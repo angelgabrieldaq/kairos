@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flujo Prequirúrgico del Paciente v3 — Centro Médico</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
+  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
+  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
+  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --rr:8px;--rl2:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+
+.page-meta{width:100%;max-width:500px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo-i{width:28px;height:28px;background:var(--g);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i svg{width:16px;height:16px;fill:#fff}
+.pm-title{font-size:14px;font-weight:500;color:var(--txt)}
+.pm-sub{font-size:10px;color:var(--txt3)}
+.slabel{font-size:10px;background:var(--gl);color:var(--gd);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--gm)}
+
+.shell{width:100%;max-width:480px;background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* HEADER */
+.hdr{background:var(--gd);padding:14px 16px 10px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hdr-brand{display:flex;align-items:center;gap:7px}
+.hdr-brand svg{width:18px;height:18px;fill:var(--gm)}
+.hdr-brand-name{font-size:11px;font-weight:500;color:var(--gm)}
+.wa-btn{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.13);border:0.5px solid rgba(255,255,255,.25);border-radius:20px;padding:4px 10px;font-size:10px;color:#fff;cursor:pointer;text-decoration:none}
+.wa-btn svg{width:12px;height:12px;fill:#fff}
+.hdr-title{font-size:17px;font-weight:500;color:#fff;margin-bottom:2px}
+.hdr-sub{font-size:10px;color:var(--gm);line-height:1.5}
+
+/* PROGRESS */
+.prog-wrap{background:#052e22;padding:9px 16px}
+.prog-dots{display:flex;gap:2px;margin-bottom:5px}
+.prog-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.18);transition:background .25s}
+.prog-dot.done{background:#5DCAA5}
+.prog-dot.active{background:#fff}
+.prog-txt{font-size:10px;color:var(--gm);text-align:center}
+
+/* STEP */
+.step{display:none;padding:16px;flex-direction:column;gap:13px}
+.step.active{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{font-size:15px;font-weight:500;color:var(--txt)}
+.sec-sub{font-size:11px;color:var(--txt2);line-height:1.6;margin-top:2px}
+
+/* FIELDS */
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;color:var(--txt2);font-weight:500}
+.field input,.field select,.field textarea{font-size:13px;padding:9px 11px;border:0.5px solid var(--brd2);border-radius:var(--rr);background:var(--bg);color:var(--txt);width:100%}
+.field textarea{min-height:64px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* UPLOAD */
+.ubox{border:1.5px dashed var(--brd2);border-radius:var(--rl2);padding:16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all .2s}
+.ubox:hover{border-color:var(--g);background:var(--gl)}
+.ubox.done{border-color:#1D9E75;background:var(--gl);border-style:solid}
+.ubox-icon{font-size:22px;margin-bottom:5px}
+.ubox-lbl{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.ubox-sub{font-size:10px;color:var(--txt2)}
+
+/* OCR */
+.ocr-box{background:var(--gl);border:0.5px solid var(--gm);border-radius:var(--rr);padding:10px 12px}
+.ocr-head{font-size:10px;font-weight:500;color:var(--gd);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.ocr-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:0.5px solid rgba(0,110,86,.12)}
+.ocr-row:last-child{border-bottom:none}
+.ok{color:var(--g)}.ov{font-weight:500;color:var(--gd)}
+
+/* PILLS */
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.p-green{background:var(--gl);color:var(--gd)}
+.p-amber{background:var(--al);color:var(--a)}
+.p-blue{background:var(--bl);color:var(--b)}
+.p-red{background:var(--rl);color:var(--r2)}
+.p-gray{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
+
+/* CHECKS */
+.chk{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--bg2);border-radius:var(--rr);cursor:pointer;border:0.5px solid var(--brd);transition:all .15s}
+.chk.on{background:var(--gl);border-color:var(--gm)}
+.chk-box{width:20px;height:20px;min-width:20px;border-radius:5px;border:1.5px solid var(--brd2);background:#fff;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s}
+.chk.on .chk-box{background:var(--g);border-color:var(--g)}
+.chk.on .chk-box::after{content:'';display:block;width:10px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+.chk-lbl{font-size:12px;color:var(--txt);line-height:1.5;flex:1}
+.chk-sub{font-size:10px;color:var(--txt2);margin-top:2px}
+
+/* RADIO GROUPS */
+.radio-group{display:flex;flex-direction:column;gap:6px}
+.radio-opt{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--rr);border:0.5px solid var(--brd);background:var(--bg2);cursor:pointer;transition:all .15s}
+.radio-opt.sel{background:var(--gl);border-color:var(--gm)}
+.radio-opt.sel-warn{background:var(--al);border-color:var(--am)}
+.ro-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--brd2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.radio-opt.sel .ro-radio{border-color:var(--g);background:var(--g)}
+.radio-opt.sel .ro-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;display:block}
+.radio-opt.sel-warn .ro-radio{border-color:var(--am);background:var(--am)}
+.radio-opt.sel-warn .ro-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;display:block}
+.ro-text{font-size:12px;color:var(--txt);font-weight:500;flex:1}
+.ro-sub{font-size:10px;color:var(--txt2);margin-top:1px}
+
+/* VACUNAS */
+.vac-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg2);border-radius:var(--rr);border:0.5px solid var(--brd);margin-bottom:6px}
+.vac-item:last-child{margin-bottom:0}
+.vac-name{font-size:12px;font-weight:500;color:var(--txt)}
+.vac-req{font-size:10px;color:var(--txt2);margin-top:1px}
+.vac-sel{display:flex;gap:4px}
+.vac-btn{font-size:10px;padding:4px 10px;border-radius:8px;border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;transition:all .15s}
+.vac-btn.yes{background:var(--gl);border-color:var(--gm);color:var(--gd)}
+.vac-btn.no{background:var(--rl);border-color:#F7C1C1;color:var(--r2)}
+.vac-btn.ns{background:var(--al);border-color:#FAC775;color:var(--a)}
+
+/* PATOLOGÍAS */
+.pat-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:5px 10px;border-radius:20px;border:0.5px solid var(--brd2);background:var(--bg2);cursor:pointer;margin:3px;transition:all .15s}
+.pat-tag.sel{background:var(--al);border-color:var(--am);color:var(--a)}
+.pat-tags-wrap{display:flex;flex-wrap:wrap;gap:0}
+
+/* ESTADO PREVIO */
+.estado-q{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:7px}
+.anx-scale{display:flex;gap:3px}
+.anx-opt{flex:1;padding:7px 3px;text-align:center;border:0.5px solid var(--brd2);border-radius:var(--rr);cursor:pointer;font-size:11px;color:var(--txt2);background:var(--bg2);transition:all .15s;line-height:1.3;user-select:none}
+.anx-opt.sel{border-color:var(--g);background:var(--gl);color:var(--gd);font-weight:500}
+.anx-opt.sel-warn{border-color:var(--am);background:var(--al);color:var(--a);font-weight:500}
+
+/* ALERTA REPROGRAMACIÓN */
+.reprogram-alert{background:var(--rl);border-left:3px solid var(--rm);border-radius:0 var(--rr) var(--rr) 0;padding:10px 12px;font-size:11px;color:var(--r2);line-height:1.6;display:none}
+.reprogram-alert.show{display:block}
+
+/* PREQUIRÚRGICOS */
+.preq-section{background:var(--bg2);border-radius:var(--rl2);overflow:hidden;border:0.5px solid var(--brd)}
+.preq-header{padding:10px 13px;border-bottom:0.5px solid var(--brd);background:var(--bg);display:flex;align-items:center;justify-content:space-between}
+.preq-title{font-size:12px;font-weight:500;color:var(--txt)}
+.preq-body{padding:12px 13px;display:flex;flex-direction:column;gap:10px}
+.preq-item{display:flex;flex-direction:column;gap:6px}
+.preq-lbl{font-size:11px;font-weight:500;color:var(--txt2)}
+.preq-opts{display:flex;gap:6px;flex-wrap:wrap}
+.preq-opt{font-size:10px;padding:4px 10px;border-radius:8px;border:0.5px solid var(--brd2);background:var(--bg);color:var(--txt2);cursor:pointer;transition:all .15s}
+.preq-opt.sel{background:var(--b);border-color:var(--b);color:#fff}
+.preq-ubox{border:1.5px dashed var(--brd2);border-radius:var(--rr);padding:12px;text-align:center;cursor:pointer;background:var(--bg);transition:all .2s}
+.preq-ubox:hover{border-color:var(--b);background:var(--bl)}
+.preq-ubox.done{border-color:var(--b);background:var(--bl);border-style:solid}
+.preq-ubox-icon{font-size:18px;margin-bottom:4px}
+.preq-ubox-lbl{font-size:11px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.preq-ubox-sub{font-size:10px;color:var(--txt2)}
+.preq-rotulado{background:var(--bl);border-radius:var(--rr);padding:8px 10px;font-size:10px;color:var(--b);display:flex;align-items:center;gap:5px;display:none}
+.preq-rotulado.show{display:flex}
+
+/* MEDS */
+.med-row{background:var(--bg2);border:0.5px solid var(--brd);border-radius:var(--rr);padding:9px 12px;display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.med-av{width:26px;height:26px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.med-name{font-size:12px;font-weight:500;color:var(--txt)}
+.med-det{font-size:10px;color:var(--txt2)}
+.btn-del{margin-left:auto;font-size:18px;color:var(--txt3);background:none;border:none;cursor:pointer;line-height:1}
+
+/* PAGO */
+.pago-card{background:var(--bg2);border-radius:var(--rl2);padding:14px;border:0.5px solid var(--brd)}
+.pago-monto{font-size:26px;font-weight:500;color:var(--txt);margin:5px 0 2px}
+.pago-opts{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.pago-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rr);border:1.5px solid var(--brd2);cursor:pointer;transition:all .15s;background:#fff}
+.pago-opt.sel{border-color:var(--g);background:var(--gl)}
+.po-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--brd2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pago-opt.sel .po-radio{border-color:var(--g);background:var(--g)}
+.pago-opt.sel .po-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;display:block}
+.po-text{font-size:12px;font-weight:500;color:var(--txt)}
+.po-sub{font-size:10px;color:var(--txt2);margin-top:1px}
+
+/* SERVICIOS */
+.srv{border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;margin-bottom:8px}
+.srv-h{padding:9px 12px;display:flex;align-items:center;gap:8px;background:var(--bg2)}
+.srv-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.srv-name{font-size:12px;font-weight:500;color:var(--txt)}
+.srv-sub{font-size:10px;color:var(--txt2)}
+.srv-badge{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500;white-space:nowrap}
+.sb-ok{background:var(--gl);color:var(--gd)}
+.sb-ex{background:var(--al);color:var(--a)}
+.srv-b{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.srv-desc{font-size:11px;color:var(--txt2);line-height:1.5;flex:1}
+.btn-srv{font-size:10px;padding:5px 11px;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;white-space:nowrap}
+.btn-srv.rsv{background:var(--gl);color:var(--gd);border:0.5px solid var(--gm)}
+.btn-srv-g{font-size:10px;padding:5px 11px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;white-space:nowrap}
+
+/* RESUMEN */
+.res-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--brd)}
+.res-row:last-child{border-bottom:none}
+.res-lbl{font-size:12px;color:var(--txt2)}
+
+/* BANNERS */
+.info-banner{background:var(--bl);border-left:3px solid #378ADD;border-radius:0 var(--rr) var(--rr) 0;padding:9px 12px;font-size:11px;color:var(--b);line-height:1.6}
+.warn-banner{background:var(--al);border-left:3px solid var(--am);border-radius:0 var(--rr) var(--rr) 0;padding:9px 12px;font-size:11px;color:var(--a);line-height:1.6}
+
+/* SUCCESS */
+.success{background:var(--gl);border:0.5px solid var(--gm);border-radius:var(--rl2);padding:20px;text-align:center}
+.suc-icon{font-size:32px;margin-bottom:8px}
+.suc-title{font-size:15px;font-weight:500;color:var(--gd);margin-bottom:4px}
+.suc-sub{font-size:11px;color:var(--g);line-height:1.6;margin-bottom:12px}
+.suc-dest{background:var(--gd);color:#fff;border-radius:var(--rr);padding:11px 14px;font-size:11px;line-height:1.7;text-align:left}
+
+/* NAV */
+.nav{display:flex;gap:8px;padding:12px 16px;border-top:0.5px solid var(--brd);background:var(--bg)}
+.btn-back{padding:10px 16px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;white-space:nowrap}
+.btn-back:hover{background:var(--bg2)}
+.btn-next{flex:1;padding:10px;font-size:12px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer}
+.btn-next:hover{background:var(--gd)}
+
+/* COND */
+.cond{display:none;flex-direction:column;gap:8px}
+.cond.show{display:flex}
+
+/* SECTION DIVIDER */
+.sdiv{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;padding:4px 0;border-bottom:0.5px solid var(--brd);margin-bottom:2px}
+</style>
+</head>
+<body>
+
+<div class="page-meta">
+  <div class="logo-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg></div>
+  <div><div class="pm-title">Centro Médico</div><div class="pm-sub">Flujo pre-quirúrgico del paciente v3</div></div>
+  <div class="slabel">Pantalla 4 v3</div>
+</div>
+
+<div class="shell">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-brand">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg>
+      <span class="hdr-brand-name">Centro Médico</span>
+    </div>
+    <a class="wa-btn" href="https://wa.me/541137528000" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.523 5.847L.057 23.737a.5.5 0 00.614.63l6.011-1.575A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.791-.538-5.362-1.472l-.384-.231-3.982 1.044 1.003-3.878-.249-.396A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Consultas
+    </a>
+  </div>
+  <div class="hdr-title">Hola, Jorge</div>
+  <div class="hdr-sub">Cirugía el 19/04 a las 12:00 hs · Completá esto desde casa y llegás directo al 2° piso</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-dots" id="prog"></div>
+  <div class="prog-txt" id="prog-txt"></div>
+</div>
+
+<!-- ══════════ STEP 1: IDENTIFICACIÓN ══════════ -->
+<div class="step active" id="s1">
+  <div><div class="sec-title">Tu identificación</div><div class="sec-sub">Fotografiá tu DNI para completar tus datos automáticamente.</div></div>
+  <div class="ubox" id="dni-box" onclick="scanDNI()">
+    <div class="ubox-icon">📷</div>
+    <div class="ubox-lbl">Foto del frente de tu DNI</div>
+    <div class="ubox-sub">Tocá para sacar foto o subir imagen</div>
+  </div>
+  <div id="dni-ocr" style="display:none">
+    <div class="ocr-box">
+      <div class="ocr-head"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gd)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Datos leídos — verificá que sean correctos</div>
+      <div class="ocr-row"><span class="ok">Apellido y nombre</span><span class="ov">Ramírez, Jorge Alberto</span></div>
+      <div class="ocr-row"><span class="ok">DNI</span><span class="ov">25.781.320</span></div>
+      <div class="ocr-row"><span class="ok">Fecha de nacimiento</span><span class="ov">14/03/1971</span></div>
+    </div>
+  </div>
+  <div class="row2">
+    <div class="field"><label>Teléfono celular</label><input type="tel" placeholder="+54 9 11 xxxx-xxxx"></div>
+    <div class="field"><label>Email</label><input type="email" placeholder="tu@email.com"></div>
+  </div>
+  <div class="field"><label>Domicilio actual</label><input type="text" placeholder="Calle, número, localidad"></div>
+</div>
+
+<!-- ══════════ STEP 2: COBERTURA ══════════ -->
+<div class="step" id="s2">
+  <div><div class="sec-title">Cobertura médica</div><div class="sec-sub">Fotografiá tu credencial para leer los datos y verificar tu elegibilidad.</div></div>
+  <div class="ubox" id="cred-box" onclick="scanCred()">
+    <div class="ubox-icon">🪪</div>
+    <div class="ubox-lbl">Foto de tu credencial (frente y dorso)</div>
+    <div class="ubox-sub">Los datos se leen automáticamente</div>
+  </div>
+  <div id="cred-ocr" style="display:none">
+    <div class="ocr-box">
+      <div class="ocr-head"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--gd)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Cobertura verificada</div>
+      <div class="ocr-row"><span class="ok">Prepaga</span><span class="ov">OSDE</span></div>
+      <div class="ocr-row"><span class="ok">Plan</span><span class="ov">310</span></div>
+      <div class="ocr-row"><span class="ok">Elegibilidad</span><span class="ov" style="color:var(--g)">✓ Verificada</span></div>
+    </div>
+  </div>
+  <div class="field">
+    <label>¿Quién tramita la autorización?</label>
+    <select id="auth-sel" onchange="showAuth()">
+      <option value="">— Seleccioná una opción —</option>
+      <option value="paciente">Yo la tramité / la tengo</option>
+      <option value="medico">Mi médico la tramita</option>
+      <option value="os">La obra social la envía al sanatorio</option>
+      <option value="particular">La cirugía es particular</option>
+    </select>
+  </div>
+  <div class="cond" id="auth-paciente">
+    <div class="ubox"><div class="ubox-icon">📄</div><div class="ubox-lbl">Foto o PDF de tu autorización</div><div class="ubox-sub">El número se leerá automáticamente</div></div>
+    <div class="field"><label>Número de autorización (si lo tenés)</label><input type="text" placeholder="Ej: 2024-00443812"></div>
+  </div>
+  <div class="cond" id="auth-medico">
+    <div class="info-banner">Tu médico envía la autorización al sanatorio. El equipo de turnos de quirófano la verifica. Si en 24 hs no la recibimos, te contactamos.</div>
+    <div class="field"><label>Médico que la tramita (opcional)</label><input type="text" placeholder="Dr. Méndez, Carlos"></div>
+  </div>
+  <div class="cond" id="auth-os"><div class="info-banner">Tu obra social la envía directamente. Nuestro equipo la verifica antes de tu cirugía.</div></div>
+  <div class="cond" id="auth-particular"><div class="warn-banner">En el siguiente paso vas a ver el presupuesto y podrás elegir cómo abonar.</div></div>
+</div>
+
+<!-- ══════════ STEP 3: PRESUPUESTO ══════════ -->
+<div class="step" id="s3">
+  <div><div class="sec-title">Presupuesto y pago</div><div class="sec-sub">Revisá el detalle y elegí cómo querés abonar.</div></div>
+  <div class="pago-card">
+    <div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em">Presupuesto confirmado</div>
+    <div class="pago-monto">$2.850.000</div>
+    <div style="font-size:11px;color:var(--txt2)">Colostomía · Dr. Méndez · QX 1</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:3px">
+      <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--txt2)">Honorarios cirujano</span><span>$1.800.000</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--txt2)">Honorarios anestesia</span><span>$650.000</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--txt2)">Uso de quirófano</span><span>$400.000</span></div>
+      <div style="border-top:0.5px solid var(--brd);margin-top:5px;padding-top:5px;display:flex;justify-content:space-between;font-size:12px;font-weight:500"><span>Total</span><span>$2.850.000</span></div>
+    </div>
+  </div>
+  <div class="pago-opts">
+    <div class="pago-opt" onclick="selPago(this)"><div class="po-radio"></div><div><div class="po-text">Pagar ahora online</div><div class="po-sub">Transferencia o tarjeta · Recibís comprobante</div></div></div>
+    <div class="pago-opt" onclick="selPago(this)"><div class="po-radio"></div><div><div class="po-text">Pagar en admisión al llegar</div><div class="po-sub">Pasás por PB · Efectivo, tarjeta o transferencia</div></div></div>
+    <div class="pago-opt" onclick="selPago(this)"><div class="po-radio"></div><div><div class="po-text">Mi médico abona el diferencial</div><div class="po-sub">El sanatorio coordinó el pago con el profesional</div></div></div>
+  </div>
+</div>
+
+<!-- ══════════ STEP 4: ANTECEDENTES Y PATOLOGÍAS ══════════ -->
+<div class="step" id="s4">
+  <div><div class="sec-title">Antecedentes de salud</div><div class="sec-sub">Esta información es fundamental para el equipo de anestesia. Seleccioná todo lo que aplique.</div></div>
+
+  <div>
+    <div class="sdiv">Patologías previas</div>
+    <div class="pat-tags-wrap" id="pat-tags">
+      <div class="pat-tag" onclick="togPat(this)">Hipertensión arterial</div>
+      <div class="pat-tag" onclick="togPat(this)">Diabetes tipo 1 o 2</div>
+      <div class="pat-tag" onclick="togPat(this)">Enfermedad cardíaca</div>
+      <div class="pat-tag" onclick="togPat(this)">Asma / EPOC</div>
+      <div class="pat-tag" onclick="togPat(this)">Insuficiencia renal</div>
+      <div class="pat-tag" onclick="togPat(this)">Tiroides</div>
+      <div class="pat-tag" onclick="togPat(this)">Coagulopatía</div>
+      <div class="pat-tag" onclick="togPat(this)">Obesidad</div>
+      <div class="pat-tag" onclick="togPat(this)">Apnea del sueño</div>
+      <div class="pat-tag" onclick="togPat(this)">Epilepsia</div>
+      <div class="pat-tag" onclick="togPat(this)">Anemia</div>
+      <div class="pat-tag" onclick="togPat(this)">Embarazo</div>
+      <div class="pat-tag" onclick="togPat(this)">Cáncer / oncológico</div>
+      <div class="pat-tag" onclick="togPat(this)">Ninguna</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sdiv" style="margin-bottom:8px">Antecedentes quirúrgicos</div>
+    <div class="field"><label>¿Tuvo cirugías anteriores? ¿Cuáles?</label><input type="text" placeholder="Ej: Apendicectomía 2015, cesárea 2018 — o escribí Ninguna"></div>
+  </div>
+
+  <div>
+    <div class="sdiv" style="margin-bottom:8px">Experiencias previas con anestesia</div>
+    <div class="radio-group">
+      <div class="radio-opt" onclick="selRad(this,'anest')"><div class="ro-radio"></div><div><div class="ro-text">Sin anestesias previas</div></div></div>
+      <div class="radio-opt" onclick="selRad(this,'anest')"><div class="ro-radio"></div><div><div class="ro-text">Anestesias previas sin complicaciones</div></div></div>
+      <div class="radio-opt sel-warn" onclick="selRad(this,'anest')"><div class="ro-radio"></div><div><div class="ro-text">Tuve complicaciones con anestesia anterior</div><div class="ro-sub" style="color:var(--a)">Por favor describí en el campo de abajo</div></div></div>
+    </div>
+    <div class="field" style="margin-top:8px"><label>Detalle (opcional)</label><input type="text" placeholder="Ej: reacción alérgica, náuseas prolongadas..."></div>
+  </div>
+
+  <!-- ALERTA REPROGRAMACIÓN -->
+  <div class="reprogram-alert" id="reprogram-alert">
+    <strong>⚠ Atención:</strong> Una o más de las condiciones que seleccionaste puede requerir una evaluación adicional antes de tu cirugía. El coordinador de turno de quirófano va a contactarte en las próximas horas para confirmarte si tu cirugía se realiza según lo planificado o si necesita ser reprogramada.
+  </div>
+</div>
+
+<!-- ══════════ STEP 5: VACUNAS ══════════ -->
+<div class="step" id="s5">
+  <div><div class="sec-title">Estado de vacunación</div><div class="sec-sub">Algunas vacunas son requisito para ingresar a quirófano. Indicá el estado de cada una.</div></div>
+
+  <div class="info-banner">Si no recordás el estado de alguna vacuna, podés consultarlo en tu carnet de vacunación o con tu médico de cabecera.</div>
+
+  <div>
+    <div class="sdiv" style="margin-bottom:8px">Vacunas requeridas para quirófano</div>
+
+    <div class="vac-item">
+      <div><div class="vac-name">Antitetánica</div><div class="vac-req">Obligatoria · Válida si tiene menos de 10 años</div></div>
+      <div class="vac-sel">
+        <button class="vac-btn" onclick="selVac(this,'si')">Sí</button>
+        <button class="vac-btn" onclick="selVac(this,'no')">No</button>
+        <button class="vac-btn" onclick="selVac(this,'ns')">No sé</button>
+      </div>
+    </div>
+
+    <div class="vac-item">
+      <div><div class="vac-name">Antihepatitis B</div><div class="vac-req">Recomendada · Serie completa (3 dosis)</div></div>
+      <div class="vac-sel">
+        <button class="vac-btn" onclick="selVac(this,'si')">Sí</button>
+        <button class="vac-btn" onclick="selVac(this,'no')">No</button>
+        <button class="vac-btn" onclick="selVac(this,'ns')">No sé</button>
+      </div>
+    </div>
+
+    <div class="vac-item">
+      <div><div class="vac-name">Antineumocócica</div><div class="vac-req">Recomendada para mayores de 65 años y pacientes con comorbilidades</div></div>
+      <div class="vac-sel">
+        <button class="vac-btn" onclick="selVac(this,'si')">Sí</button>
+        <button class="vac-btn" onclick="selVac(this,'no')">No</button>
+        <button class="vac-btn" onclick="selVac(this,'ns')">No sé</button>
+      </div>
+    </div>
+
+    <div class="vac-item">
+      <div><div class="vac-name">COVID-19</div><div class="vac-req">Esquema completo recomendado</div></div>
+      <div class="vac-sel">
+        <button class="vac-btn" onclick="selVac(this,'si')">Sí</button>
+        <button class="vac-btn" onclick="selVac(this,'no')">No</button>
+        <button class="vac-btn" onclick="selVac(this,'ns')">No sé</button>
+      </div>
+    </div>
+
+    <div class="vac-item">
+      <div><div class="vac-name">Antigripal</div><div class="vac-req">Última dosis — temporada actual</div></div>
+      <div class="vac-sel">
+        <button class="vac-btn" onclick="selVac(this,'si')">Sí</button>
+        <button class="vac-btn" onclick="selVac(this,'no')">No</button>
+        <button class="vac-btn" onclick="selVac(this,'ns')">No sé</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field"><label>¿Alguna otra vacuna reciente que quieras informar?</label><input type="text" placeholder="Nombre de la vacuna y fecha aproximada"></div>
+</div>
+
+<!-- ══════════ STEP 6: ESTADO LA NOCHE ANTERIOR ══════════ -->
+<div class="step" id="s6">
+  <div><div class="sec-title">Cómo estás esta noche</div><div class="sec-sub">Respondé estas preguntas la noche antes de tu cirugía. Nos ayudan a prepararnos y a detectar si hay algo que necesite atención.</div></div>
+
+  <div>
+    <div class="estado-q">¿Cómo te sentís físicamente hoy?</div>
+    <div class="anx-scale" id="e1">
+      <div class="anx-opt" onclick="selEstado('e1',this,'ok')">Muy bien<br><span style="font-size:9px">😊</span></div>
+      <div class="anx-opt" onclick="selEstado('e1',this,'ok')">Bien<br><span style="font-size:9px">🙂</span></div>
+      <div class="anx-opt" onclick="selEstado('e1',this,'warn')">Regular<br><span style="font-size:9px">😐</span></div>
+      <div class="anx-opt sel-warn" onclick="selEstado('e1',this,'warn')">Mal<br><span style="font-size:9px">😔</span></div>
+      <div class="anx-opt sel-warn" onclick="selEstado('e1',this,'warn')">Muy mal<br><span style="font-size:9px">🤒</span></div>
+    </div>
+  </div>
+
+  <div id="sintomas-alert" class="warn-banner" style="display:none">Si te sentís mal físicamente, es importante que lo comuniques al equipo antes de la cirugía. Podés escribirnos por WhatsApp ahora mismo.</div>
+
+  <div>
+    <div class="sdiv" style="margin-bottom:8px">¿Tenés alguno de estos síntomas hoy?</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Fiebre o temperatura elevada</div></div></div>
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Tos, resfrío o congestión nasal</div></div></div>
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Dificultad para respirar</div></div></div>
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Dolor de garganta</div></div></div>
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Náuseas o vómitos</div></div></div>
+      <div class="chk" onclick="togChk(this,'sintoma')"><div class="chk-box"></div><div><div class="chk-lbl">Ninguno de los anteriores</div></div></div>
+    </div>
+  </div>
+
+  <div id="sintomas-serios" class="reprogram-alert" style="display:none">
+    <strong>⚠ Importante:</strong> Los síntomas que indicaste pueden afectar la seguridad de tu cirugía. El equipo de quirófano va a contactarte a la brevedad para evaluar si la cirugía puede realizarse según lo planificado.
+  </div>
+
+  <div>
+    <div class="estado-q" style="margin-top:4px">¿Cómo te sentís emocionalmente frente a la cirugía?</div>
+    <div class="anx-scale" id="e2">
+      <div class="anx-opt" onclick="selEstado('e2',this,'ok')">1<br><span style="font-size:9px">Tranquilo</span></div>
+      <div class="anx-opt" onclick="selEstado('e2',this,'ok')">2</div>
+      <div class="anx-opt" onclick="selEstado('e2',this,'ok')">3</div>
+      <div class="anx-opt" onclick="selEstado('e2',this,'warn')">4</div>
+      <div class="anx-opt" onclick="selEstado('e2',this,'warn')">5<br><span style="font-size:9px">Muy ansioso</span></div>
+    </div>
+  </div>
+
+  <div class="field"><label>¿Querés contarnos algo antes de mañana? (opcional)</label><textarea placeholder="Cualquier duda, síntoma o situación que quieras que sepamos..."></textarea></div>
+</div>
+
+<!-- ══════════ STEP 7: MEDICAMENTOS Y ALERGIAS ══════════ -->
+<div class="step" id="s7">
+  <div><div class="sec-title">Medicamentos y alergias</div><div class="sec-sub">Fundamental para el equipo de anestesia. Incluí todo lo que tomás, incluyendo vitaminas y suplementos.</div></div>
+  <div>
+    <div style="font-size:11px;font-weight:500;color:var(--txt2);margin-bottom:7px">Medicamentos actuales</div>
+    <div id="med-list">
+      <div class="med-row"><div class="med-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg></div><div><div class="med-name">Enalapril 10mg</div><div class="med-det">1 comp · Mañana · Dr. García (Cardiología)</div></div><button class="btn-del" onclick="this.parentElement.remove()">×</button></div>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rr);padding:10px 12px;border:0.5px solid var(--brd);margin-top:6px;display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:11px;font-weight:500;color:var(--txt2)">Agregar medicamento</div>
+      <div class="field"><label>Nombre y dosis</label><input type="text" id="med-n" placeholder="Ej: Metformina 850mg · 1 comp con cena"></div>
+      <div class="field"><label>Médico que lo indicó</label><input type="text" id="med-dr" placeholder="Nombre o especialidad"></div>
+      <button onclick="addMed()" style="font-size:11px;padding:7px;border-radius:var(--rr);border:0.5px solid var(--g);background:transparent;color:var(--g);cursor:pointer">+ Agregar</button>
+    </div>
+  </div>
+  <div class="field"><label>Alergias conocidas (medicamentos, alimentos, látex, etc.)</label><input type="text" placeholder="Ej: Penicilina, látex, ibuprofeno — o escribí Ninguna"></div>
+  <div class="row2">
+    <div class="field"><label>Nombre del acompañante</label><input type="text" placeholder="Nombre y apellido"></div>
+    <div class="field"><label>Teléfono del acompañante</label><input type="tel" placeholder="+54 9 11..."></div>
+  </div>
+</div>
+
+<!-- ══════════ STEP 8: PREQUIRÚRGICOS ══════════ -->
+<div class="step" id="s8">
+  <div><div class="sec-title">Tus estudios prequirúrgicos</div><div class="sec-sub">Subí foto o PDF de cada estudio. Clasificalos con el menú para que lleguen rotulados a admisión y puedan cargarse directamente en el HIS.</div></div>
+
+  <!-- LABORATORIO -->
+  <div class="preq-section">
+    <div class="preq-header">
+      <div class="preq-title">Laboratorio prequirúrgico</div>
+      <span class="pill p-amber">Requerido · máx. 1 mes</span>
+    </div>
+    <div class="preq-body">
+      <div class="preq-item">
+        <div class="preq-lbl">¿Qué incluye tu laboratorio?</div>
+        <div class="preq-opts">
+          <div class="preq-opt sel" onclick="togPreq(this)">Hemograma</div>
+          <div class="preq-opt sel" onclick="togPreq(this)">Coagulograma</div>
+          <div class="preq-opt" onclick="togPreq(this)">Glucemia</div>
+          <div class="preq-opt" onclick="togPreq(this)">Urea / Creatinina</div>
+          <div class="preq-opt" onclick="togPreq(this)">Hepatograma</div>
+          <div class="preq-opt" onclick="togPreq(this)">Ionograma</div>
+          <div class="preq-opt" onclick="togPreq(this)">Grupo y factor</div>
+        </div>
+      </div>
+      <div class="preq-ubox" id="lab-box" onclick="uploadPreq('lab-box','lab-rot')">
+        <div class="preq-ubox-icon">🔬</div>
+        <div class="preq-ubox-lbl">Subir resultado de laboratorio</div>
+        <div class="preq-ubox-sub">Foto legible o PDF · Válido hasta 1 mes antes</div>
+      </div>
+      <div class="preq-rotulado" id="lab-rot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Laboratorio cargado · Rotulado como "Laboratorio prequirúrgico" · Enviado a admisión
+      </div>
+    </div>
+  </div>
+
+  <!-- ECG -->
+  <div class="preq-section">
+    <div class="preq-header">
+      <div class="preq-title">Electrocardiograma (ECG)</div>
+      <span class="pill p-amber">Requerido · con informe de cardiólogo</span>
+    </div>
+    <div class="preq-body">
+      <div class="preq-item">
+        <div class="preq-lbl">¿El ECG tiene informe de cardiólogo?</div>
+        <div class="preq-opts">
+          <div class="preq-opt" onclick="selPreqOpt(this,'ecg-inf')">Sí, tiene informe</div>
+          <div class="preq-opt" onclick="selPreqOpt(this,'ecg-inf')">No, solo el trazado</div>
+          <div class="preq-opt" onclick="selPreqOpt(this,'ecg-inf')">No me hice el ECG</div>
+        </div>
+      </div>
+      <div class="preq-ubox" id="ecg-box" onclick="uploadPreq('ecg-box','ecg-rot')">
+        <div class="preq-ubox-icon">❤️</div>
+        <div class="preq-ubox-lbl">Subir ECG con informe</div>
+        <div class="preq-ubox-sub">Foto del papel o PDF · Válido hasta 1 año antes</div>
+      </div>
+      <div class="preq-rotulado" id="ecg-rot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        ECG cargado · Rotulado como "Electrocardiograma con informe" · Enviado a admisión
+      </div>
+    </div>
+  </div>
+
+  <!-- RX / IMÁGENES -->
+  <div class="preq-section">
+    <div class="preq-header">
+      <div class="preq-title">Imágenes diagnósticas</div>
+      <span class="pill p-gray">Si tu médico las solicitó</span>
+    </div>
+    <div class="preq-body">
+      <div class="preq-item">
+        <div class="preq-lbl">Tipo de imagen</div>
+        <div class="preq-opts">
+          <div class="preq-opt" onclick="togPreq(this)">Radiografía</div>
+          <div class="preq-opt" onclick="togPreq(this)">Ecografía</div>
+          <div class="preq-opt" onclick="togPreq(this)">Tomografía</div>
+          <div class="preq-opt" onclick="togPreq(this)">Resonancia</div>
+          <div class="preq-opt" onclick="togPreq(this)">No tengo imágenes</div>
+        </div>
+      </div>
+      <div class="preq-ubox" id="img-box" onclick="uploadPreq('img-box','img-rot')">
+        <div class="preq-ubox-icon">🩻</div>
+        <div class="preq-ubox-lbl">Subir imagen diagnóstica</div>
+        <div class="preq-ubox-sub">Foto, CD escaneado o PDF con informe</div>
+      </div>
+      <div class="preq-rotulado" id="img-rot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Imagen cargada · Rotulada · Enviada a admisión
+      </div>
+    </div>
+  </div>
+
+  <!-- OTROS -->
+  <div class="preq-section">
+    <div class="preq-header">
+      <div class="preq-title">Otros estudios o informes</div>
+      <span class="pill p-gray">Opcional</span>
+    </div>
+    <div class="preq-body">
+      <div class="preq-item">
+        <div class="preq-lbl">Tipo de documento</div>
+        <div class="preq-opts">
+          <div class="preq-opt" onclick="togPreq(this)">Evaluación cardiológica</div>
+          <div class="preq-opt" onclick="togPreq(this)">Evaluación neumológica</div>
+          <div class="preq-opt" onclick="togPreq(this)">Interconsulta especialista</div>
+          <div class="preq-opt" onclick="togPreq(this)">Informe de diabetólogo</div>
+          <div class="preq-opt" onclick="togPreq(this)">Historia clínica previa</div>
+          <div class="preq-opt" onclick="togPreq(this)">Otro</div>
+        </div>
+      </div>
+      <div class="preq-ubox" id="otro-box" onclick="uploadPreq('otro-box','otro-rot')">
+        <div class="preq-ubox-icon">📋</div>
+        <div class="preq-ubox-lbl">Subir documento adicional</div>
+        <div class="preq-ubox-sub">Cualquier otro estudio o informe solicitado</div>
+      </div>
+      <div class="preq-rotulado" id="otro-rot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Documento cargado · Rotulado · Enviado a admisión
+      </div>
+    </div>
+  </div>
+
+  <div class="info-banner">Todos los estudios que subas llegan rotulados al equipo de admisión para ser cargados en el HIS antes de tu cirugía. No necesitás traer copias físicas si los subiste acá.</div>
+</div>
+
+<!-- ══════════ STEP 9: PREPARACIÓN ══════════ -->
+<div class="step" id="s9">
+  <div><div class="sec-title">Preparación para mañana</div><div class="sec-sub">Confirmá que cumpliste con estas indicaciones. Son importantes para tu seguridad.</div></div>
+  <div style="display:flex;flex-direction:column;gap:5px">
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Hice el ayuno indicado por mi médico</div><div class="chk-sub">Sin comer ni beber, incluyendo agua, chicles y caramelos</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Hice el baño antiséptico esta noche</div><div class="chk-sub">Comenzando por zonas limpias, terminando en genitales</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Me quité el esmalte de uñas</div><div class="chk-sub">Necesario para el monitoreo del anestesiólogo</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Dejé alhajas y objetos de valor en casa</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Preparé ropa cómoda para el alta</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Traje mi medicación en su envase original</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">Vendré acompañado/a mañana</div></div></div>
+    <div class="chk" onclick="togChk(this,'prep')"><div class="chk-box"></div><div><div class="chk-lbl">No tomé aspirina en los últimos 7 días</div><div class="chk-sub">Salvo que tu cirujano te lo indicara expresamente</div></div></div>
+  </div>
+</div>
+
+<!-- ══════════ STEP 10: SERVICIOS ══════════ -->
+<div class="step" id="s10">
+  <div><div class="sec-title">Servicios para tu estadía</div><div class="sec-sub">Basado en tu plan OSDE 310, estos son los servicios disponibles.</div></div>
+  <div class="srv">
+    <div class="srv-h"><div class="srv-ico" style="background:var(--gl)">🛏</div><div><div class="srv-name">Cama para acompañante</div><div class="srv-sub">Primera noche de internación</div></div><div class="srv-badge sb-ok">Cubierto por tu plan</div></div>
+    <div class="srv-b"><div class="srv-desc">Armado de cama, kit de higiene y desayuno al día siguiente.</div><button class="btn-srv" id="b-cama" onclick="rsv('b-cama')">Reservar</button></div>
+  </div>
+  <div class="srv">
+    <div class="srv-h"><div class="srv-ico" style="background:var(--al)">⭐</div><div><div class="srv-name">Habitación VIP</div><div class="srv-sub">Suite premium</div></div><div class="srv-badge sb-ex">Adicional</div></div>
+    <div class="srv-b"><div class="srv-desc">Frigobar, cafetera, vista al jardín y atención personalizada.</div><button class="btn-srv-g">Me interesa</button></div>
+  </div>
+  <div class="srv">
+    <div class="srv-h"><div class="srv-ico" style="background:var(--bl)">☕</div><div><div class="srv-name">Confitería — 1° piso</div><div class="srv-sub">Abierta 7 a 21 hs</div></div><div class="srv-badge" style="background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)">Disponible</div></div>
+    <div class="srv-b"><div class="srv-desc">Tu acompañante puede esperar cómodamente mientras dura la cirugía.</div><button class="btn-srv-g">Ver menú</button></div>
+  </div>
+</div>
+
+<!-- ══════════ STEP 11: RESUMEN ══════════ -->
+<div class="step" id="s11">
+  <div><div class="sec-title">Resumen final</div><div class="sec-sub">Revisá que todo esté completo antes de enviar.</div></div>
+  <div style="background:var(--bg2);border-radius:var(--rl2);padding:12px 14px">
+    <div class="res-row"><span class="res-lbl">DNI escaneado</span><span class="pill p-green">✓</span></div>
+    <div class="res-row"><span class="res-lbl">Cobertura OSDE 310</span><span class="pill p-green">✓ Verificada</span></div>
+    <div class="res-row"><span class="res-lbl">Autorización OS</span><span class="pill p-amber">Médico tramita</span></div>
+    <div class="res-row"><span class="res-lbl">Presupuesto</span><span class="pill p-green">✓ Pago en admisión</span></div>
+    <div class="res-row"><span class="res-lbl">Antecedentes y patologías</span><span class="pill p-green">✓ Cargados</span></div>
+    <div class="res-row"><span class="res-lbl">Vacunas</span><span class="pill p-green">✓ Completado</span></div>
+    <div class="res-row"><span class="res-lbl">Estado noche anterior</span><span class="pill p-green">✓ Sin síntomas</span></div>
+    <div class="res-row"><span class="res-lbl">Medicamentos y alergias</span><span class="pill p-green">✓ Cargados</span></div>
+    <div class="res-row"><span class="res-lbl">Prequirúrgicos</span><span class="pill p-green">✓ Rotulados y enviados</span></div>
+    <div class="res-row"><span class="res-lbl">Preparación prequirúrgica</span><span class="pill p-green">✓ Confirmada</span></div>
+    <div class="res-row"><span class="res-lbl">Cama acompañante</span><span class="pill p-green">✓ Reservada</span></div>
+  </div>
+  <div id="send-wrap">
+    <button onclick="enviar()" style="width:100%;padding:12px;font-size:13px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer">Confirmar y enviar todo al sanatorio</button>
+    <div style="font-size:10px;color:var(--txt3);text-align:center;margin-top:7px">El equipo de turnos de quirófano recibe todo lo que completaste rotulado y listo para cargar en el HIS.</div>
+  </div>
+  <div id="sent-wrap" style="display:none">
+    <div class="success">
+      <div class="suc-icon">✓</div>
+      <div class="suc-title">¡Listo, Jorge!</div>
+      <div class="suc-sub">Tu información y todos tus estudios llegaron al sanatorio rotulados.<br>Te confirmamos todo por WhatsApp.</div>
+      <div class="suc-dest"><strong>El día de tu cirugía:</strong><br>Llegá al <strong>2° piso</strong> a las <strong>10:00 hs</strong> (2 hs antes).<br>No necesitás pasar por planta baja.<br>Traé tus estudios físicos solo si los tenés.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="btn-back" id="btn-b" onclick="prev()">← Atrás</button>
+  <button class="btn-next" id="btn-n" onclick="next()">Continuar →</button>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+const STEPS=[
+  {id:'s1',lbl:'Identificación'},
+  {id:'s2',lbl:'Cobertura'},
+  {id:'s3',lbl:'Presupuesto'},
+  {id:'s4',lbl:'Antecedentes'},
+  {id:'s5',lbl:'Vacunas'},
+  {id:'s6',lbl:'Estado previo'},
+  {id:'s7',lbl:'Medicamentos'},
+  {id:'s8',lbl:'Prequirúrgicos'},
+  {id:'s9',lbl:'Preparación'},
+  {id:'s10',lbl:'Servicios'},
+  {id:'s11',lbl:'Resumen'},
+];
+let cur=0;
+
+function render(){
+  STEPS.forEach((s,i)=>document.getElementById(s.id).classList.toggle('active',i===cur));
+  const pg=document.getElementById('prog');
+  pg.innerHTML=STEPS.map((_,i)=>`<div class="prog-dot ${i<cur?'done':i===cur?'active':''}"></div>`).join('');
+  document.getElementById('prog-txt').textContent=`Paso ${cur+1} de ${STEPS.length} — ${STEPS[cur].lbl}`;
+  document.getElementById('btn-b').style.visibility=cur===0?'hidden':'visible';
+  const isLast=cur===STEPS.length-1;
+  document.getElementById('btn-n').style.display=isLast?'none':'block';
+}
+
+function next(){if(cur<STEPS.length-1){cur++;render();window.scrollTo(0,0);}}
+function prev(){if(cur>0){cur--;render();window.scrollTo(0,0);}}
+
+function scanDNI(){
+  const b=document.getElementById('dni-box');
+  b.innerHTML='<div class="ubox-icon">⏳</div><div class="ubox-lbl">Leyendo DNI...</div>';
+  setTimeout(()=>{b.classList.add('done');b.innerHTML='<div class="ubox-icon">✓</div><div class="ubox-lbl" style="color:var(--gd)">DNI leído correctamente</div>';document.getElementById('dni-ocr').style.display='block';},1100);
+}
+function scanCred(){
+  const b=document.getElementById('cred-box');
+  b.innerHTML='<div class="ubox-icon">⏳</div><div class="ubox-lbl">Leyendo credencial...</div>';
+  setTimeout(()=>{b.classList.add('done');b.innerHTML='<div class="ubox-icon">✓</div><div class="ubox-lbl" style="color:var(--gd)">OSDE 310 · Verificada</div>';document.getElementById('cred-ocr').style.display='block';},1100);
+}
+function showAuth(){
+  ['paciente','medico','os','particular'].forEach(k=>{
+    const el=document.getElementById('auth-'+k);
+    if(el) el.classList.toggle('show',document.getElementById('auth-sel').value===k);
+  });
+}
+
+function selRad(el,group){
+  el.closest('.radio-group').querySelectorAll('.radio-opt').forEach(o=>{o.classList.remove('sel');o.classList.remove('sel-warn');});
+  el.classList.add(el.classList.contains('sel-warn')?'sel-warn':'sel');
+}
+function togPat(el){
+  el.classList.toggle('sel');
+  const hasAlert = document.querySelectorAll('.pat-tag.sel').length > 0 &&
+    !document.querySelector('.pat-tag.sel[onclick*="Ninguna"]');
+  document.getElementById('reprogram-alert').classList.toggle('show', hasAlert);
+}
+function selVac(btn, val){
+  const wrap=btn.closest('.vac-sel');
+  wrap.querySelectorAll('.vac-btn').forEach(b=>{b.classList.remove('yes','no','ns');});
+  btn.classList.add(val==='si'?'yes':val==='no'?'no':'ns');
+}
+function selEstado(gid,el,type){
+  document.querySelectorAll('#'+gid+' .anx-opt').forEach(o=>{o.classList.remove('sel','sel-warn');});
+  el.classList.add(type==='warn'?'sel-warn':'sel');
+  if(gid==='e1'&&type==='warn') document.getElementById('sintomas-alert').style.display='block';
+  else if(gid==='e1') document.getElementById('sintomas-alert').style.display='none';
+}
+function togChk(el,group){
+  el.classList.toggle('on');
+  if(group==='sintoma'){
+    const checked=[...document.querySelectorAll('.chk.on')].filter(c=>c.closest('#s6'));
+    const none=checked.some(c=>c.querySelector('.chk-lbl').textContent.includes('Ninguno'));
+    document.getElementById('sintomas-serios').classList.toggle('show',checked.length>0&&!none);
+  }
+}
+function togPreq(el){ el.classList.toggle('sel'); }
+function selPreqOpt(el,group){
+  el.closest('.preq-opts').querySelectorAll('.preq-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function uploadPreq(boxId,rotId){
+  const b=document.getElementById(boxId);
+  const r=document.getElementById(rotId);
+  b.innerHTML='<div class="preq-ubox-icon">⏳</div><div class="preq-ubox-lbl">Subiendo...</div>';
+  setTimeout(()=>{
+    b.classList.add('done');
+    b.innerHTML='<div class="preq-ubox-icon">✓</div><div class="preq-ubox-lbl" style="color:var(--b)">Archivo cargado</div>';
+    r.classList.add('show');
+  },1000);
+}
+function selPago(el){
+  document.querySelectorAll('.pago-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function addMed(){
+  const n=document.getElementById('med-n').value.trim();
+  const dr=document.getElementById('med-dr').value.trim();
+  if(!n)return;
+  const row=document.createElement('div');
+  row.className='med-row';
+  row.innerHTML=`<div class="med-av"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--b)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg></div><div><div class="med-name">${n}</div><div class="med-det">${dr||'Médico no especificado'}</div></div><button class="btn-del" onclick="this.parentElement.remove()">×</button>`;
+  document.getElementById('med-list').appendChild(row);
+  document.getElementById('med-n').value='';
+  document.getElementById('med-dr').value='';
+}
+function rsv(id){const b=document.getElementById(id);b.textContent='✓ Reservado';b.classList.add('rsv');}
+function enviar(){
+  document.getElementById('send-wrap').style.display='none';
+  document.getElementById('sent-wrap').style.display='block';
+  document.getElementById('nav').style.display='none';
+}
+
+render();
+</script>
+</body>
+</html>

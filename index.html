@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos — Sistema de Trazabilidad Quirúrgica</title>
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
+  --bl:#E6F1FB;--b:#0C447C;
+  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
+  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --pl:#EEEDFE;--p:#3C3489;
+  --rr:8px;--rl2:12px;
+  --nav-w:220px;
+  --top-h:52px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);display:flex;flex-direction:column}
+
+/* ── MODAL SELECTOR DE ROLES ── */
+.role-selector-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(2px)}
+.rsm-content{background:var(--bg);border-radius:var(--rl2);padding:32px;max-width:600px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.rsm-header{margin-bottom:24px}
+.rsm-title{font-size:20px;font-weight:600;color:var(--txt);margin-bottom:6px}
+.rsm-sub{font-size:13px;color:var(--txt2);line-height:1.5}
+.rsm-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:12px;margin:20px 0}
+.rsm-card{padding:14px;border:1px solid var(--brd);border-radius:var(--rr);cursor:pointer;transition:all .15s;text-align:center}
+.rsm-card:hover{border-color:var(--gm);background:var(--gl);transform:translateY(-2px)}
+.rsm-card.selected{border-color:var(--g);background:var(--gl);box-shadow:0 4px 12px rgba(15,110,86,.15)}
+.rsm-card-icon{font-size:28px;margin-bottom:8px}
+.rsm-card-name{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.rsm-card-desc{font-size:10px;color:var(--txt3)}
+.rsm-footer{display:flex;gap:10px;margin-top:24px;justify-content:flex-end}
+.rsm-btn{padding:8px 16px;border-radius:var(--rr);border:none;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.rsm-btn-cancel{background:var(--bg2);color:var(--txt2)}
+.rsm-btn-cancel:hover{background:var(--brd2)}
+.rsm-btn-confirm{background:var(--g);color:#fff}
+.rsm-btn-confirm:hover{background:var(--gd)}
+.rsm-btn-confirm:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── TOPBAR GLOBAL ── */
+.global-top{height:var(--top-h);background:var(--gd);display:flex;align-items:center;padding:0 18px;gap:14px;flex-shrink:0;border-bottom:0.5px solid rgba(255,255,255,.1)}
+.gt-logo{display:flex;align-items:center;gap:9px}
+.gt-logo-icon{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.gt-logo-icon svg{width:18px;height:18px;fill:var(--gm)}
+.gt-product{font-size:16px;font-weight:500;color:#fff}
+.gt-inst{font-size:10px;color:var(--gm);margin-top:1px}
+.gt-sep{width:1px;height:28px;background:rgba(255,255,255,.2);margin:0 4px}
+.gt-tagline{font-size:11px;color:rgba(255,255,255,.6)}
+.gt-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.gt-version{font-size:10px;color:rgba(255,255,255,.5);background:rgba(255,255,255,.1);padding:3px 9px;border-radius:20px}
+.gt-user{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.8);cursor:pointer}
+.gt-user:hover{opacity:.8}
+.gt-av{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff}
+.gt-user-menu{position:absolute;top:52px;right:18px;background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rr);padding:6px;min-width:180px;display:none;z-index:500;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.gt-user-menu.visible{display:block}
+.gum-item{padding:8px 12px;font-size:11px;color:var(--txt2);cursor:pointer;border-radius:var(--rr);transition:background .12s}
+.gum-item:hover{background:var(--bg2)}
+.gum-divider{height:0.5px;background:var(--brd);margin:4px 0}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR NAV ── */
+.sidenav{width:var(--nav-w);background:var(--bg);border-right:0.5px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.nav-section{padding:10px 12px 4px}
+.nav-section-title{font-size:9px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;padding:0 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--rr);cursor:pointer;transition:background .12s;margin-bottom:1px}
+.nav-item:hover{background:var(--bg2)}
+.nav-item.active{background:var(--gl)}
+.nav-item.active .nav-label{color:var(--gd);font-weight:500}
+.nav-item.active .nav-icon{background:var(--g)}
+.nav-item.active .nav-icon svg{fill:#fff;stroke:#fff}
+.nav-item.hidden{display:none}
+.nav-icon{width:28px;height:28px;border-radius:7px;background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .12s}
+.nav-icon svg{width:14px;height:14px;fill:var(--txt3);stroke:none}
+.nav-label{font-size:12px;color:var(--txt2);flex:1;line-height:1.3}
+.nav-role{font-size:9px;color:var(--txt3);margin-top:1px}
+.nav-badge{font-size:9px;padding:1px 6px;border-radius:8px;font-weight:500}
+.nb-alert{background:var(--rl);color:var(--r2)}
+.nb-warn{background:var(--al);color:var(--a)}
+.nb-ok{background:var(--gl);color:var(--gd)}
+.nb-info{background:var(--bl);color:var(--b)}
+
+.nav-divider{height:0.5px;background:var(--brd);margin:6px 12px}
+
+.nav-footer{padding:12px;border-top:0.5px solid var(--brd);margin-top:auto}
+.nf-info{font-size:10px;color:var(--txt3);line-height:1.6}
+.nf-dot{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--g);margin-top:4px}
+.nf-live{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 1.8s infinite}
+.nf-change-role{font-size:10px;color:var(--g);cursor:pointer;margin-top:6px;padding:4px 0}
+.nf-change-role:hover{text-decoration:underline}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── CONTENT AREA ── */
+.content{flex:1;overflow:hidden;position:relative;background:var(--bg3)}
+.content iframe{width:100%;height:100%;border:none;display:block}
+.content-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--txt3)}
+.cp-icon{font-size:48px;opacity:.4}
+.cp-text{font-size:14px;font-weight:500;color:var(--txt2)}
+.cp-sub{font-size:11px;color:var(--txt3)}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{height:34px;background:var(--bg);border-bottom:0.5px solid var(--brd);display:flex;align-items:center;padding:0 16px;gap:6px;font-size:11px;color:var(--txt3);flex-shrink:0}
+.bc-home{color:var(--txt3);cursor:pointer}
+.bc-home:hover{color:var(--g)}
+.bc-sep{color:var(--brd2)}
+.bc-current{color:var(--txt);font-weight:500}
+.bc-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.bc-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.bc-open{font-size:10px;color:var(--g);cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:3px}
+.bc-open:hover{text-decoration:underline}
+
+/* ── LOADING ── */
+.loading{position:absolute;inset:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;z-index:10}
+.loading-spinner{width:32px;height:32px;border:2px solid var(--brd);border-top-color:var(--g);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-size:11px;color:var(--txt3)}
+
+/* ── WELCOME ── */
+.welcome{padding:32px;max-width:900px;margin:0 auto;overflow-y:auto}
+.w-product{font-size:28px;font-weight:500;color:var(--txt);margin-bottom:4px}
+.w-sub{font-size:14px;color:var(--txt2);margin-bottom:28px;line-height:1.6}
+
+.w-section-title{font-size:12px;font-weight:600;color:var(--txt);text-transform:uppercase;letter-spacing:.05em;margin-top:28px;margin-bottom:12px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
+
+.w-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:12px}
+.w-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:16px;cursor:pointer;transition:all .15s}
+.w-card:hover{border-color:var(--gm);background:var(--gl);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.w-card.featured{border-color:var(--gm);background:var(--gl)}
+.wc-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:18px}
+.wc-title{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px}
+.wc-role{font-size:10px;color:var(--txt3);margin-bottom:6px}
+.wc-desc{font-size:11px;color:var(--txt2);line-height:1.5}
+
+.w-hint{font-size:11px;color:var(--txt3);margin-top:28px;padding:10px 14px;background:var(--bg);border-radius:var(--rr);border:0.5px solid var(--brd);line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- MODAL DE SELECCIÓN DE ROLES (INICIAL) -->
+<div class="role-selector-modal" id="role-selector-modal" style="display:none">
+  <div class="rsm-content">
+    <div class="rsm-header">
+      <div class="rsm-title">Bienvenido a Kairos</div>
+      <div class="rsm-sub">Selecciona el rol que representas en el quirófano. Esto determinará qué vistas y funcionalidades tendrás disponibles.</div>
+    </div>
+
+    <div class="rsm-grid" id="role-grid">
+      <!-- Se genera dinámicamente -->
+    </div>
+
+    <div class="rsm-footer">
+      <button class="rsm-btn rsm-btn-cancel" onclick="skipRoleSelection()">Saltar selección</button>
+      <button class="rsm-btn rsm-btn-confirm" id="btn-confirm-role" disabled>Continuar como</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOPBAR GLOBAL -->
+<div class="global-top">
+  <div class="gt-logo">
+    <div class="gt-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg>
+    </div>
+    <div>
+      <div class="gt-product" id="top-product">Kairos</div>
+      <div class="gt-inst" id="top-inst">Zenoxia · Nombre de la institución</div>
+    </div>
+  </div>
+  <div class="gt-sep"></div>
+  <div class="gt-tagline" id="top-tagline">Trazabilidad quirúrgica en tiempo real</div>
+  <div class="gt-right">
+    <div class="gt-version" id="top-version">v0.2 · prototipo</div>
+    <div class="gt-user" id="top-user" onclick="toggleUserMenu()">
+      <div class="gt-av" id="top-av">—</div>
+      <span id="top-username">Seleccioná un rol</span>
+    </div>
+    <div class="gt-user-menu" id="user-menu">
+      <div class="gum-item" onclick="changeRole()">Cambiar rol</div>
+      <div class="gum-divider"></div>
+      <div class="gum-item" onclick="loadScreen('roles')">Configurar acceso</div>
+      <div class="gum-item" onclick="clearStorage()">Limpiar sesión</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP BODY -->
+<div class="app-body">
+
+  <!-- SIDENAV -->
+  <div class="sidenav">
+
+    <div class="nav-section">
+      <div class="nav-section-title">Operaciones Quirúrgicas</div>
+
+      <div class="nav-item" onclick="loadScreen('dashboard')" id="nav-dashboard" data-roles="director,coord,circulante,camillero">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Dashboard</div>
+          <div class="nav-role">Monitoreo en tiempo real</div>
+        </div>
+        <span class="nav-badge nb-alert">4</span>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('coord')" id="nav-coord" data-roles="director,coord">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 6.5A2.5 2.5 0 0 1 6.5 9H20M4 12.5A2.5 2.5 0 0 1 6.5 15H20"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Coordinador turno</div>
+          <div class="nav-role">Gestión operativa</div>
+        </div>
+        <span class="nav-badge nb-warn">2</span>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('circulante')" id="nav-circulante" data-roles="director,circulante">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2m0 2v8m4-4l-4 4m-4-4l4 4"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Circulante / Anestesia</div>
+          <div class="nav-role">En quirófano</div>
+        </div>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('camilleros')" id="nav-camilleros" data-roles="director,coord,camillero">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M3 12h2m14 0h2M3 6h18M3 18h18M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Tablero camilleros</div>
+          <div class="nav-role">Office · Time-real</div>
+        </div>
+        <span class="nav-badge nb-ok">✓</span>
+      </div>
+
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Flujos de Pacientes</div>
+
+      <div class="nav-item" onclick="loadScreen('paciente')" id="nav-paciente" data-roles="director,coord,paciente">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm6 9.5c0-2.5-2.5-4.5-6-4.5s-6 2-6 4.5V20h12v-2.5z"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Flujo del paciente</div>
+          <div class="nav-role">Desde casa</div>
+        </div>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('uca')" id="nav-uca" data-roles="director,uca">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Recepcionista UCA</div>
+          <div class="nav-role">2° piso</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Administración</div>
+
+      <div class="nav-item" onclick="loadScreen('jefatura')" id="nav-jefatura" data-roles="director">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Jefatura · Analítica</div>
+          <div class="nav-role">KPIs y reportes</div>
+        </div>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('roles')" id="nav-roles" data-roles="director,admin">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm6 9.5c0-2.5-2.5-4.5-6-4.5s-6 2-6 4.5V20h12v-2.5z"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Panel de roles</div>
+          <div class="nav-role">Configuración</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER NAV -->
+    <div class="nav-footer">
+      <div class="nf-info">
+        <strong id="nf-config-name">Zenoxia · Kairos</strong>
+        <div class="nf-dot"><span class="nf-live"></span> En línea</div>
+      </div>
+      <div class="nf-change-role" onclick="changeRole()">↻ Cambiar rol</div>
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb" id="breadcrumb" style="display:none">
+      <span class="bc-home" onclick="goHome()">Inicio</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current" id="bc-current">—</span>
+      <div class="bc-right">
+        <a class="bc-open" id="bc-open-link" target="_blank" rel="noopener noreferrer">
+          <span>Abrir en nueva pestaña</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- IFRAME CONTENT -->
+    <div class="content" id="content-area">
+
+      <!-- WELCOME DEFAULT -->
+      <div id="welcome-screen" class="welcome">
+        <div class="w-product" id="w-product-name">Kairos</div>
+        <div class="w-sub"><strong id="w-empresa">Zenoxia</strong> · Sistema de trazabilidad quirúrgica en tiempo real · <strong id="w-inst-name">Centro Médico</strong><br>Seleccioná una pantalla en el menú lateral para comenzar.</div>
+
+        <div id="role-specific-content">
+          <!-- Se genera dinámicamente según el rol -->
+        </div>
+
+        <div class="w-hint">
+          <strong>Prototipo funcional v0.2</strong> · Estás navegando como <strong id="hint-role">usuario sin rol</strong>. <a href="#" onclick="changeRole(); return false;">Cambiar rol</a>
+        </div>
+      </div>
+
+      <!-- IFRAME (oculto hasta que se selecciona una pantalla) -->
+      <div id="loading-indicator" class="loading" style="display:none">
+        <div class="loading-spinner"></div>
+        <div class="loading-txt">Cargando pantalla...</div>
+      </div>
+      <iframe id="main-iframe" style="display:none" title="Pantalla Kairos"></iframe>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DEFINICIÓN DE ROLES ──────────────────────────────
+const ROLES_CONFIG = {
+  director: {
+    icon: '👨‍⚕️',
+    name: 'Director',
+    desc: 'Jefatura del área quirúrgica',
+    user: 'DR',
+    username: 'Dr. Díaz Ruiz, Adriana'
+  },
+  coord: {
+    icon: '📋',
+    name: 'Coordinador',
+    desc: 'Coordinador de turno',
+    user: 'GR',
+    username: 'González, Romina · Coord. QX'
+  },
+  circulante: {
+    icon: '⬡',
+    name: 'Circulante',
+    desc: 'Técnico en quirófano',
+    user: 'LV',
+    username: 'Vidal, Laura · Circulante'
+  },
+  camillero: {
+    icon: '🚑',
+    name: 'Camillero',
+    desc: 'Traslado de pacientes',
+    user: 'CA',
+    username: 'Sistema Camilleros'
+  },
+  uca: {
+    icon: '🏥',
+    name: 'Recepcionista UCA',
+    desc: 'Recepción 2° piso',
+    user: 'MR',
+    username: 'Rodríguez, María'
+  },
+  paciente: {
+    icon: '👤',
+    name: 'Paciente',
+    desc: 'Vista del paciente',
+    user: '→',
+    username: 'Vista del paciente'
+  },
+  admin: {
+    icon: '⚙️',
+    name: 'Administrador',
+    desc: 'Gestión del sistema',
+    user: 'AD',
+    username: 'Administrador del sistema'
+  }
+};
+
+// ── DEFINICIÓN DE PANTALLAS ──────────────────────────────
+const SCREENS = {
+  dashboard:  { file:'03_dashboard_monitoreo.html',      label:'Dashboard · Monitoreo' },
+  coord:      { file:'02_coordinador_turno_qx_v2.html',  label:'Coordinador turno QX' },
+  circulante: { file:'05_circulante_qx.html',            label:'Circulante · QX' },
+  camilleros: { file:'08_tablero_camilleros.html',       label:'Tablero camilleros' },
+  uca:        { file:'06_uca_jefatura.html',             label:'Recepcionista UCA' },
+  paciente:   { file:'04_flujo_paciente_v3.html',        label:'Flujo del paciente' },
+  jefatura:   { file:'06_uca_jefatura.html',             label:'Jefatura · Analítica' },
+  roles:      { file:'01_panel_roles.html',              label:'Panel de roles' },
+};
+
+let currentRole = null;
+let currentScreen = null;
+
+// ── INICIALIZACIÓN ──────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Aplicar config
+  if (typeof CONFIG !== 'undefined') {
+    document.getElementById('top-product').textContent    = CONFIG.proyecto.nombre;
+    document.getElementById('top-inst').textContent       = CONFIG.proyecto.empresa + ' · ' + CONFIG.institucion.nombre;
+    document.getElementById('top-tagline').textContent    = CONFIG.proyecto.tagline;
+    document.getElementById('top-version').textContent    = CONFIG.proyecto.version;
+    document.getElementById('w-product-name').textContent = CONFIG.proyecto.nombre;
+    document.getElementById('w-empresa').textContent      = CONFIG.proyecto.empresa;
+    document.getElementById('w-inst-name').textContent    = CONFIG.institucion.nombre;
+    document.getElementById('nf-config-name').textContent = CONFIG.proyecto.empresa + ' · ' + CONFIG.proyecto.nombre;
+    document.title = CONFIG.proyecto.nombre + ' — ' + CONFIG.proyecto.empresa;
+  }
+
+  // Verificar si hay rol guardado
+  const savedRole = localStorage.getItem('kairos-user-role');
+  if (savedRole && ROLES_CONFIG[savedRole]) {
+    setUserRole(savedRole);
+  } else {
+    showRoleSelector();
+  }
+});
+
+// ── MODAL DE SELECCIÓN DE ROLES ──────────────────────────────
+function showRoleSelector() {
+  const roleGrid = document.getElementById('role-grid');
+  const modal = document.getElementById('role-selector-modal');
+  
+  roleGrid.innerHTML = '';
+  Object.entries(ROLES_CONFIG).forEach(([roleId, roleData]) => {
+    const card = document.createElement('div');
+    card.className = 'rsm-card';
+    card.innerHTML = `
+      <div class="rsm-card-icon">${roleData.icon}</div>
+      <div class="rsm-card-name">${roleData.name}</div>
+      <div class="rsm-card-desc">${roleData.desc}</div>
+    `;
+    card.onclick = () => selectRole(roleId, card);
+    roleGrid.appendChild(card);
+  });
+  
+  modal.style.display = 'flex';
+}
+
+function selectRole(roleId, element) {
+  // Remover selección anterior
+  document.querySelectorAll('.rsm-card').forEach(c => c.classList.remove('selected'));
+  // Seleccionar nuevo
+  element.classList.add('selected');
+  // Habilitar botón
+  document.getElementById('btn-confirm-role').disabled = false;
+  document.getElementById('btn-confirm-role').textContent = 'Continuar como ' + ROLES_CONFIG[roleId].name;
+  // Guardar selección temporal
+  window.selectedRole = roleId;
+}
+
+function confirmRole() {
+  if (window.selectedRole) {
+    setUserRole(window.selectedRole);
+  }
+}
+
+function skipRoleSelection() {
+  document.getElementById('role-selector-modal').style.display = 'none';
+  // Mostrar welcome sin rol
+}
+
+function setUserRole(roleId) {
+  currentRole = roleId;
+  const roleData = ROLES_CONFIG[roleId];
+  
+  // Guardar en localStorage
+  localStorage.setItem('kairos-user-role', roleId);
+  
+  // Actualizar topbar
+  document.getElementById('top-av').textContent = roleData.user;
+  document.getElementById('top-username').textContent = roleData.username;
+  document.getElementById('hint-role').textContent = roleData.name;
+  
+  // Ocultar modal
+  document.getElementById('role-selector-modal').style.display = 'none';
+  
+  // Filtrar menú según rol
+  filterMenuByRole(roleId);
+  
+  // Generar contenido dinámico del welcome
+  generateWelcomeContent(roleId);
+  
+  // Volver a home
+  goHome();
+}
+
+function filterMenuByRole(roleId) {
+  document.querySelectorAll('[data-roles]').forEach(item => {
+    const roles = item.getAttribute('data-roles').split(',');
+    if (roles.includes(roleId)) {
+      item.classList.remove('hidden');
+    } else {
+      item.classList.add('hidden');
+    }
+  });
+}
+
+function generateWelcomeContent(roleId) {
+  const container = document.getElementById('role-specific-content');
+  const roleData = ROLES_CONFIG[roleId];
+  
+  // Determinar qué pantallas mostrar para este rol
+  const availableScreens = [];
+  Object.entries(SCREENS).forEach(([screenId, screenData]) => {
+    const navItem = document.getElementById('nav-' + screenId);
+    if (navItem && !navItem.classList.contains('hidden')) {
+      availableScreens.push({ id: screenId, ...screenData });
+    }
+  });
+  
+  let html = '';
+  
+  // Agrupar pantallas por categoría
+  const opScreens = availableScreens.filter(s => 
+    ['dashboard', 'coord', 'circulante', 'camilleros'].includes(s.id)
+  );
+  const pacScreens = availableScreens.filter(s => 
+    ['paciente', 'uca'].includes(s.id)
+  );
+  const adminScreens = availableScreens.filter(s => 
+    ['jefatura', 'roles'].includes(s.id)
+  );
+  
+  if (opScreens.length > 0) {
+    html += `<div class="w-section-title">Operaciones Quirúrgicas</div><div class="w-grid">`;
+    opScreens.forEach(s => {
+      const icons = {dashboard:'📊', coord:'📋', circulante:'⬡', camilleros:'🚑'};
+      html += `
+        <div class="w-card" onclick="loadScreen('${s.id}')">
+          <div class="wc-icon" style="background:var(--bl)">${icons[s.id] || '📱'}</div>
+          <div class="wc-title">${s.label}</div>
+          <div class="wc-desc">Acceso disponible para tu rol.</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  
+  if (pacScreens.length > 0) {
+    html += `<div class="w-section-title">Flujos de Pacientes</div><div class="w-grid">`;
+    pacScreens.forEach(s => {
+      const icons = {paciente:'👤', uca:'🏥'};
+      html += `
+        <div class="w-card" onclick="loadScreen('${s.id}')">
+          <div class="wc-icon" style="background:var(--pl)">${icons[s.id] || '📱'}</div>
+          <div class="wc-title">${s.label}</div>
+          <div class="wc-desc">Acceso disponible para tu rol.</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  
+  if (adminScreens.length > 0) {
+    html += `<div class="w-section-title">Administración</div><div class="w-grid">`;
+    adminScreens.forEach(s => {
+      const icons = {jefatura:'📈', roles:'⚙️'};
+      html += `
+        <div class="w-card" onclick="loadScreen('${s.id}')">
+          <div class="wc-icon" style="background:var(--bg2)">${icons[s.id] || '⚙️'}</div>
+          <div class="wc-title">${s.label}</div>
+          <div class="wc-desc">Acceso disponible para tu rol.</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+  
+  container.innerHTML = html;
+}
+
+function changeRole() {
+  currentRole = null;
+  localStorage.removeItem('kairos-user-role');
+  location.reload();
+}
+
+function toggleUserMenu() {
+  const menu = document.getElementById('user-menu');
+  menu.classList.toggle('visible');
+  document.addEventListener('click', function closeMenu(e) {
+    if (!menu.contains(e.target) && !document.getElementById('top-user').contains(e.target)) {
+      menu.classList.remove('visible');
+      document.removeEventListener('click', closeMenu);
+    }
+  });
+}
+
+function clearStorage() {
+  localStorage.clear();
+  location.reload();
+}
+
+// ── CARGA DE PANTALLAS ──────────────────────────────────
+function loadScreen(id) {
+  const s = SCREENS[id];
+  if (!s) return;
+  
+  // Verificar que el rol tiene acceso
+  const navItem = document.getElementById('nav-' + id);
+  if (!navItem || navItem.classList.contains('hidden')) {
+    alert('No tienes acceso a esta pantalla con tu rol actual.');
+    return;
+  }
+  
+  currentScreen = id;
+
+  // Activar nav item
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navItem) navItem.classList.add('active');
+
+  // Breadcrumb
+  document.getElementById('breadcrumb').style.display = 'flex';
+  document.getElementById('bc-current').textContent   = s.label;
+  document.getElementById('bc-open-link').href        = s.file;
+
+  // Ocultar welcome
+  document.getElementById('welcome-screen').style.display = 'none';
+
+  // Mostrar loading
+  const loading = document.getElementById('loading-indicator');
+  const iframe  = document.getElementById('main-iframe');
+  loading.style.display = 'flex';
+  iframe.style.display  = 'none';
+
+  // Cargar iframe
+  iframe.onload = () => {
+    loading.style.display = 'none';
+    iframe.style.display  = 'block';
+
+    if (id === 'jefatura') {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const jefBtn = doc.querySelector('.stab:last-child');
+        if (jefBtn) jefBtn.click();
+      } catch(e) {}
+    }
+  };
+  iframe.src = s.file;
+}
+
+function goHome() {
+  currentScreen = null;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('breadcrumb').style.display    = 'none';
+  document.getElementById('welcome-screen').style.display = 'block';
+  document.getElementById('main-iframe').style.display   = 'none';
+  document.getElementById('loading-indicator').style.display = 'none';
+}
+
+// Aplicar botón de confirmación del modal
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btn-confirm-role').addEventListener('click', confirmRole);
+});
+</script>
+</body>
+</html>

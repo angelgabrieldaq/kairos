@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIROS — Tablero de Camilleros</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --bg2: #f9fafb;
+            --bg3: #f3f4f6;
+            --txt: #0f172a;
+            --txt2: #334155;
+            --txt3: #64748b;
+            --brd: rgba(15, 23, 42, 0.06);
+            --brd2: rgba(15, 23, 42, 0.12);
+            
+            --bl: #0c447c;
+            --bl-light: #e0f2fe;
+            --bl-mid: #1e5ba8;
+            --bl-dark: #003d7a;
+            --bl-accent: #0369a1;
+            
+            --success: #15803d;
+            --success-light: #dcfce7;
+            --warning: #b45309;
+            --warning-light: #fef3c7;
+            --error: #7f1d1d;
+            --error-light: #fef2f2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg3);
+            color: var(--txt);
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--bl-dark);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(12, 68, 124, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .time {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .date {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            margin-top: 12px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ── GRID DE TARJETAS ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* ── TARJETA DE CAMILLERO ── */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 2px solid var(--brd2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(12, 68, 124, 0.12);
+            border-color: var(--bl-accent);
+            transform: translateY(-2px);
+        }
+
+        /* Estado de la tarjeta */
+        .card.status-available {
+            border-top: 6px solid var(--success);
+        }
+
+        .card.status-in-progress {
+            border-top: 6px solid var(--bl);
+        }
+
+        .card.status-completed {
+            border-top: 6px solid var(--success);
+            opacity: 0.85;
+        }
+
+        /* ── HEADER DE TARJETA ── */
+        .card-header {
+            background: linear-gradient(135deg, var(--bl) 0%, var(--bl-mid) 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .camillero-name {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .camillero-id {
+            font-size: 13px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        .status-badge.available {
+            background: var(--success);
+        }
+
+        .status-badge.in-progress {
+            background: var(--warning);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .status-badge.completed {
+            background: var(--success);
+        }
+
+        /* ── CONTENIDO DE TARJETA ── */
+        .card-body {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Sección de información */
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--txt3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--brd);
+        }
+
+        .info-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .info-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--txt3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--txt);
+            line-height: 1.3;
+        }
+
+        /* Paciente */
+        .patient-box {
+            background: var(--bl-light);
+            border-left: 4px solid var(--bl);
+            padding: 16px;
+            border-radius: 6px;
+        }
+
+        .patient-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--bl-dark);
+            margin-bottom: 8px;
+        }
+
+        .patient-info {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--bl-dark);
+        }
+
+        /* Ubicación */
+        .location-box {
+            background: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            padding: 16px;
+            border-radius: 6px;
+        }
+
+        .location-label {
+            font-size: 12px;
+            color: var(--warning);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .location-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--txt);
+        }
+
+        /* Requerimientos */
+        .requirements {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            padding: 8px;
+            background: var(--bg2);
+            border-radius: 4px;
+        }
+
+        .requirement-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Ruta */
+        .route-box {
+            background: var(--bg2);
+            padding: 14px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid var(--brd2);
+        }
+
+        .route-text {
+            font-size: 14px;
+            color: var(--txt2);
+            margin-bottom: 8px;
+        }
+
+        .route-arrow {
+            font-size: 24px;
+            color: var(--bl);
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .route-destination {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--txt);
+        }
+
+        /* Tiempos */
+        .times-box {
+            background: var(--bg2);
+            padding: 14px;
+            border-radius: 6px;
+            border-left: 4px solid var(--bl);
+            font-size: 14px;
+        }
+
+        .time-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--brd);
+        }
+
+        .time-item:last-child {
+            border-bottom: none;
+        }
+
+        .time-label {
+            color: var(--txt2);
+            font-weight: 500;
+        }
+
+        .time-value {
+            font-weight: 700;
+            color: var(--bl);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            color: var(--txt3);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--brd2);
+        }
+
+        .update-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .update-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 1s infinite;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--txt3);
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .empty-sub {
+            font-size: 16px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1400px) {
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                align-items: flex-start;
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                font-size: 16px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header-left h1 {
+                font-size: 36px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                padding: 18px;
+            }
+
+            .camillero-name {
+                font-size: 24px;
+            }
+
+            .card-body {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <h1>🏥 KAIROS — Tablero Camilleros</h1>
+            <p>Estado en tiempo real</p>
+        </div>
+        <div class="header-right">
+            <div class="time" id="current-time">00:00:00</div>
+            <div class="date" id="current-date">--/--/--</div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>En vivo</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRID DE CAMILLEROS -->
+    <div class="grid" id="camilleros-grid">
+        <div class="empty-state">
+            <div class="empty-icon">⏳</div>
+            <div class="empty-text">Cargando camilleros...</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="update-info">
+            <div class="update-dot"></div>
+            <span id="last-update">Última actualización: hace unos segundos</span>
+        </div>
+        <div style="margin-top: 8px; color: var(--txt3);">
+            Se actualiza automáticamente cada 10 segundos
+        </div>
+    </div>
+
+    <script>
+        // ── DATOS MOCK DE CAMILLEROS ──
+        const mockCamilleros = [
+            {
+                id: 1,
+                name: "Juan Pérez",
+                status: "available",
+                patient: null,
+                requirements: [],
+                location: null,
+                from: null,
+                to: null,
+                pickupTime: null,
+                deliveryTime: null
+            },
+            {
+                id: 2,
+                name: "Carlos Gómez",
+                status: "in-progress",
+                patient: {
+                    name: "Ana Rodríguez Silva",
+                    dni: "28.456.321",
+                    age: 42,
+                    procedure: "Colecistectomía"
+                },
+                requirements: ["Camilla con ruedas", "Oxígeno portátil", "Monitor cardíaco"],
+                location: "Quirófano 1 - Sala de recuperación",
+                from: "Quirófano 1",
+                to: "Piso 2 - Habitación 215",
+                pickupTime: "08:45",
+                deliveryTime: "09:12"
+            },
+            {
+                id: 3,
+                name: "Rosa García",
+                status: "completed",
+                patient: {
+                    name: "Luis Hernández Díaz",
+                    dni: "32.789.654",
+                    age: 67,
+                    procedure: "Resección transuretral"
+                },
+                requirements: ["Silla de ruedas ortopédica", "Oxígeno portátil", "Manta térmica"],
+                location: "Quirófano 2 - Sala de recuperación",
+                from: "Quirófano 2",
+                to: "Habitación 218 - Piso 2",
+                pickupTime: "09:30",
+                deliveryTime: "09:47"
+            },
+            {
+                id: 4,
+                name: "Juan Carlos Martínez",
+                status: "available",
+                patient: {
+                    name: "Juan Carlos Martínez López",
+                    dni: "35.892.145",
+                    age: 58,
+                    procedure: "Artroscopia rodilla derecha"
+                },
+                requirements: ["Camilla estándar", "Sin oxígeno"],
+                location: "Sala de Admisión - Escritorio de registros",
+                from: "Admisión",
+                to: "Quirófano 3",
+                pickupTime: null,
+                deliveryTime: null
+            }
+        ];
+
+        // ── INICIALIZACIÓN ──
+        window.addEventListener('load', () => {
+            renderCamilleros();
+            updateClock();
+            setInterval(updateClock, 1000);
+            setInterval(renderCamilleros, 10000); // Actualizar cada 10 segundos
+            setInterval(simulateStatusChange, 15000); // Simular cambios
+        });
+
+        // ── FUNCIONES ──
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('es-AR');
+            document.getElementById('current-date').textContent = now.toLocaleDateString('es-AR');
+            
+            const lastUpdate = new Date(Date.now() - Math.random() * 5000);
+            const diff = Math.floor((Date.now() - lastUpdate) / 1000);
+            document.getElementById('last-update').textContent = `Última actualización: hace ${diff}s`;
+        }
+
+        function renderCamilleros() {
+            const grid = document.getElementById('camilleros-grid');
+            
+            if (mockCamilleros.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✅</div>
+                        <div class="empty-text">Todos los camilleros disponibles</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = mockCamilleros.map(cam => `
+                <div class="card status-${cam.status}">
+                    <!-- HEADER -->
+                    <div class="card-header">
+                        <div>
+                            <div class="camillero-name">${cam.name}</div>
+                            <div class="camillero-id">Camillero #${cam.id}</div>
+                        </div>
+                        <div class="status-badge ${cam.status}">
+                            ${getStatusLabel(cam.status)}
+                        </div>
+                    </div>
+
+                    <!-- CONTENIDO -->
+                    <div class="card-body">
+                        ${cam.status === 'available' ? `
+                            <div style="text-align: center; color: var(--success); font-size: 20px; font-weight: 700;">
+                                ✓ Disponible
+                            </div>
+                        ` : ''}
+
+                        ${cam.patient ? `
+                            <!-- PACIENTE -->
+                            <div class="section">
+                                <div class="section-title">👤 Paciente</div>
+                                <div class="patient-box">
+                                    <div class="patient-name">${cam.patient.name}</div>
+                                    <div class="patient-info">
+                                        <span>DNI: ${cam.patient.dni}</span>
+                                        <span>Edad: ${cam.patient.age}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- UBICACIÓN -->
+                            <div class="section">
+                                <div class="location-box">
+                                    <div class="location-label">📍 Buscar en:</div>
+                                    <div class="location-text">${cam.location}</div>
+                                </div>
+                            </div>
+
+                            <!-- REQUERIMIENTOS -->
+                            <div class="section">
+                                <div class="section-title">📋 Requerimientos</div>
+                                <div class="requirements">
+                                    ${cam.requirements.map(req => `
+                                        <div class="requirement">
+                                            <span class="requirement-icon">✓</span>
+                                            <span>${req}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- RUTA -->
+                            <div class="route-box">
+                                <div class="route-text">Traslado de:</div>
+                                <strong style="font-size: 16px;">${cam.from}</strong>
+                                <div class="route-arrow">↓</div>
+                                <strong style="font-size: 16px;">${cam.to}</strong>
+                            </div>
+
+                            <!-- TIEMPOS -->
+                            ${cam.pickupTime || cam.deliveryTime ? `
+                                <div class="times-box">
+                                    ${cam.pickupTime ? `
+                                        <div class="time-item">
+                                            <span class="time-label">Recogida:</span>
+                                            <span class="time-value">${cam.pickupTime}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${cam.deliveryTime ? `
+                                        <div class="time-item">
+                                            <span class="time-label">Entrega:</span>
+                                            <span class="time-value">${cam.deliveryTime}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'available': '✓ Disponible',
+                'in-progress': '⏱ En Traslado',
+                'completed': '✓ Completado'
+            };
+            return labels[status] || status;
+        }
+
+        function simulateStatusChange() {
+            // Simular cambios aleatorios para demo
+            if (Math.random() > 0.7) {
+                const randomIndex = Math.floor(Math.random() * mockCamilleros.length);
+                const cam = mockCamilleros[randomIndex];
+                
+                if (cam.status === 'available') {
+                    cam.status = 'in-progress';
+                    // Asignar paciente ficticio
+                    const patients = [
+                        { name: "Juan Carlos Martínez López", dni: "35.892.145", age: 58, procedure: "Artroscopia" },
+                        { name: "Ana Rodríguez Silva", dni: "28.456.321", age: 42, procedure: "Colecistectomía" }
+                    ];
+                    cam.patient = patients[Math.floor(Math.random() * patients.length)];
+                    cam.location = `Quirófano ${Math.floor(Math.random() * 5) + 1}`;
+                    cam.from = "Quirófano";
+                    cam.to = `Piso 2 - Habitación ${Math.floor(Math.random() * 200) + 200}`;
+                    cam.pickupTime = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+                } else if (cam.status === 'in-progress') {
+                    cam.status = 'completed';
+                    cam.deliveryTime = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+                } else if (cam.status === 'completed') {
+                    cam.status = 'available';
+                    cam.patient = null;
+                    cam.requirements = [];
+                    cam.location = null;
+                    cam.pickupTime = null;
+                    cam.deliveryTime = null;
+                }
+                
+                renderCamilleros();
+            }
+        }
+    </script>
+</body>
+</html>

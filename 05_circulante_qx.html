@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circulante / Téc. Anestesia — Centro Médico</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
+  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
+  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
+  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --rr:8px;--rl2:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+
+.page-meta{width:100%;max-width:520px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo-i{width:28px;height:28px;background:var(--a);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i svg{width:16px;height:16px;fill:#fff}
+.pm-title{font-size:14px;font-weight:500;color:var(--txt)}
+.pm-sub{font-size:10px;color:var(--txt3)}
+.slabel{font-size:10px;background:var(--al);color:var(--a);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--am)}
+
+.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* TOPBAR */
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.tb-left{display:flex;align-items:center;gap:9px}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--al);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--a)}
+.tb-name{font-size:12px;font-weight:500;color:var(--txt)}
+.tb-role{font-size:10px;color:var(--txt3)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
+.qx-badge{font-size:11px;font-weight:500;background:var(--bl);color:var(--b);padding:4px 12px;border-radius:20px;border:0.5px solid var(--bm)}
+
+/* VIEWS */
+.view{display:none}
+.view.active{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── VIEW 1: SIN PACIENTE / ESCANEAR ─── */
+.scan-view{padding:20px 16px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.scan-title{font-size:16px;font-weight:500;color:var(--txt)}
+.scan-sub{font-size:11px;color:var(--txt2);line-height:1.6}
+.scan-area{width:100%;border:2px dashed var(--brd2);border-radius:var(--rl2);padding:36px 24px;cursor:pointer;background:var(--bg);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scan-area:hover{border-color:var(--g);background:var(--gl)}
+.scan-icon{font-size:48px;line-height:1}
+.scan-lbl{font-size:14px;font-weight:500;color:var(--txt)}
+.scan-hint{font-size:11px;color:var(--txt2)}
+.scan-alt{font-size:11px;color:var(--txt3)}
+.scan-alt button{color:var(--g);background:none;border:none;cursor:pointer;font-size:11px;text-decoration:underline}
+
+/* LISTA QX DEL DÍA */
+.qx-list{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);width:100%;text-align:left;overflow:hidden}
+.ql-head{padding:9px 13px;border-bottom:0.5px solid var(--brd);background:var(--bg2)}
+.ql-title{font-size:11px;font-weight:500;color:var(--txt)}
+.ql-item{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:0.5px solid var(--brd);cursor:pointer;transition:background .12s}
+.ql-item:last-child{border-bottom:none}
+.ql-item:hover{background:var(--bg2)}
+.ql-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ql-time{font-size:11px;font-weight:500;color:var(--txt2);min-width:44px}
+.ql-name{font-size:12px;font-weight:500;color:var(--txt);flex:1}
+.ql-proc{font-size:10px;color:var(--txt2)}
+.ql-status{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;white-space:nowrap}
+.s-pend{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
+.s-act{background:var(--bl);color:var(--b)}
+.s-done{background:var(--gl);color:var(--gd)}
+.s-warn{background:var(--al);color:var(--a)}
+
+/* ─── VIEW 2: PACIENTE CARGADO ─── */
+/* PAC HEADER */
+.pac-header{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:12px 16px}
+.ph-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ph-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.ph-name{font-size:15px;font-weight:500;color:var(--txt)}
+.ph-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.ph-badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500}
+.b-proc{background:var(--bl);color:var(--b)}
+.b-anest{background:var(--al);color:var(--a)}
+.b-latex{background:var(--rl);color:var(--r2);border:0.5px solid #F7C1C1}
+.b-dest{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
+
+/* LATEX BANNER */
+.latex-banner{background:var(--rl);border-left:4px solid var(--rm);padding:10px 14px;font-size:12px;color:var(--r2);font-weight:500;display:flex;align-items:center;gap:8px;line-height:1.5}
+
+/* HITOS PANEL */
+.hitos-panel{background:var(--bg);padding:14px 16px;border-bottom:0.5px solid var(--brd)}
+.hp-title{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+
+.hito-item{display:flex;gap:10px;margin-bottom:0}
+.hi-left{display:flex;flex-direction:column;align-items:center;width:36px}
+.hi-btn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:all .2s;flex-shrink:0}
+.hi-btn.pending{background:var(--bg2);border:2px dashed var(--brd2);color:var(--txt3);cursor:default}
+.hi-btn.ready{background:var(--g);color:#fff;animation:pulse-g 1.5s infinite}
+@keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(15,110,86,.4)}50%{box-shadow:0 0 0 6px rgba(15,110,86,.0)}}
+.hi-btn.done{background:var(--gl);border:2px solid var(--gm);color:var(--gd);cursor:default;animation:none}
+.hi-btn.done::after{content:'✓';font-size:14px}
+.hi-line{flex:1;width:2px;background:var(--brd);margin:3px 0;min-height:16px}
+.hi-line.done{background:var(--gm)}
+.hi-body{flex:1;padding-bottom:18px;padding-top:4px}
+.hi-label{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.hi-who{font-size:10px;color:var(--txt2);margin-bottom:3px}
+.hi-time{font-size:11px;color:var(--txt3)}
+.hi-time.recorded{color:var(--g);font-weight:500}
+.hi-time.overdue{color:var(--r2);font-weight:500}
+.hi-scan-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;background:var(--gl);color:var(--gd);padding:2px 8px;border-radius:8px;margin-top:2px;border:0.5px solid var(--gm)}
+.hi-delta{font-size:10px;color:var(--r2);font-weight:500}
+
+/* SCAN CONFIRM MODAL */
+.scan-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center;padding:0}
+.scan-modal.open{display:flex}
+.scan-sheet{background:var(--bg);border-radius:var(--rl2) var(--rl2) 0 0;width:100%;max-width:520px;padding:20px 20px 32px;display:flex;flex-direction:column;gap:14px}
+.ss-title{font-size:16px;font-weight:500;color:var(--txt);text-align:center}
+.ss-sub{font-size:12px;color:var(--txt2);text-align:center;line-height:1.6}
+.ss-hito{background:var(--gl);border-radius:var(--rr);padding:12px 16px;text-align:center}
+.ss-hito-name{font-size:14px;font-weight:500;color:var(--gd);margin-bottom:2px}
+.ss-hito-who{font-size:11px;color:var(--g)}
+.ss-pac{font-size:12px;color:var(--txt2);text-align:center}
+.ss-pac strong{color:var(--txt)}
+.latex-warn-sheet{background:var(--rl);border-radius:var(--rr);padding:10px 14px;font-size:11px;color:var(--r2);font-weight:500;text-align:center}
+.ss-btns{display:flex;flex-direction:column;gap:8px}
+.btn-confirm-scan{padding:14px;font-size:14px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;width:100%}
+.btn-cancel-scan{padding:10px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;width:100%}
+
+/* CONFIRMED MODAL */
+.confirmed-sheet{display:none;flex-direction:column;gap:12px;align-items:center;padding:8px 0}
+.cs-icon{font-size:52px;line-height:1}
+.cs-title{font-size:16px;font-weight:500;color:var(--gd)}
+.cs-sub{font-size:12px;color:var(--g);text-align:center;line-height:1.6}
+.cs-time{font-size:11px;color:var(--txt3)}
+.btn-close-conf{padding:10px 24px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;margin-top:4px}
+
+/* DATOS CLÍNICOS */
+.clin-section{background:var(--bg);border-top:0.5px solid var(--brd);padding:14px 16px}
+.cs-head{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.clin-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--brd);margin-bottom:12px}
+.ctab{font-size:11px;padding:7px 12px;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.ctab.active{color:var(--g);border-bottom-color:var(--g);font-weight:500}
+.clin-panel{display:none}
+.clin-panel.active{display:block}
+.clin-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:0.5px solid var(--brd)}
+.clin-row:last-child{border-bottom:none}
+.clin-k{color:var(--txt2)}
+.clin-v{font-weight:500;color:var(--txt)}
+.clin-v.alert{color:var(--r2)}
+.clin-v.warn{color:var(--a)}
+.clin-v.ok{color:var(--g)}
+
+.req-mini{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--brd);font-size:11px}
+.req-mini:last-child{border-bottom:none}
+.req-ico-sm{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ri-ok{background:var(--gl)}
+.ri-err{background:var(--rl)}
+.ri-warn{background:var(--al)}
+
+/* BOTTOM BAR */
+.bottom-bar{background:var(--bg);border-top:0.5px solid var(--brd);padding:10px 16px;display:flex;gap:8px}
+.btn-new-scan{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-change-pac{padding:11px 14px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
+
+/* PILL */
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.p-green{background:var(--gl);color:var(--gd)}
+.p-amber{background:var(--al);color:var(--a)}
+.p-blue{background:var(--bl);color:var(--b)}
+.p-red{background:var(--rl);color:var(--r2)}
+</style>
+</head>
+<body>
+
+<div class="page-meta">
+  <div class="logo-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg></div>
+  <div><div class="pm-title">Centro Médico</div><div class="pm-sub">Sistema de gestión quirúrgica</div></div>
+  <div class="slabel">Pantalla 5 — Circulante / Téc. anestesia</div>
+</div>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-av">LV</div>
+      <div><div class="tb-name">Vidal, Laura</div><div class="tb-role">Circulante · Turno mañana</div></div>
+    </div>
+    <div class="tb-right">
+      <div class="clock">10:47 hs</div>
+      <div class="qx-badge">QX 2</div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW 1: SIN PACIENTE ═══ -->
+  <div class="view active" id="view-scan">
+    <div class="scan-view">
+      <div>
+        <div class="scan-title">Identificar paciente</div>
+        <div class="scan-sub">Escaneá el QR de la pulsera del paciente para cargar su información y registrar los hitos de la cirugía.</div>
+      </div>
+
+      <div class="scan-area" onclick="loadPacient()" style="width:100%">
+        <div class="scan-icon">⬡</div>
+        <div class="scan-lbl">Apuntar al QR de la pulsera</div>
+        <div class="scan-hint">Lector USB conectado · o cámara del dispositivo</div>
+      </div>
+
+      <div class="scan-alt">También podés <button onclick="loadPacient()">ingresar el número de HC manualmente</button></div>
+
+      <div class="qx-list">
+        <div class="ql-head"><div class="ql-title">Cirugías asignadas a QX 2 hoy</div></div>
+        <div class="ql-item" onclick="loadPacient()">
+          <div class="ql-dot" style="background:var(--g)"></div>
+          <div class="ql-time">10:00</div>
+          <div><div class="ql-name">Vega, Carlos</div><div class="ql-proc">Artroplastia MAKO · Dr. Castillo</div></div>
+          <div class="ql-status s-act">En curso</div>
+        </div>
+        <div class="ql-item" onclick="loadPacient()">
+          <div class="ql-dot" style="background:var(--am)"></div>
+          <div class="ql-time">14:00</div>
+          <div><div class="ql-name">Díaz, Carlos</div><div class="ql-proc">Artroplastia cadera · Dr. Castillo</div></div>
+          <div class="ql-status s-warn">Req. incompletos</div>
+        </div>
+        <div class="ql-item">
+          <div class="ql-dot" style="background:var(--brd2)"></div>
+          <div class="ql-time">17:00</div>
+          <div><div class="ql-name">Paz, Silvana</div><div class="ql-proc">Artroscopia rodilla · Dr. Ruiz</div></div>
+          <div class="ql-status s-pend">Pendiente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW 2: PACIENTE CARGADO ═══ -->
+  <div class="view" id="view-pac">
+
+    <!-- HEADER PACIENTE -->
+    <div class="pac-header">
+      <div class="ph-top">
+        <div class="ph-av" style="background:var(--rl);color:var(--r2)">VC</div>
+        <div style="flex:1">
+          <div class="ph-name">Vega López, Carlos</div>
+          <div class="ph-sub">HC 00028741 · DNI 32.451.890 · 54 años</div>
+        </div>
+        <button onclick="backToScan()" style="font-size:10px;padding:4px 10px;border-radius:8px;border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer">Cambiar</button>
+      </div>
+      <div class="ph-badges">
+        <span class="badge b-proc">Artroplastia rodilla — MAKO</span>
+        <span class="badge b-anest">Anestesia espinal</span>
+        <span class="badge b-latex">⚠ ALÉRGICO LÁTEX</span>
+        <span class="badge b-dest">Destino post-op: UTI</span>
+      </div>
+    </div>
+
+    <!-- LÁTEX BANNER -->
+    <div class="latex-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div>PROTOCOLO LÁTEX ACTIVO — Guantes nitrilo obligatorios. QX 2 acondicionado libre de látex. Verificar todos los insumos antes del procedimiento.</div>
+    </div>
+
+    <!-- HITOS -->
+    <div class="hitos-panel">
+      <div class="hp-title">Registro de hitos — tap para escanear</div>
+
+      <!-- HITO 1: INGRESO QX — done -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn done" id="h1-btn"></div>
+          <div class="hi-line done"></div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label">Ingreso a quirófano</div>
+          <div class="hi-who">Circulante</div>
+          <div class="hi-time recorded">10:04 hs <span class="hi-delta">+4 min</span></div>
+          <div class="hi-scan-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Scan registrado · Circulante Vidal</div>
+        </div>
+      </div>
+
+      <!-- HITO 2: INICIO ANESTESIA — done -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn done" id="h2-btn"></div>
+          <div class="hi-line done"></div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label">Inicio anestesia</div>
+          <div class="hi-who">Técnico de anestesia</div>
+          <div class="hi-time recorded">10:19 hs <span class="hi-delta" style="color:var(--r2)">+4 min</span></div>
+          <div class="hi-scan-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Scan registrado · Téc. Fernández</div>
+        </div>
+      </div>
+
+      <!-- HITO 3: INICIO CIRUGÍA — READY (próximo a registrar) -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn ready" id="h3-btn" onclick="openScanModal('inicio-cirugia')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M21 15h-3v3M21 21h-6v-3M15 15h.01"/></svg>
+          </div>
+          <div class="hi-line" id="h3-line"></div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label" style="color:var(--g)">Inicio cirugía</div>
+          <div class="hi-who">Circulante</div>
+          <div class="hi-time" id="h3-time">Programado 10:30 hs — Tap para registrar ahora</div>
+        </div>
+      </div>
+
+      <!-- HITO 4: FIN CIRUGÍA — pending -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn pending" id="h4-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="hi-line" id="h4-line"></div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label">Fin cirugía</div>
+          <div class="hi-who">Circulante</div>
+          <div class="hi-time">Programado ~13:00 hs</div>
+        </div>
+      </div>
+
+      <!-- HITO 5: FIN ANESTESIA — pending -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn pending" id="h5-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="hi-line" id="h5-line"></div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label">Fin anestesia</div>
+          <div class="hi-who">Técnico de anestesia</div>
+          <div class="hi-time">Programado ~13:10 hs</div>
+        </div>
+      </div>
+
+      <!-- HITO 6: SOLICITUD CAMILLERO — pending -->
+      <div class="hito-item">
+        <div class="hi-left">
+          <div class="hi-btn pending" id="h6-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div class="hi-body">
+          <div class="hi-label">QX listo · Solicitar camillero</div>
+          <div class="hi-who">Circulante — automático al registrar fin</div>
+          <div class="hi-time">Programado ~13:20 hs</div>
+        </div>
+      </div>
+
+    </div><!-- /hitos -->
+
+    <!-- DATOS CLÍNICOS -->
+    <div class="clin-section">
+      <div class="cs-head">Datos del paciente</div>
+      <div class="clin-tabs">
+        <div class="ctab active" onclick="showClin('req',this)">Requisitos</div>
+        <div class="ctab" onclick="showClin('eval',this)">Eval. preanestésica</div>
+        <div class="ctab" onclick="showClin('ant',this)">Antecedentes</div>
+      </div>
+
+      <!-- REQUISITOS -->
+      <div class="clin-panel active" id="clin-req">
+        <div class="req-mini">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="clin-k">Consentimiento quirúrgico</span>
+          </div>
+          <span class="clin-v ok">Firmado</span>
+        </div>
+        <div class="req-mini">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="clin-k">Consentimiento anestesia</span>
+          </div>
+          <span class="clin-v ok">Firmado</span>
+        </div>
+        <div class="req-mini">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div class="req-ico-sm ri-warn"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="3"><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <span class="clin-k">Autorización OS</span>
+          </div>
+          <span class="clin-v warn">Pendiente</span>
+        </div>
+        <div class="req-mini">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="clin-k">Estudios prequirúrgicos</span>
+          </div>
+          <span class="clin-v ok">Cargados HIS</span>
+        </div>
+        <div class="req-mini">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="clin-k">Eval. preanestésica</span>
+          </div>
+          <span class="clin-v ok">Completa · HIS</span>
+        </div>
+      </div>
+
+      <!-- EVAL PREANESTÉSICA -->
+      <div class="clin-panel" id="clin-eval">
+        <div class="clin-row"><span class="clin-k">ASA</span><span class="clin-v">II</span></div>
+        <div class="clin-row"><span class="clin-k">Vía aérea</span><span class="clin-v">Mallampati I · Sin riesgo</span></div>
+        <div class="clin-row"><span class="clin-k">Ayuno desde</span><span class="clin-v ok">06:30 hs ✓</span></div>
+        <div class="clin-row"><span class="clin-k">TA prequirúrgica</span><span class="clin-v">128/82 mmHg</span></div>
+        <div class="clin-row"><span class="clin-k">Peso / Talla</span><span class="clin-v">84 kg / 1.72 m</span></div>
+        <div class="clin-row"><span class="clin-k">Tipo de anestesia</span><span class="clin-v">Espinal</span></div>
+        <div class="clin-row"><span class="clin-k">Alergia al látex</span><span class="clin-v alert">SÍ — Protocolo activo</span></div>
+        <div class="clin-row"><span class="clin-k">Anestesias previas</span><span class="clin-v">Sin complicaciones</span></div>
+        <div class="clin-row"><span class="clin-k">Última actualización</span><span class="clin-v">18/04/2026 · Dr. Gómez</span></div>
+      </div>
+
+      <!-- ANTECEDENTES -->
+      <div class="clin-panel" id="clin-ant">
+        <div class="clin-row"><span class="clin-k">Patologías</span><span class="clin-v">HTA · tratada</span></div>
+        <div class="clin-row"><span class="clin-k">Medicación habitual</span><span class="clin-v">Enalapril 10mg · mañana</span></div>
+        <div class="clin-row"><span class="clin-k">Cirugías previas</span><span class="clin-v">Meniscectomía 2019</span></div>
+        <div class="clin-row"><span class="clin-k">Vacuna antitetánica</span><span class="clin-v ok">Al día ✓</span></div>
+        <div class="clin-row"><span class="clin-k">Alergias conocidas</span><span class="clin-v alert">Látex — penicilina</span></div>
+        <div class="clin-row"><span class="clin-k">Grupo y factor</span><span class="clin-v">O Rh+</span></div>
+        <div class="clin-row"><span class="clin-k">Estado noche anterior</span><span class="clin-v ok">Sin síntomas · Ansioso leve</span></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="bottom-bar">
+      <button class="btn-new-scan" onclick="openScanModal('inicio-cirugia')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M21 15h-3v3M21 21h-6v-3M15 15h.01"/></svg>
+        Registrar próximo hito
+      </button>
+      <button class="btn-change-pac" onclick="backToScan()">Cambiar paciente</button>
+    </div>
+
+  </div><!-- /view-pac -->
+
+</div><!-- /shell -->
+
+<!-- ═══ MODAL DE CONFIRMACIÓN DE SCAN ═══ -->
+<div class="scan-modal" id="scan-modal">
+  <div class="scan-sheet">
+    <div id="modal-confirm-wrap">
+      <div class="ss-title">Confirmar registro</div>
+      <div class="ss-sub">¿Registrás este hito ahora? La hora quedará guardada y no podrá modificarse.</div>
+      <div class="ss-hito">
+        <div class="ss-hito-name" id="modal-hito-name">Inicio cirugía</div>
+        <div class="ss-hito-who" id="modal-hito-who">Registrado por: Vidal, Laura (Circulante)</div>
+      </div>
+      <div class="ss-pac"><strong>Vega López, Carlos</strong> · QX 2 · MAKO rodilla</div>
+      <div class="latex-warn-sheet">⚠ Paciente alérgico al látex — Verificar guantes nitrilo antes de proceder</div>
+      <div class="ss-btns">
+        <button class="btn-confirm-scan" onclick="confirmScan()">Confirmar — 10:47 hs</button>
+        <button class="btn-cancel-scan" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+    <div class="confirmed-sheet" id="modal-confirmed">
+      <div class="cs-icon">✓</div>
+      <div class="cs-title">Hito registrado</div>
+      <div class="cs-sub">Inicio cirugía registrado a las <strong>10:47 hs</strong><br>Coordinador QX y sistema notificados automáticamente.</div>
+      <div class="cs-time">Delay vs programado: +17 min</div>
+      <button class="btn-close-conf" onclick="closeModalAndUpdate()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function loadPacient(){
+  document.getElementById('view-scan').classList.remove('active');
+  document.getElementById('view-pac').classList.add('active');
+}
+function backToScan(){
+  document.getElementById('view-pac').classList.remove('active');
+  document.getElementById('view-scan').classList.add('active');
+}
+function showClin(id,el){
+  document.querySelectorAll('.clin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('clin-'+id).classList.add('active');
+  el.classList.add('active');
+}
+function openScanModal(hito){
+  document.getElementById('modal-confirm-wrap').style.display='block';
+  document.getElementById('modal-confirmed').style.display='none';
+  document.getElementById('modal-confirmed').style.flexDirection='column';
+  document.getElementById('scan-modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('scan-modal').classList.remove('open');
+}
+function confirmScan(){
+  document.getElementById('modal-confirm-wrap').style.display='none';
+  const mc = document.getElementById('modal-confirmed');
+  mc.style.display='flex';
+}
+function closeModalAndUpdate(){
+  closeModal();
+  // Marcar hito 3 como done
+  const h3=document.getElementById('h3-btn');
+  h3.className='hi-btn done';
+  h3.onclick=null;
+  h3.innerHTML='';
+  document.getElementById('h3-time').textContent='10:47 hs · +17 min';
+  document.getElementById('h3-time').className='hi-time recorded';
+  document.getElementById('h3-line').classList.add('done');
+  // Hito 4 listo para escanear
+  const h4=document.getElementById('h4-btn');
+  h4.className='hi-btn ready';
+  h4.style.cursor='pointer';
+  h4.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M21 15h-3v3M21 21h-6v-3M15 15h.01"/></svg>';
+  h4.onclick=()=>openScanModal('fin-cirugia');
+  // Añadir badge al hito 3
+  const h3body=h3.closest('.hito-item').querySelector('.hi-body');
+  const badge=document.createElement('div');
+  badge.className='hi-scan-badge';
+  badge.innerHTML='<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Scan registrado · Circulante Vidal';
+  h3body.appendChild(badge);
+}
+</script>
+</body>
+</html>
