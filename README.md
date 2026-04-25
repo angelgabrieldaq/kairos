@@ -42,7 +42,7 @@ kairos-v0.2/
     ├── DOCUMENTACION_SISTEMA_ROLES.md  Especificación técnica
     ├── GUIA_RAPIDA_ROLES.md            Guía visual y flujos
     ├── SNIPPETS_CUSTOMIZACION.md       Ejemplos de código
-    └── LIMPIEZA_SANATORIO_FINOCHIETTO.md Cambios realizados
+  
 ```
 
 ---
