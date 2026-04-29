@@ -207,13 +207,6 @@ Si esto resuena con lo que ves en tu institución:
 
 Esta es la licencia de salud pública para software de salud. Garantiza que el código abierto permanece abierto, especialmente cuando se usa como servicio.
 
-### ¿Qué Puedes Hacer? (Libertades)
-
-✅ **Usar:** Comercial, académico, personal, sin restricción
-✅ **Modificar:** Adapta el código para tus necesidades
-✅ **Distribuir:** Comparte copias del original o modificado
-✅ **Ganar dinero:** Ofrece servicios, hosting, soporte basado en Kairos
-
 ### ¿Cuál Es La Obligación? (La Clave)
 
 ⚠️ **Si usas Kairos como servicio web/app** (usuarios acceden remotamente):
