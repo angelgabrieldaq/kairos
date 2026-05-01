@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camillero — Kairos · Zenoxia</title>
 <style>
 :root{
@@ -18,14 +18,105 @@
   --safe-bottom: env(safe-area-inset-bottom, 16px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%;margin:0;padding:0}
+
+/* ── DESKTOP: phone preview wrapper ────────────────────────────
+   En pantallas > 600px mostramos el contenido dentro de una
+   silueta de teléfono centrada, como en Figma.
+   En pantallas ≤ 600px (móvil real) ocupa toda la pantalla.
+─────────────────────────────────────────────────────────────── */
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   font-size:15px;
+  background:#1a1a2e;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+/* Etiqueta desktop */
+.desktop-label{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  font-size:11px;color:rgba(255,255,255,.5);
+  background:rgba(255,255,255,.08);
+  padding:4px 14px;border-radius:20px;
+  letter-spacing:.04em;pointer-events:none;
+  display:none;
+}
+
+/* Phone shell — solo visible en desktop */
+.phone-shell{
+  display:none;
+  width:393px;
+  height:852px;
+  background:#111;
+  border-radius:50px;
+  padding:12px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 40px 80px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(255,255,255,.05);
+  position:relative;
+  flex-shrink:0;
+}
+
+/* Notch simulado */
+.phone-shell::before{
+  content:'';
+  position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;
+  background:#111;
+  border-radius:20px;
+  z-index:10;
+}
+
+/* Pantalla del teléfono */
+.phone-screen{
+  width:100%;height:100%;
+  border-radius:40px;
+  overflow:hidden;
   background:var(--bg3);
   display:flex;flex-direction:column;
-  max-width:430px;
-  margin:0 auto;
+  position:relative;
+}
+
+/* Mobile nativo: el phone-screen NO aplica, el body es el contenedor */
+.mobile-app{
+  display:flex;flex-direction:column;
+  width:100%;height:100%;
+  overflow:hidden;
+}
+
+@media (min-width:600px){
+  .desktop-label{display:block}
+  .phone-shell{display:flex;flex-direction:column}
+  /* Escala para pantallas más pequeñas de desktop */
+  @media (max-height:920px){
+    .phone-shell{
+      transform:scale(0.88);
+      transform-origin:center center;
+    }
+  }
+  @media (max-height:780px){
+    .phone-shell{
+      transform:scale(0.76);
+      transform-origin:center center;
+    }
+  }
+}
+
+@media (max-width:599px){
+  body{
+    background:var(--bg3);
+    align-items:stretch;
+    justify-content:flex-start;
+    min-height:100dvh;
+  }
+  .mobile-app{
+    height:100dvh;
+    overflow:hidden;
+  }
 }
 
 /* ── TOPBAR ─────────────────────────────── */
@@ -223,6 +314,14 @@ body{
 </head>
 <body>
 
+<!-- ETIQUETA DESKTOP -->
+<div class="desktop-label">Kairos · Camillero · Vista móvil</div>
+
+<!-- PHONE SHELL (visible solo en desktop) -->
+<div class="phone-shell">
+<div class="phone-screen">
+<div class="mobile-app">
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="tb-left">
@@ -247,6 +346,10 @@ body{
 <div class="footer-fixed" id="footer">
   <!-- Botones según estado -->
 </div>
+
+</div><!-- /mobile-app -->
+</div><!-- /phone-screen -->
+</div><!-- /phone-shell -->
 
 <!-- SHEET CAMBIO DE PACIENTE -->
 <div class="sheet-bd" id="sheet-cambio">

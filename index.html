@@ -140,6 +140,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .wc-desc{font-size:11px;color:var(--txt2);line-height:1.5}
 
 .w-hint{font-size:11px;color:var(--txt3);margin-top:28px;padding:10px 14px;background:var(--bg);border-radius:var(--r);border:0.5px solid var(--brd);line-height:1.6}
+
+/* MODO DEMO */
+.demo-toggle{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;border:0.5px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
+.demo-toggle:hover{background:rgba(255,255,255,.2)}
+.demo-toggle.active{background:rgba(255,255,255,.95);color:var(--p-dark)}
+.demo-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);flex-shrink:0;transition:background .2s}
+.demo-toggle.active .demo-dot{background:var(--p)}
+
+/* BANNER DEMO */
+.demo-banner{background:var(--p-light);border-bottom:0.5px solid var(--p-mid);padding:7px 16px;font-size:11px;color:var(--p-dark);display:none;align-items:center;gap:8px;flex-shrink:0}
+.demo-banner.visible{display:flex}
+.demo-banner svg{flex-shrink:0}
+.demo-banner strong{font-weight:600}
+
+/* SHOWCASE GRID — welcome en modo demo */
+.showcase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.showcase-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all .15s}
+.showcase-card:hover{border-color:var(--p-mid);box-shadow:0 2px 12px rgba(43,87,217,.12);transform:translateY(-1px)}
+.sc-thumb{height:80px;display:flex;align-items:center;justify-content:center;font-size:28px;border-bottom:0.5px solid var(--brd)}
+.sc-info{padding:10px 12px}
+.sc-name{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:2px}
+.sc-desc{font-size:10px;color:var(--txt2);line-height:1.4;margin-bottom:6px}
+.sc-roles{display:flex;gap:3px;flex-wrap:wrap}
+.sc-role-tag{font-size:9px;padding:1px 6px;border-radius:6px;background:var(--bg2);color:var(--txt3);border:0.5px solid var(--brd2)}
+.sc-role-tag.mobile{background:var(--s-warn-l);color:var(--s-warn);border-color:var(--s-warn-m)}
+.sc-file{font-size:9px;color:var(--txt3);margin-top:4px;font-family:monospace}
+
+.showcase-section-title{font-size:11px;font-weight:600;color:var(--txt);text-transform:uppercase;letter-spacing:.06em;margin:20px 0 10px;padding-bottom:6px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;gap:8px}
+.showcase-section-title .ss-count{font-size:10px;padding:2px 8px;border-radius:8px;background:var(--p-light);color:var(--p-dark);font-weight:500;letter-spacing:0}
+
+/* NAV EN DEMO — todos visibles */
+body.demo-mode .nav-item.hidden{display:flex !important}
+body.demo-mode .nav-item.hidden .nav-label{opacity:.7}
+body.demo-mode .nav-item.hidden::after{content:'';display:block}
 </style>
 </head>
 <body>
@@ -177,7 +211,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <div class="gt-sep"></div>
   <div class="gt-tagline" id="top-tagline">Trazabilidad quirúrgica en tiempo real</div>
   <div class="gt-right">
-    <div class="gt-version" id="top-version">v0.2 · prototipo</div>
+    <div class="gt-version" id="top-version">v0.4 · prototipo</div>
+    <button class="demo-toggle" id="demo-toggle" onclick="toggleDemo()" title="Modo demo — muestra todas las pantallas sin restricción de rol">
+      <span class="demo-dot" id="demo-dot"></span>
+      <span id="demo-label">Demo</span>
+    </button>
     <div class="gt-user" id="top-user" onclick="toggleUserMenu()">
       <div class="gt-av" id="top-av">—</div>
       <span id="top-username">Seleccioná un rol</span>
@@ -189,6 +227,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="gum-item" onclick="clearStorage()">Limpiar sesión</div>
     </div>
   </div>
+</div>
+
+<!-- BANNER MODO DEMO -->
+<div class="demo-banner" id="demo-banner">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--p-dark)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span><strong>Modo demo activo</strong> — Todas las pantallas visibles · Sin restricción de rol · Ideal para presentaciones y testing de UX</span>
+  <button onclick="toggleDemo()" style="margin-left:auto;font-size:10px;padding:2px 10px;border-radius:8px;border:0.5px solid var(--p-mid);background:transparent;color:var(--p-dark);cursor:pointer;font-weight:500">Desactivar</button>
 </div>
 
 <!-- APP BODY -->
@@ -277,6 +322,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div>
           <div class="nav-label">Enfermero UCA</div>
           <div class="nav-role">Hab. prequirúrgica · Ingreso</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Móvil</div>
+
+      <div class="nav-item" onclick="loadScreen('camillero_mobile')" id="nav-camillero_mobile" data-roles="camillero,director,coord,circulante">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Camillero · Móvil</div>
+          <div class="nav-role">App táctil</div>
+        </div>
+        <span class="nav-badge nb-info">📱</span>
+      </div>
+
+      <div class="nav-item" onclick="loadScreen('circulante_consulta')" id="nav-circulante_consulta" data-roles="director,circulante,coord">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Circulante · Consulta</div>
+          <div class="nav-role">Estado pacientes</div>
         </div>
       </div>
 
@@ -457,7 +530,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Verificar si hay rol guardado
   const savedRole = localStorage.getItem('kairos-user-role');
-  if (savedRole && ROLES_CONFIG[savedRole]) {
+  const demoSaved = localStorage.getItem('kairos-demo-mode') === 'true';
+
+  if (demoSaved) {
+    // Restaurar modo demo si estaba activo
+    toggleDemo();
+  } else if (savedRole && ROLES_CONFIG[savedRole]) {
     setUserRole(savedRole);
   } else {
     showRoleSelector();
@@ -554,6 +632,14 @@ function generateWelcomeContent(roleId) {
       availableScreens.push({ id: screenId, ...screenData });
     }
   });
+  // Pantallas sin nav-item propio: incluir si el rol tiene acceso directo
+  ['camillero_mobile','circulante_consulta'].forEach(id => {
+    const navItem = document.getElementById('nav-' + id);
+    const already = availableScreens.find(s => s.id === id);
+    if (navItem && !navItem.classList.contains('hidden') && !already) {
+      availableScreens.push({ id, ...SCREENS[id] });
+    }
+  });
 
   const ICONS = {
     dashboard:'📊', coord:'📋', circulante:'⬡', camilleros:'🚑',
@@ -562,9 +648,10 @@ function generateWelcomeContent(roleId) {
   };
 
   const GRUPOS = [
-    { titulo:'Operaciones Quirúrgicas', ids:['dashboard','coord','circulante','camilleros','circulante_consulta','camillero_mobile'], bg:'var(--s-info-l)' },
-    { titulo:'Flujos de Pacientes',     ids:['paciente','uca','enfermero'],                                                           bg:'var(--p-light)' },
-    { titulo:'Administración',          ids:['jefatura','roles'],                                                                     bg:'var(--bg2)' },
+    { titulo:'Operaciones Quirúrgicas', ids:['dashboard','coord','circulante','camilleros','circulante_consulta'], bg:'var(--s-info-l)' },
+    { titulo:'Flujos de Pacientes',     ids:['paciente','uca','enfermero'],                                        bg:'var(--p-light)' },
+    { titulo:'Móvil',                   ids:['camillero_mobile'],                                                  bg:'var(--p-dark)' },
+    { titulo:'Administración',          ids:['jefatura','roles'],                                                  bg:'var(--bg2)' },
   ];
 
   let html = '';
@@ -613,6 +700,9 @@ function loadScreen(id) {
   const s = SCREENS[id];
   if (!s) return;
   
+  // En modo demo saltear verificación de rol
+  if (demoMode) { loadScreenDemo(id); return; }
+
   // Verificar que el rol tiene acceso
   const navItem = document.getElementById('nav-' + id);
   if (!navItem || navItem.classList.contains('hidden')) {
@@ -657,12 +747,151 @@ function goHome() {
   document.getElementById('welcome-screen').style.display = 'block';
   document.getElementById('main-iframe').style.display   = 'none';
   document.getElementById('loading-indicator').style.display = 'none';
+  if (demoMode) showShowcase();
 }
 
 // Aplicar botón de confirmación del modal
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-confirm-role').addEventListener('click', confirmRole);
 });
+
+// ── MODO DEMO ──────────────────────────────────────────────────
+let demoMode = false;
+
+function toggleDemo() {
+  demoMode = !demoMode;
+  const btn = document.getElementById('demo-toggle');
+  const dot = document.getElementById('demo-dot');
+  const lbl = document.getElementById('demo-label');
+  const banner = document.getElementById('demo-banner');
+
+  if (demoMode) {
+    btn.classList.add('active');
+    dot.style.background = 'var(--p)';
+    lbl.textContent = 'Demo ON';
+    banner.classList.add('visible');
+    document.body.classList.add('demo-mode');
+    localStorage.setItem('kairos-demo-mode', 'true');
+    // Mostrar todos los nav items
+    document.querySelectorAll('[data-roles]').forEach(el => el.classList.remove('hidden'));
+    // Regenerar welcome con showcase completo
+    if (!currentScreen) showShowcase();
+  } else {
+    btn.classList.remove('active');
+    dot.style.background = '';
+    lbl.textContent = 'Demo';
+    banner.classList.remove('visible');
+    document.body.classList.remove('demo-mode');
+    localStorage.removeItem('kairos-demo-mode');
+    // Restaurar filtro de rol
+    if (currentRole) {
+      filterMenuByRole(currentRole);
+      generateWelcomeContent(currentRole);
+    } else {
+      showRoleSelector();
+    }
+  }
+}
+
+function showShowcase() {
+  document.getElementById('welcome-screen').style.display = 'block';
+  document.getElementById('main-iframe').style.display = 'none';
+  document.getElementById('loading-indicator').style.display = 'none';
+  document.getElementById('breadcrumb').style.display = 'none';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  currentScreen = null;
+
+  const SHOWCASE = [
+    {
+      grupo: 'Operaciones quirúrgicas — Desktop',
+      items: [
+        { id:'dashboard',     icon:'📊', roles:['director','coord','circulante','camillero'],   mobile:false },
+        { id:'coord',         icon:'📋', roles:['coordinador','director'],                       mobile:false },
+        { id:'circulante',    icon:'⬡',  roles:['circulante','director'],                        mobile:false },
+        { id:'camilleros',    icon:'🚑', roles:['coordinador','director'],                       mobile:false },
+        { id:'circulante_consulta', icon:'✅', roles:['circulante','director'],                  mobile:false },
+      ]
+    },
+    {
+      grupo: 'Flujo de pacientes — Desktop',
+      items: [
+        { id:'paciente',  icon:'👤', roles:['paciente'],             mobile:false },
+        { id:'uca',       icon:'🏥', roles:['recepcionista UCA'],    mobile:false },
+        { id:'enfermero', icon:'🩺', roles:['enfermero UCA'],        mobile:false },
+      ]
+    },
+    {
+      grupo: 'Móvil',
+      items: [
+        { id:'camillero_mobile', icon:'📱', roles:['camillero'], mobile:true },
+      ]
+    },
+    {
+      grupo: 'Administración',
+      items: [
+        { id:'jefatura', icon:'📈', roles:['director','jefatura'], mobile:false },
+        { id:'roles',    icon:'⚙️', roles:['administrador'],       mobile:false },
+      ]
+    },
+  ];
+
+  const container = document.getElementById('role-specific-content');
+  let html = '';
+
+  SHOWCASE.forEach(g => {
+    html += `<div class="showcase-section-title">${g.grupo}<span class="ss-count">${g.items.length}</span></div>`;
+    html += `<div class="showcase-grid">`;
+    g.items.forEach(item => {
+      const s = SCREENS[item.id];
+      if (!s) return;
+      const roleTags = item.roles.map(r =>
+        `<span class="sc-role-tag ${item.mobile?'mobile':''}">${r}</span>`
+      ).join('');
+      html += `<div class="showcase-card" onclick="loadScreenDemo('${item.id}')">
+        <div class="sc-thumb" style="background:${item.mobile?'var(--p-dark)':'var(--bg2)'}">
+          <span style="font-size:32px;${item.mobile?'filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))':''}">${item.icon}</span>
+        </div>
+        <div class="sc-info">
+          <div class="sc-name">${s.label}</div>
+          <div class="sc-desc">${s.desc}</div>
+          <div class="sc-roles">${roleTags}</div>
+          <div class="sc-file">${s.file}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  document.getElementById('w-product-name').textContent = 'Kairos · Showcase';
+  document.querySelector('.w-sub').innerHTML = '<strong>Modo demo activo</strong> · Todas las pantallas disponibles · Hacé click en cualquier tarjeta para abrirla.';
+  container.innerHTML = html;
+}
+
+function loadScreenDemo(id) {
+  // En modo demo saltea la verificación de rol
+  const s = SCREENS[id];
+  if (!s) return;
+  currentScreen = id;
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navItem = document.getElementById('nav-' + id);
+  if (navItem) navItem.classList.add('active');
+
+  document.getElementById('breadcrumb').style.display = 'flex';
+  document.getElementById('bc-current').textContent = s.label + ' (demo)';
+  document.getElementById('welcome-screen').style.display = 'none';
+
+  const loading = document.getElementById('loading-indicator');
+  const iframe  = document.getElementById('main-iframe');
+  loading.style.display = 'flex';
+  iframe.style.display  = 'none';
+
+  iframe.onload = () => {
+    loading.style.display = 'none';
+    iframe.style.display  = 'block';
+  };
+  iframe.src = s.file;
+}
 
 function showToast(titulo, mensaje, tipo) {
   const existing = document.getElementById('kairos-toast');
