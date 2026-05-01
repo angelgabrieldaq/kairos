@@ -171,7 +171,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     </div>
     <div>
       <div class="gt-product" id="top-product">Kairos</div>
-      <div class="gt-inst" id="top-inst">Zenoxia · Nombre de la institución</div>
+      <div class="gt-inst" id="top-inst">Zenoxia · Institución</div>
     </div>
   </div>
   <div class="gt-sep"></div>
@@ -270,6 +270,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         </div>
       </div>
 
+      <div class="nav-item" onclick="loadScreen('enfermero')" id="nav-enfermero" data-roles="director,enfermero">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--txt3)" fill="none" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+        </div>
+        <div>
+          <div class="nav-label">Enfermero UCA</div>
+          <div class="nav-role">Hab. prequirúrgica · Ingreso</div>
+        </div>
+      </div>
+
     </div>
 
     <div class="nav-divider"></div>
@@ -332,7 +342,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <!-- WELCOME DEFAULT -->
       <div id="welcome-screen" class="welcome">
         <div class="w-product" id="w-product-name">Kairos</div>
-        <div class="w-sub"><strong id="w-empresa">Zenoxia</strong> · Sistema de trazabilidad quirúrgica en tiempo real · <strong id="w-inst-name">Centro Médico</strong><br>Seleccioná una pantalla en el menú lateral para comenzar.</div>
+        <div class="w-sub"><strong id="w-empresa">Zenoxia</strong> · Sistema de trazabilidad quirúrgica en tiempo real · <strong id="w-inst-name">Institución</strong><br>Seleccioná una pantalla en el menú lateral para comenzar.</div>
 
         <div id="role-specific-content">
           <!-- Se genera dinámicamente según el rol -->
@@ -392,6 +402,13 @@ const ROLES_CONFIG = {
     user: 'MR',
     username: 'Rodríguez, María'
   },
+  enfermero: {
+    icon: '🩺',
+    name: 'Enfermero UCA',
+    desc: 'Hab. prequirúrgica',
+    user: 'GF',
+    username: 'Fernández, Gustavo'
+  },
   paciente: {
     icon: '👤',
     name: 'Paciente',
@@ -414,9 +431,10 @@ const SCREENS = {
   coord:      { file:'02_coordinador_turno_qx_v2.html',  label:'Coordinador turno QX' },
   circulante: { file:'05_circulante_qx.html',            label:'Circulante · QX' },
   camilleros: { file:'08_tablero_camilleros.html',       label:'Tablero camilleros' },
-  uca:        { file:'06_uca_jefatura.html',             label:'Recepcionista UCA' },
+  uca:        { file:'06_recepcionista_uca.html',        label:'Recepcionista UCA' },
+  enfermero:  { file:'07_enfermero_uca.html',            label:'Enfermero UCA' },
   paciente:   { file:'04_flujo_paciente_v3.html',        label:'Flujo del paciente' },
-  jefatura:   { file:'06_uca_jefatura.html',             label:'Jefatura · Analítica' },
+  jefatura:   { file:'09_jefatura.html',                 label:'Jefatura · Analítica' },
   roles:      { file:'01_panel_roles.html',              label:'Panel de roles' },
 };
 
@@ -660,13 +678,7 @@ function loadScreen(id) {
     loading.style.display = 'none';
     iframe.style.display  = 'block';
 
-    if (id === 'jefatura') {
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        const jefBtn = doc.querySelector('.stab:last-child');
-        if (jefBtn) jefBtn.click();
-      } catch(e) {}
-    }
+    // Jefatura is now a standalone file — no tab switching needed
   };
   iframe.src = s.file;
 }

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recepcionista UCA — Kairos · Zenoxia</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
+  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
+  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
+  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --pl:#EEEDFE;--p:#3C3489;--pm:#AFA9EC;
+  --rr:8px;--rl2:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+
+.page-meta{width:100%;max-width:900px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo-i{width:28px;height:28px;background:var(--p);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i svg{width:16px;height:16px;fill:#fff}
+.pm-title{font-size:14px;font-weight:500;color:var(--txt)}
+.pm-sub{font-size:10px;color:var(--txt3)}
+.slabel{font-size:10px;background:var(--pl);color:var(--p);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--pm)}
+
+.shell{width:100%;max-width:900px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* TOPBAR */
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.tb-left{display:flex;align-items:center;gap:9px}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--p)}
+.tb-name{font-size:12px;font-weight:500;color:var(--txt)}
+.tb-role{font-size:10px;color:var(--txt3)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
+
+/* LAYOUT */
+.uca-body{display:grid;grid-template-columns:280px 1fr;min-height:600px}
+
+/* SIDEBAR */
+.uca-sidebar{background:var(--bg);border-right:0.5px solid var(--brd);display:flex;flex-direction:column}
+.us-head{padding:12px 14px;border-bottom:0.5px solid var(--brd)}
+.us-title{font-size:11px;font-weight:500;color:var(--txt);margin-bottom:6px}
+.us-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.us-stat{text-align:center;background:var(--bg2);border-radius:var(--rr);padding:5px 4px}
+.us-stat-val{font-size:16px;font-weight:600}
+.us-stat-lbl{font-size:9px;color:var(--txt3);margin-top:1px}
+.pac-list{flex:1;overflow-y:auto;padding:8px}
+.pac-item{padding:10px;border-radius:var(--rr);margin-bottom:4px;cursor:pointer;border:0.5px solid transparent;transition:all .15s}
+.pac-item:hover{background:var(--bg2)}
+.pac-item.active{background:var(--gl);border-color:var(--gm)}
+.pac-item.ready{border-left:3px solid var(--g)}
+.pac-item.warn{border-left:3px solid var(--am)}
+.pac-item.alert{border-left:3px solid var(--rm)}
+.pi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.pi-name{font-size:12px;font-weight:500;color:var(--txt)}
+.pi-time{font-size:10px;color:var(--txt3);background:var(--bg2);padding:1px 6px;border-radius:8px}
+.pi-proc{font-size:10px;color:var(--txt2);margin-bottom:4px}
+.pi-bottom{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:500}
+.t-green{background:var(--gl);color:var(--gd)}
+.t-amber{background:var(--al);color:var(--a)}
+.t-red{background:var(--rl);color:var(--r2)}
+.t-blue{background:var(--bl);color:var(--b)}
+.t-grey{background:var(--bg2);color:var(--txt3);border:0.5px solid var(--brd)}
+
+/* MAIN */
+.uca-main{display:flex;flex-direction:column;overflow-y:auto}
+.um-header{padding:14px 16px;border-bottom:0.5px solid var(--brd);background:var(--bg);display:flex;align-items:center;justify-content:space-between}
+.um-pac-info{display:flex;align-items:center;gap:10px}
+.um-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.um-name{font-size:14px;font-weight:500;color:var(--txt)}
+.um-sub{font-size:10px;color:var(--txt3)}
+.um-actions{display:flex;gap:6px;align-items:center}
+
+.um-content{padding:14px 16px;display:flex;flex-direction:column;gap:12px;flex:1}
+
+.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden}
+.card-head{padding:10px 14px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
+.card-title{font-size:11px;font-weight:500;color:var(--txt)}
+.card-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+
+.req-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--brd)}
+.req-row:last-child{border-bottom:none}
+.req-left{display:flex;align-items:center;gap:8px}
+.req-ico{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ri-ok{background:var(--gl)}
+.ri-err{background:var(--rl)}
+.ri-warn{background:var(--al)}
+.ri-pend{background:var(--bg2);border:0.5px solid var(--brd2)}
+.req-label{font-size:11px;color:var(--txt)}
+.req-sub{font-size:9px;color:var(--txt3);margin-top:1px}
+
+/* DOC UPLOAD ZONE */
+.doc-upload-zone{background:var(--bg2);border:1.5px dashed var(--brd2);border-radius:var(--rr);padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;margin-top:4px}
+.doc-upload-zone:hover{border-color:var(--g);background:var(--gl)}
+.doc-upload-zone.has-file{border-color:var(--g);background:var(--gl);border-style:solid}
+.duz-icon{font-size:20px;flex-shrink:0}
+.duz-text{font-size:11px;color:var(--txt2);flex:1;line-height:1.5}
+.duz-text strong{color:var(--txt);display:block;margin-bottom:2px}
+.duz-btn{font-size:10px;padding:4px 10px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:var(--bg);color:var(--txt2);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.duz-btn:hover{border-color:var(--g);color:var(--g)}
+.duz-btn.uploaded{background:var(--gl);border-color:var(--gm);color:var(--gd)}
+
+/* EFICIENCIA BADGE */
+.eficiencia-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--brd)}
+.eficiencia-row:last-child{border-bottom:none}
+.ef-label{font-size:11px;color:var(--txt2)}
+.ef-val{font-size:11px;font-weight:500}
+.ef-source{font-size:9px;color:var(--txt3)}
+
+/* DATOS GRID */
+.datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dato-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.dato-val{font-size:12px;font-weight:500;color:var(--txt)}
+
+/* PILL */
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.p-green{background:var(--gl);color:var(--gd)}
+.p-amber{background:var(--al);color:var(--a)}
+.p-blue{background:var(--bl);color:var(--b)}
+.p-red{background:var(--rl);color:var(--r2)}
+.p-purple{background:var(--pl);color:var(--p)}
+
+/* ESCALA ANSIEDAD */
+.anxiety-bar{display:flex;gap:3px;margin:6px 0 2px}
+.ab-seg{flex:1;height:8px;border-radius:2px}
+
+/* BOTÓN INGRESO */
+.ingreso-wrap{padding:12px 16px;border-top:0.5px solid var(--brd);background:var(--bg)}
+.btn-confirmar-ingreso{width:100%;padding:11px;font-size:13px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s}
+.btn-confirmar-ingreso:hover{background:var(--gd)}
+.btn-confirmar-ingreso.done{background:var(--bg2);color:var(--txt2);cursor:default}
+.ingreso-sub{font-size:10px;color:var(--txt3);margin-top:5px;text-align:center;line-height:1.5}
+.notif-panel{display:flex;align-items:center;gap:8px;background:var(--gl);border:0.5px solid var(--gm);border-radius:var(--rr);padding:8px 12px;font-size:11px;color:var(--gd);margin:0 16px 12px}
+
+/* DOC UPLOAD MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center}
+.modal-backdrop.open{display:flex}
+.modal-sheet{background:var(--bg);border-radius:var(--rl2) var(--rl2) 0 0;width:100%;max-width:900px;padding:20px 20px 28px;display:flex;flex-direction:column;gap:14px}
+.ms-title{font-size:14px;font-weight:500;color:var(--txt)}
+.ms-sub{font-size:11px;color:var(--txt2);line-height:1.5}
+.ms-fields{display:flex;flex-direction:column;gap:10px}
+.ms-field{display:flex;flex-direction:column;gap:4px}
+.ms-field label{font-size:10px;font-weight:500;color:var(--txt2);text-transform:uppercase;letter-spacing:.04em}
+.ms-field select,.ms-field textarea{padding:8px 10px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:var(--bg2);font-size:12px;color:var(--txt);font-family:inherit}
+.ms-field textarea{resize:vertical;min-height:60px}
+.ms-drop{border:1.5px dashed var(--brd2);border-radius:var(--rr);padding:20px;text-align:center;background:var(--bg2);cursor:pointer;font-size:11px;color:var(--txt2);transition:all .15s}
+.ms-drop:hover{border-color:var(--g);background:var(--gl);color:var(--g)}
+.ms-drop.filled{border-color:var(--g);border-style:solid;background:var(--gl)}
+.ms-btns{display:flex;gap:8px}
+.ms-btn-primary{flex:1;padding:10px;border:none;background:var(--g);color:#fff;border-radius:var(--rr);font-size:12px;font-weight:500;cursor:pointer}
+.ms-btn-cancel{padding:10px 16px;border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);border-radius:var(--rr);font-size:12px;cursor:pointer}
+
+/* METRIC EFFICIENCY CARD */
+.eff-summary{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:12px 14px;display:flex;gap:20px;align-items:center}
+.eff-stat{text-align:center}
+.eff-val{font-size:20px;font-weight:600;color:var(--txt)}
+.eff-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em}
+.eff-divider{width:0.5px;height:36px;background:var(--brd)}
+</style>
+</head>
+<body>
+
+<div class="page-meta">
+  <div class="logo-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg></div>
+  <div><div class="pm-title">Kairos · Zenoxia</div><div class="pm-sub">Trazabilidad quirúrgica</div></div>
+  <div class="slabel">Pantalla 6 — Recepcionista UCA</div>
+</div>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-av">MR</div>
+      <div><div class="tb-name">Rodríguez, María</div><div class="tb-role">Recepcionista UCA · 2° piso</div></div>
+    </div>
+    <div class="tb-right">
+      <div class="clock" id="clock-disp">10:47 hs</div>
+    </div>
+  </div>
+
+  <div class="uca-body">
+
+    <!-- SIDEBAR LISTA DE PACIENTES -->
+    <div class="uca-sidebar">
+      <div class="us-head">
+        <div class="us-title">Pacientes del día — 2° piso</div>
+        <div class="us-stats">
+          <div class="us-stat"><div class="us-stat-val" style="color:var(--g)">3</div><div class="us-stat-lbl">Validados</div></div>
+          <div class="us-stat"><div class="us-stat-val" style="color:var(--am)">2</div><div class="us-stat-lbl">Incompletos</div></div>
+          <div class="us-stat"><div class="us-stat-val" style="color:var(--b)">4</div><div class="us-stat-lbl">En QX</div></div>
+        </div>
+      </div>
+      <div class="pac-list">
+
+        <div class="pac-item ready active" onclick="selectPac(this,'ramirez')">
+          <div class="pi-top"><span class="pi-name">Ramírez, Jorge</span><span class="pi-time">12:00</span></div>
+          <div class="pi-proc">Colostomía · QX 1</div>
+          <div class="pi-bottom"><span class="tag t-green">Doc. completa</span><span class="tag t-green">Digital ✓</span></div>
+        </div>
+
+        <div class="pac-item ready" onclick="selectPac(this,'torres')">
+          <div class="pi-top"><span class="pi-name">Torres, Andrés</span><span class="pi-time">13:30</span></div>
+          <div class="pi-proc">Hernia inguinal · QX 3</div>
+          <div class="pi-bottom"><span class="tag t-green">Validado ✓</span><span class="tag t-amber">Eval. preanest. pend.</span></div>
+        </div>
+
+        <div class="pac-item warn" onclick="selectPac(this,'ferreyra')">
+          <div class="pi-top"><span class="pi-name">Ferreyra, Carlos</span><span class="pi-time">11:00</span></div>
+          <div class="pi-proc">Apendicectomía · QX 4</div>
+          <div class="pi-bottom"><span class="tag t-amber">Llegó sin digital</span></div>
+        </div>
+
+        <div class="pac-item alert" onclick="selectPac(this,'diaz')">
+          <div class="pi-top"><span class="pi-name">Díaz, Carlos</span><span class="pi-time">14:00</span></div>
+          <div class="pi-proc">MAKO cadera · QX 2</div>
+          <div class="pi-bottom"><span class="tag t-red">Req. incompletos</span><span class="tag t-red">Autorizac. ✗</span></div>
+        </div>
+
+        <div class="pac-item" onclick="selectPac(this,'paz')">
+          <div class="pi-top"><span class="pi-name">Paz, Silvana</span><span class="pi-time">17:00</span></div>
+          <div class="pi-proc">Artroscopia rodilla · QX 2</div>
+          <div class="pi-bottom"><span class="tag t-blue">Aún no llegó</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="uca-main" id="main-content">
+
+      <!-- HEADER PACIENTE -->
+      <div class="um-header">
+        <div class="um-pac-info">
+          <div class="um-av" style="background:var(--gl);color:var(--gd)">RJ</div>
+          <div>
+            <div class="um-name">Ramírez, Jorge Alberto</div>
+            <div class="um-sub">HC 00031284 · DNI 25.781.320 · OSDE 310 · QX 1 · 12:00 hs</div>
+          </div>
+        </div>
+        <div class="um-actions">
+          <span class="pill p-green">Validado · ingreso directo</span>
+        </div>
+      </div>
+
+      <div class="um-content">
+
+        <!-- ESTADO DOCUMENTACIÓN -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Documentación del ingreso</div>
+            <span class="pill p-green">Completada 18/04 · 21:30 hs</span>
+          </div>
+          <div class="card-body">
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div><div class="req-label">DNI escaneado e identidad verificada</div><div class="req-sub">Cargado por paciente · App Kairos</div></div>
+              </div>
+              <span class="pill p-green">Digital</span>
+            </div>
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div><div class="req-label">Cobertura OSDE 310 verificada</div><div class="req-sub">Autorización nro. 48291-QX · vigente</div></div>
+              </div>
+              <span class="pill p-green">Confirmado</span>
+            </div>
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-warn"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="3"><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                <div><div class="req-label">Autorización OS para procedimiento</div><div class="req-sub">En gestión · médico tratante</div></div>
+              </div>
+              <span class="pill p-amber">Médico tramita</span>
+            </div>
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div><div class="req-label">Prequirúrgicos rotulados</div><div class="req-sub">Laboratorio, ECG, Rx tórax · en HIS</div></div>
+              </div>
+              <span class="pill p-green">En HIS</span>
+            </div>
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div><div class="req-label">Antecedentes, medicamentos y alergias</div><div class="req-sub">Formulario digital completo</div></div>
+              </div>
+              <span class="pill p-green">✓</span>
+            </div>
+
+            <div class="req-row">
+              <div class="req-left">
+                <div class="req-ico ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div><div class="req-label">Estado noche anterior</div><div class="req-sub">Sin síntomas · ayuno confirmado</div></div>
+              </div>
+              <span class="pill p-green">✓</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DOCUMENTACIÓN EXTRA — CARGA EN RECEPCIÓN -->
+        <div class="card" style="border-left:3px solid var(--am)">
+          <div class="card-head">
+            <div class="card-title">Documentación adicional en recepción</div>
+            <button onclick="openDocModal()" style="font-size:10px;padding:4px 10px;border-radius:var(--rr);border:0.5px solid var(--g);background:var(--gl);color:var(--gd);cursor:pointer;font-weight:500">+ Agregar documento</button>
+          </div>
+          <div class="card-body" id="doc-list">
+            <div style="font-size:11px;color:var(--txt3);text-align:center;padding:10px 0">
+              Sin documentos cargados en recepción para este paciente.
+            </div>
+          </div>
+        </div>
+
+        <!-- EFICIENCIA DEL FLUJO DIGITAL -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Eficiencia del flujo digital — Ramírez, Jorge</div>
+            <span class="pill p-blue">Kairos Analytics</span>
+          </div>
+          <div class="card-body">
+            <div class="eff-summary">
+              <div class="eff-stat">
+                <div class="eff-val" style="color:var(--g)">5/6</div>
+                <div class="eff-lbl">Docs digital</div>
+              </div>
+              <div class="eff-divider"></div>
+              <div class="eff-stat">
+                <div class="eff-val">21:30 hs</div>
+                <div class="eff-lbl">Completó la noche anterior</div>
+              </div>
+              <div class="eff-divider"></div>
+              <div class="eff-stat">
+                <div class="eff-val" style="color:var(--g)">0 min</div>
+                <div class="eff-lbl">Tiempo extra en recepción</div>
+              </div>
+              <div class="eff-divider"></div>
+              <div class="eff-stat">
+                <div class="eff-val" style="color:var(--am)">1</div>
+                <div class="eff-lbl">Ítem cargado acá</div>
+              </div>
+            </div>
+            <div style="margin-top:4px">
+              <div class="eficiencia-row">
+                <div class="ef-label">Docs cargados por el paciente (digital)</div>
+                <div><span class="ef-val" style="color:var(--g)">83%</span> <span class="ef-source">· antes de llegar</span></div>
+              </div>
+              <div class="eficiencia-row">
+                <div class="ef-label">Docs completados en recepción</div>
+                <div><span class="ef-val" style="color:var(--am)">17%</span> <span class="ef-source">· 1 de 6 ítems</span></div>
+              </div>
+              <div class="eficiencia-row">
+                <div class="ef-label">Tiempo promedio de validación (hoy)</div>
+                <div><span class="ef-val">4 min</span> <span class="ef-source">· objetivo ≤ 5 min</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS CLAVE -->
+        <div class="card">
+          <div class="card-head"><div class="card-title">Datos clave para recepción</div></div>
+          <div class="card-body">
+            <div class="datos-grid">
+              <div><div class="dato-lbl">Cirugía</div><div class="dato-val">Colostomía · QX 1</div></div>
+              <div><div class="dato-lbl">Hora programada</div><div class="dato-val">12:00 hs</div></div>
+              <div><div class="dato-lbl">Anestesia</div><div class="dato-val">General</div></div>
+              <div><div class="dato-lbl">Destino post-op</div><div class="dato-val">Piso adultos</div></div>
+              <div><div class="dato-lbl">Alergias</div><div class="dato-val">Ninguna conocida</div></div>
+              <div><div class="dato-lbl">Acompañante</div><div class="dato-val">Ramírez, Lucía</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCALA DE ANSIEDAD -->
+        <div class="card" style="border-left:3px solid var(--am)">
+          <div class="card-head"><div class="card-title">Escala de ansiedad — reportada por el paciente</div><span class="pill p-amber">Moderada · 3/5</span></div>
+          <div class="card-body">
+            <div style="font-size:11px;color:var(--txt2);line-height:1.6;margin-bottom:8px">El paciente reportó ansiedad moderada (3/5) frente a la cirugía y anestesia. Se recomienda recepción cálida y explicación breve del proceso al momento del ingreso.</div>
+            <div class="anxiety-bar">
+              <div class="ab-seg" style="background:var(--g)"></div>
+              <div class="ab-seg" style="background:var(--g)"></div>
+              <div class="ab-seg" style="background:var(--am)"></div>
+              <div class="ab-seg" style="background:var(--bg2)"></div>
+              <div class="ab-seg" style="background:var(--bg2)"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--txt3);margin-top:3px"><span>Tranquilo</span><span>Muy ansioso</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTÓN CONFIRMAR INGRESO -->
+      <div class="ingreso-wrap">
+        <button class="btn-confirmar-ingreso" id="btn-ingreso" onclick="confirmarIngreso()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Confirmar ingreso · Notificar a enfermero UCA
+        </button>
+        <div class="ingreso-sub">Al confirmar, el enfermero recibe aviso para preparar la habitación prequirúrgica.</div>
+      </div>
+      <div class="notif-panel" id="notif-done" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gd)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Ingreso confirmado a las 10:47 hs · Enfermero UCA notificado · Habitación prequirúrgica 2B asignada
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CARGA DE DOCUMENTACIÓN -->
+<div class="modal-backdrop" id="doc-modal">
+  <div class="modal-sheet">
+    <div>
+      <div class="ms-title">Agregar documento faltante</div>
+      <div class="ms-sub">Registrá qué documento se carga en recepción y por qué no llegó por el flujo digital. Esto alimenta el indicador de eficiencia del proceso.</div>
+    </div>
+    <div class="ms-fields">
+      <div class="ms-field">
+        <label>Tipo de documento</label>
+        <select id="doc-tipo">
+          <option value="">Seleccionar…</option>
+          <option>DNI / Identidad</option>
+          <option>Autorización de obra social</option>
+          <option>Análisis de laboratorio</option>
+          <option>Electrocardiograma (ECG)</option>
+          <option>Radiografía de tórax</option>
+          <option>Evaluación preanestésica</option>
+          <option>Consentimiento informado</option>
+          <option>Derivación / Orden médica</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="ms-field">
+        <label>Motivo de presentación en recepción</label>
+        <select id="doc-motivo">
+          <option value="">Seleccionar…</option>
+          <option>Paciente no completó el flujo digital</option>
+          <option>Documento actualizado en el día</option>
+          <option>Error técnico en la app</option>
+          <option>Paciente sin acceso a smartphone</option>
+          <option>Documento vencido — requería renovación</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="ms-field">
+        <label>Observaciones (opcional)</label>
+        <textarea id="doc-obs" placeholder="Ej: El paciente llegó con el ECG físico. Se digitalizó y cargó en HIS."></textarea>
+      </div>
+      <div class="ms-drop" id="drop-zone" onclick="simulateUpload()">
+        <div style="font-size:24px;margin-bottom:6px">📎</div>
+        <div style="font-weight:500;margin-bottom:3px">Adjuntar archivo o foto del documento</div>
+        <div style="font-size:10px;color:var(--txt3)">PDF, JPG, PNG · Máx 10 MB</div>
+      </div>
+    </div>
+    <div class="ms-btns">
+      <button class="ms-btn-cancel" onclick="closeDocModal()">Cancelar</button>
+      <button class="ms-btn-primary" onclick="saveDoc()">Guardar registro</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Reloj
+(function tick(){
+  const d=new Date();
+  document.getElementById('clock-disp').textContent=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0')+' hs';
+  setTimeout(tick,10000);
+})();
+
+function selectPac(el){
+  document.querySelectorAll('.pac-item').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function confirmarIngreso(){
+  const btn=document.getElementById('btn-ingreso');
+  btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--txt2)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Ingreso confirmado';
+  btn.className='btn-confirmar-ingreso done';
+  document.querySelector('.ingreso-sub').textContent='';
+  document.getElementById('notif-done').style.display='flex';
+}
+
+function openDocModal(){
+  document.getElementById('doc-modal').classList.add('open');
+}
+function closeDocModal(){
+  document.getElementById('doc-modal').classList.remove('open');
+}
+function simulateUpload(){
+  const dz=document.getElementById('drop-zone');
+  dz.classList.add('filled');
+  dz.innerHTML='<div style="font-size:24px;margin-bottom:6px">✅</div><div style="font-weight:500;color:var(--gd)">Archivo listo para guardar</div><div style="font-size:10px;color:var(--g)">ECG_Ramirez_18042026.pdf</div>';
+}
+function saveDoc(){
+  const tipo=document.getElementById('doc-tipo').value||'Documento sin tipo';
+  const motivo=document.getElementById('doc-motivo').value||'Sin motivo especificado';
+  const list=document.getElementById('doc-list');
+  const now=new Date();
+  const hora=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  
+  // Limpiar placeholder
+  if(list.querySelector('div[style]')) list.innerHTML='';
+  
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--brd)';
+  row.innerHTML=`
+    <div style="width:18px;height:18px;border-radius:50%;background:var(--al);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:11px;font-weight:500;color:var(--txt)">${tipo}</div>
+      <div style="font-size:9px;color:var(--txt3)">${motivo} · ${hora} hs · Recepcionista Rodríguez</div>
+    </div>
+    <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--al);color:var(--a);font-weight:500">Cargado acá</span>
+  `;
+  list.appendChild(row);
+  closeDocModal();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enfermero UCA — Kairos · Zenoxia</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
+  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
+  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
+  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --tl:#E0F7F4;--t:#065F55;
+  --rr:8px;--rl2:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+
+.page-meta{width:100%;max-width:520px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo-i{width:28px;height:28px;background:var(--t);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i svg{width:16px;height:16px;fill:#fff}
+.pm-title{font-size:14px;font-weight:500;color:var(--txt)}
+.pm-sub{font-size:10px;color:var(--txt3)}
+.slabel{font-size:10px;background:var(--tl);color:var(--t);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--gm)}
+
+.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* TOPBAR */
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.tb-left{display:flex;align-items:center;gap:9px}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--tl);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--t)}
+.tb-name{font-size:12px;font-weight:500;color:var(--txt)}
+.tb-role{font-size:10px;color:var(--txt3)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
+.hab-badge{font-size:11px;font-weight:500;background:var(--tl);color:var(--t);padding:4px 12px;border-radius:20px;border:0.5px solid var(--gm)}
+
+/* VIEWS */
+.view{display:none}
+.view.active{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* QUEUE VIEW */
+.queue-view{padding:16px}
+.section-hdr{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:12px}
+.section-hdr:first-child{margin-top:0}
+
+/* NOTIF CARD */
+.notif-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.notif-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.notif-card.urgent{border-left:3px solid var(--g);animation:pulse-border 2s infinite}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(15,110,86,.2)}50%{box-shadow:0 0 0 4px rgba(15,110,86,.05)}}
+.nc-top{padding:10px 14px;display:flex;align-items:center;gap:10px}
+.nc-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.nc-name{font-size:13px;font-weight:500;color:var(--txt)}
+.nc-sub{font-size:10px;color:var(--txt3)}
+.nc-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.nc-time{font-size:10px;color:var(--txt3)}
+.nc-bottom{padding:8px 14px;background:var(--bg2);border-top:0.5px solid var(--brd);display:flex;gap:6px;align-items:center}
+.nc-tag{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500}
+.t-green{background:var(--gl);color:var(--gd)}
+.t-amber{background:var(--al);color:var(--a)}
+.t-teal{background:var(--tl);color:var(--t)}
+.t-blue{background:var(--bl);color:var(--b)}
+.nc-action-btn{margin-left:auto;font-size:10px;padding:4px 10px;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;font-weight:500}
+
+/* HABITACIONES */
+.hab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.hab-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:12px;cursor:pointer;transition:all .15s}
+.hab-card:hover{border-color:var(--gm)}
+.hab-card.ocupada{border-left:3px solid var(--b)}
+.hab-card.libre{border-left:3px solid var(--g)}
+.hab-card.prep{border-left:3px solid var(--am);animation:pulse-amber 2s infinite}
+@keyframes pulse-amber{0%,100%{box-shadow:0 0 0 0 rgba(239,159,39,.2)}50%{box-shadow:0 0 0 4px rgba(239,159,39,.05)}}
+.hab-nro{font-size:16px;font-weight:600;color:var(--txt);margin-bottom:3px}
+.hab-estado{font-size:10px;font-weight:500;margin-bottom:5px}
+.hab-pac{font-size:11px;color:var(--txt2)}
+.hab-proc{font-size:10px;color:var(--txt3)}
+
+/* PACIENTE DETAIL */
+.pac-view{display:flex;flex-direction:column}
+.pac-header{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:12px 16px}
+.ph-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ph-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.ph-name{font-size:15px;font-weight:500;color:var(--txt)}
+.ph-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.ph-badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500}
+.b-proc{background:var(--bl);color:var(--b)}
+.b-anest{background:var(--al);color:var(--a)}
+.b-hab{background:var(--tl);color:var(--t)}
+
+/* CHECKLIST */
+.checklist{padding:14px 16px;display:flex;flex-direction:column;gap:0}
+.chk-section{margin-bottom:14px}
+.chk-title{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid var(--brd)}
+.chk-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
+.chk-item:last-child{border-bottom:none}
+.chk-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--brd2);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chk-box.checked{background:var(--g);border-color:var(--g)}
+.chk-box.checked::after{content:'✓';font-size:11px;color:#fff;font-weight:600}
+.chk-label{font-size:12px;color:var(--txt);flex:1}
+.chk-sub{font-size:10px;color:var(--txt3);margin-top:1px}
+.chk-badge{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500;white-space:nowrap}
+
+/* OBSERV */
+.obs-area{padding:12px 16px;border-top:0.5px solid var(--brd)}
+.obs-label{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.obs-input{width:100%;padding:8px 10px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:var(--bg2);font-size:11px;color:var(--txt);font-family:inherit;resize:none;min-height:60px}
+
+/* BOTTOM */
+.bottom-bar{background:var(--bg);border-top:0.5px solid var(--brd);padding:10px 16px;display:flex;gap:8px}
+.btn-primary{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.btn-primary:hover{background:var(--gd)}
+.btn-primary.done{background:var(--bg2);color:var(--txt2);cursor:default}
+.btn-secondary{padding:11px 14px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="page-meta">
+  <div class="logo-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg></div>
+  <div><div class="pm-title">Kairos · Zenoxia</div><div class="pm-sub">Trazabilidad quirúrgica</div></div>
+  <div class="slabel">Pantalla 7 — Enfermero UCA</div>
+</div>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-av">GF</div>
+      <div><div class="tb-name">Fernández, Gustavo</div><div class="tb-role">Enfermero UCA · Turno mañana</div></div>
+    </div>
+    <div class="tb-right">
+      <div class="clock" id="clock-disp">10:47 hs</div>
+      <div class="hab-badge">UCA 2° piso</div>
+    </div>
+  </div>
+
+  <!-- ═══ VISTA 1: COLA DE PACIENTES ═══ -->
+  <div class="view active" id="view-queue">
+    <div class="queue-view">
+
+      <div class="section-hdr">Notificaciones de recepción</div>
+
+      <!-- Paciente notificado — urgente -->
+      <div class="notif-card urgent" onclick="openPaciente()">
+        <div class="nc-top">
+          <div class="nc-av" style="background:var(--gl);color:var(--gd)">RJ</div>
+          <div>
+            <div class="nc-name">Ramírez, Jorge Alberto</div>
+            <div class="nc-sub">Colostomía · QX 1 · 12:00 hs</div>
+          </div>
+          <div class="nc-right">
+            <div class="nc-time">Hace 3 min</div>
+            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--gl);color:var(--gd);font-weight:500">Confirmado</span>
+          </div>
+        </div>
+        <div class="nc-bottom">
+          <span class="nc-tag t-green">Doc. completa</span>
+          <span class="nc-tag t-teal">Habilitado hab. 2B</span>
+          <button class="nc-action-btn" onclick="event.stopPropagation();openPaciente()">Recibir →</button>
+        </div>
+      </div>
+
+      <!-- Paciente en espera -->
+      <div class="notif-card">
+        <div class="nc-top">
+          <div class="nc-av" style="background:var(--al);color:var(--a)">TC</div>
+          <div>
+            <div class="nc-name">Torres, Carlos Andrés</div>
+            <div class="nc-sub">Hernia inguinal · QX 3 · 13:30 hs</div>
+          </div>
+          <div class="nc-right">
+            <div class="nc-time">Esperando</div>
+            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--al);color:var(--a);font-weight:500">Pendiente</span>
+          </div>
+        </div>
+        <div class="nc-bottom">
+          <span class="nc-tag t-amber">Eval. preanest. pend.</span>
+          <span class="nc-tag t-blue">No llegó aún</span>
+        </div>
+      </div>
+
+      <div class="section-hdr" style="margin-top:16px">Habitaciones prequirúrgicas — 2° piso</div>
+
+      <div class="hab-grid">
+        <div class="hab-card prep" onclick="openPaciente()">
+          <div class="hab-nro">Hab. 2B</div>
+          <div class="hab-estado" style="color:var(--am)">⟳ En preparación</div>
+          <div class="hab-pac">Ramírez, J.</div>
+          <div class="hab-proc">Colostomía · 12:00 hs</div>
+        </div>
+        <div class="hab-card ocupada">
+          <div class="hab-nro">Hab. 2A</div>
+          <div class="hab-estado" style="color:var(--b)">● Ocupada</div>
+          <div class="hab-pac">García, Marta</div>
+          <div class="hab-proc">MAKO rodilla · 10:00 hs</div>
+        </div>
+        <div class="hab-card libre">
+          <div class="hab-nro">Hab. 2C</div>
+          <div class="hab-estado" style="color:var(--g)">○ Libre</div>
+          <div class="hab-pac" style="color:var(--txt3)">Sin asignar</div>
+          <div class="hab-proc" style="color:var(--txt3)">Torres · 13:30</div>
+        </div>
+        <div class="hab-card libre">
+          <div class="hab-nro">Hab. 2D</div>
+          <div class="hab-estado" style="color:var(--g)">○ Libre</div>
+          <div class="hab-pac" style="color:var(--txt3)">Sin asignar</div>
+          <div class="hab-proc" style="color:var(--txt3)">—</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ VISTA 2: ATENCIÓN PACIENTE ═══ -->
+  <div class="view" id="view-pac">
+    <div class="pac-view">
+
+      <!-- HEADER -->
+      <div class="pac-header">
+        <div class="ph-top">
+          <div class="ph-av" style="background:var(--gl);color:var(--gd)">RJ</div>
+          <div style="flex:1">
+            <div class="ph-name">Ramírez, Jorge Alberto</div>
+            <div class="ph-sub">HC 00031284 · DNI 25.781.320 · 54 años</div>
+          </div>
+          <button onclick="backToQueue()" style="font-size:10px;padding:4px 10px;border-radius:8px;border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer">← Volver</button>
+        </div>
+        <div class="ph-badges">
+          <span class="badge b-proc">Colostomía · QX 1</span>
+          <span class="badge b-anest">Anestesia general</span>
+          <span class="badge b-hab">Hab. 2B asignada</span>
+        </div>
+      </div>
+
+      <!-- CHECKLIST INGRESO A HABITACIÓN -->
+      <div class="checklist">
+
+        <div class="chk-section">
+          <div class="chk-title">Verificación de documentación (recibido de recepción)</div>
+
+          <div class="chk-item">
+            <div class="chk-box checked" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Documentación completa confirmada</div>
+              <div class="chk-sub">Validada por Recepcionista Rodríguez · 10:44 hs</div>
+            </div>
+            <span class="chk-badge" style="background:var(--gl);color:var(--gd)">Digital ✓</span>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Pulsera de identificación colocada</div>
+              <div class="chk-sub">Verificar nombre, HC y alergias</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Consentimiento informado firmado</div>
+              <div class="chk-sub">Original en HIS · verificar</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="chk-section">
+          <div class="chk-title">Preparación en habitación prequirúrgica 2B</div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Paciente vestido con bata quirúrgica</div>
+              <div class="chk-sub">Retirar ropa, alhajas y prótesis removibles</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Signos vitales registrados</div>
+              <div class="chk-sub">TA, FC, saturación O₂, temperatura</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Ayuno verificado</div>
+              <div class="chk-sub">Mínimo 8 hs sólidos · 4 hs líquidos</div>
+            </div>
+            <span class="chk-badge" style="background:var(--gl);color:var(--gd)">Confirmado digital</span>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Vía periférica colocada</div>
+              <div class="chk-sub">Antebrazo izquierdo · 18G</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Premedicación administrada (si indicada)</div>
+              <div class="chk-sub">Verificar indicación de anestesiología</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="chk-section">
+          <div class="chk-title">Confirmación de datos clínicos</div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Alergias confirmadas verbalmente con el paciente</div>
+              <div class="chk-sub">Registrado: ninguna conocida</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Medicación habitual verificada y suspendida si indicado</div>
+              <div class="chk-sub">Consultar indicación médica</div>
+            </div>
+          </div>
+
+          <div class="chk-item">
+            <div class="chk-box" onclick="toggleChk(this)"></div>
+            <div style="flex:1">
+              <div class="chk-label">Paciente informado del proceso a seguir</div>
+              <div class="chk-sub">Breve explicación · ansiedad: 3/5 reportada</div>
+            </div>
+            <span class="chk-badge" style="background:var(--al);color:var(--a)">Ansioso moderado</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- OBSERVACIONES -->
+      <div class="obs-area">
+        <div class="obs-label">Observaciones de enfermería</div>
+        <textarea class="obs-input" placeholder="Ej: Paciente refiere dolor leve en rodilla derecha previo al procedimiento. TA: 120/80 mmHg. Vía periférica permeable en ABD izquierdo."></textarea>
+      </div>
+
+      <!-- BOTTOM BAR -->
+      <div class="bottom-bar">
+        <button class="btn-secondary" onclick="backToQueue()">← Cola</button>
+        <button class="btn-primary" id="btn-listo" onclick="confirmarListo()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Paciente listo · Notificar camillero
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function tick(){
+  const d=new Date();
+  document.getElementById('clock-disp').textContent=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0')+' hs';
+  setTimeout(tick,10000);
+})();
+
+function openPaciente(){
+  document.getElementById('view-queue').classList.remove('active');
+  document.getElementById('view-pac').classList.add('active');
+}
+function backToQueue(){
+  document.getElementById('view-pac').classList.remove('active');
+  document.getElementById('view-queue').classList.add('active');
+}
+function toggleChk(el){
+  el.classList.toggle('checked');
+}
+function confirmarListo(){
+  const btn=document.getElementById('btn-listo');
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--txt2)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Listo — Camillero notificado';
+  btn.className='btn-primary done';
+}
+</script>
+</body>
+</html>
