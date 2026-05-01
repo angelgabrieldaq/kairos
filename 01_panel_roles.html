@@ -233,7 +233,7 @@ function setLevel(id, level){ perms[id].level = level; dirty = true; render(); }
 function save(){
   ROLES[cur].perms = dc(perms); dirty = false;
   const btn = document.getElementById('btn-save');
-  btn.textContent = '✓ Guardado'; btn.style.background = '#1D9E75';
+  btn.textContent = '✓ Guardado'; btn.style.background = '#2B57D9';
   setTimeout(()=>{ btn.textContent = 'Guardar cambios'; btn.style.background = '#2B57D9'; }, 2000);
   render();
 }

@@ -39,10 +39,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .hdr-sub{font-size:10px;color:var(--p-mid);line-height:1.5}
 
 /* PROGRESS */
-.prog-wrap{background:#052e22;padding:9px 16px}
+.prog-wrap{background:#112880;padding:9px 16px}
 .prog-dots{display:flex;gap:2px;margin-bottom:5px}
 .prog-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.18);transition:background .25s}
-.prog-dot.done{background:#5DCAA5}
+.prog-dot.done{background:var(--p-mid)}
 .prog-dot.active{background:#fff}
 .prog-txt{font-size:10px;color:var(--p-mid);text-align:center}
 
@@ -64,7 +64,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 /* UPLOAD */
 .ubox{border:1.5px dashed var(--brd2);border-radius:var(--r-lg);padding:16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all .2s}
 .ubox:hover{border-color:var(--p);background:var(--p-light)}
-.ubox.done{border-color:#1D9E75;background:var(--p-light);border-style:solid}
+.ubox.done{border-color:var(--p);background:var(--p-light);border-style:solid}
 .ubox-icon{font-size:22px;margin-bottom:5px}
 .ubox-lbl{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:2px}
 .ubox-sub{font-size:10px;color:var(--txt2)}
@@ -192,7 +192,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .res-lbl{font-size:12px;color:var(--txt2)}
 
 /* BANNERS */
-.info-banner{background:var(--s-info-l);border-left:3px solid #378ADD;border-radius:0 var(--r) var(--r) 0;padding:9px 12px;font-size:11px;color:var(--s-info);line-height:1.6}
+.info-banner{background:var(--s-info-l);border-left:3px solid var(--s-info);border-radius:0 var(--r) var(--r) 0;padding:9px 12px;font-size:11px;color:var(--s-info);line-height:1.6}
 .warn-banner{background:var(--s-warn-l);border-left:3px solid var(--s-warn-m);border-radius:0 var(--r) var(--r) 0;padding:9px 12px;font-size:11px;color:var(--s-warn);line-height:1.6}
 
 /* SUCCESS */
