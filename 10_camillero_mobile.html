@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Camillero — Kairos · Zenoxia</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-ok:#0F6E56;--s-ok-l:#E1F5EE;--s-ok-m:#9FE1CB;
+  --s-warn:#633806;--s-warn-l:#FAEEDA;--s-warn-m:#EF9F27;
+  --s-err:#791F1F;--s-err-l:#FCEBEB;--s-err-m:#E24B4A;
+  --s-info:#0C447C;--s-info-l:#E6F1FB;--s-info-m:#B5D4F4;
+  --r:10px;--r-lg:16px;
+  --safe-bottom: env(safe-area-inset-bottom, 16px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  font-size:15px;
+  background:var(--bg3);
+  display:flex;flex-direction:column;
+  max-width:430px;
+  margin:0 auto;
+}
+
+/* ── TOPBAR ─────────────────────────────── */
+.topbar{
+  background:var(--p-dark);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  padding-top:calc(14px + env(safe-area-inset-top, 0px));
+}
+.tb-left{display:flex;align-items:center;gap:10px}
+.tb-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.tb-name{font-size:14px;font-weight:500;color:#fff}
+.tb-role{font-size:11px;color:var(--p-mid)}
+.tb-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.tb-clock{font-size:13px;font-weight:500;color:#fff}
+.tb-live{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--p-mid)}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--p-mid);animation:blink 1.8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── SCROLLABLE CONTENT ─────────────────── */
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px}
+
+/* ── VISTA: SIN SOLICITUD ───────────────── */
+.idle-view{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:12px;text-align:center}
+.idle-icon{width:72px;height:72px;border-radius:50%;background:var(--p-light);border:2px solid var(--p-mid);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.idle-icon svg{width:36px;height:36px;stroke:var(--p-dark);fill:none;stroke-width:1.5}
+.idle-title{font-size:17px;font-weight:500;color:var(--txt)}
+.idle-sub{font-size:13px;color:var(--txt2);line-height:1.6;max-width:260px}
+.idle-badge{font-size:12px;background:var(--s-ok-l);color:var(--s-ok);padding:5px 14px;border-radius:20px;border:0.5px solid var(--s-ok-m);font-weight:500}
+
+/* HISTORIAL MINI */
+.hist-section{margin-top:24px;width:100%}
+.hist-title{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.hist-row{background:var(--bg);border-radius:var(--r);padding:10px 13px;margin-bottom:6px;border:0.5px solid var(--brd);display:flex;align-items:center;gap:10px}
+.hr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hr-name{font-size:13px;font-weight:500;color:var(--txt);flex:1}
+.hr-hora{font-size:11px;color:var(--txt3)}
+.hr-badge{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:500}
+
+/* ── NOTIFICACIÓN ENTRANTE ──────────────── */
+.notif-banner{
+  background:var(--p-dark);
+  border-radius:var(--r-lg);
+  padding:14px 16px;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
+  animation:slideDown .3s ease;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.nb-dot{width:10px;height:10px;border-radius:50%;background:var(--p-mid);animation:blink 1s infinite;flex-shrink:0}
+.nb-text{font-size:13px;color:#fff;font-weight:500}
+.nb-sub{font-size:11px;color:var(--p-mid);margin-top:2px}
+
+/* ── SOL CARD ───────────────────────────── */
+.sol-card{background:var(--bg);border-radius:var(--r-lg);border:0.5px solid var(--brd);overflow:hidden;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+
+.sol-card.urgente .sc-accent{background:var(--s-err-m)}
+.sol-card.normal .sc-accent{background:var(--s-warn-m)}
+.sc-accent{height:4px;width:100%}
+
+.sc-pac-block{padding:16px 16px 12px;border-bottom:0.5px solid var(--brd)}
+.sc-pac-name{font-size:17px;font-weight:500;color:var(--txt);margin-bottom:4px}
+.sc-pac-sub{font-size:12px;color:var(--txt2);margin-bottom:10px}
+.sc-badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500}
+.b-proc{background:var(--p-light);color:var(--p-dark);border:0.5px solid var(--p-mid)}
+.b-pesado{background:var(--s-err-l);color:var(--s-err);border:0.5px solid var(--s-err-m)}
+.b-anest{background:var(--s-warn-l);color:var(--s-warn)}
+
+/* RUTA VISUAL */
+.ruta-block{padding:14px 16px;border-bottom:0.5px solid var(--brd)}
+.ruta-title{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.ruta-visual{display:flex;flex-direction:column;gap:0}
+.ruta-punto{display:flex;align-items:flex-start;gap:12px}
+.rp-icon-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.rp-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rp-line{width:2px;height:24px;margin:2px 0}
+.rp-text{padding-top:6px;flex:1}
+.rp-lbl{font-size:11px;color:var(--txt3)}
+.rp-val{font-size:14px;font-weight:500;color:var(--txt)}
+
+/* REQUERIMIENTOS */
+.req-block{padding:14px 16px;border-bottom:0.5px solid var(--brd)}
+.req-title{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.req-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--brd)}
+.req-item:last-child{border-bottom:none}
+.req-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.req-label{font-size:13px;color:var(--txt);flex:1}
+.req-note{font-size:11px;color:var(--txt3);margin-top:2px}
+
+/* ALERTA PESADO */
+.alerta-pesado{margin:0 16px 12px;background:var(--s-err-l);border:0.5px solid var(--s-err-m);border-radius:var(--r);padding:11px 13px;display:flex;gap:9px;align-items:flex-start}
+.ap-icon{font-size:18px;flex-shrink:0}
+.ap-title{font-size:13px;font-weight:500;color:var(--s-err);margin-bottom:2px}
+.ap-sub{font-size:11px;color:var(--s-err);line-height:1.5}
+
+/* ── FOOTER FIJO ─────────────────────────── */
+.footer-fixed{
+  flex-shrink:0;
+  padding:12px 16px;
+  padding-bottom:calc(12px + var(--safe-bottom));
+  background:var(--bg);
+  border-top:0.5px solid var(--brd);
+}
+
+/* BOTONES ACCIÓN PRINCIPAL */
+.btn-group{display:flex;flex-direction:column;gap:8px}
+.btn-primary{
+  width:100%;padding:16px;
+  font-size:15px;font-weight:600;
+  border:none;border-radius:var(--r-lg);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:opacity .15s;
+  -webkit-appearance:none;
+}
+.btn-primary:active{opacity:.85}
+.btn-primary.accept{background:var(--p);color:#fff}
+.btn-primary.confirm{background:var(--s-ok);color:#fff}
+.btn-primary.done{background:var(--bg2);color:var(--txt2)}
+.btn-secondary{
+  width:100%;padding:13px;
+  font-size:14px;font-weight:500;
+  border:0.5px solid var(--brd2);
+  border-radius:var(--r-lg);
+  background:transparent;color:var(--txt2);
+  cursor:pointer;-webkit-appearance:none;
+}
+.btn-secondary:active{background:var(--bg2)}
+.btn-secondary.danger{border-color:var(--s-err-m);color:var(--s-err)}
+
+/* FILA DE BOTONES */
+.btn-row{display:flex;gap:8px}
+.btn-row .btn-secondary{flex:1}
+.btn-chip{padding:10px 14px;font-size:13px;font-weight:500;border:0.5px solid var(--brd2);border-radius:var(--r-lg);background:transparent;color:var(--txt2);cursor:pointer;-webkit-appearance:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-chip:active{background:var(--bg2)}
+.btn-chip.warn{border-color:var(--s-warn-m);color:var(--s-warn)}
+
+/* SHEET CAMBIO PACIENTE */
+.sheet-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center}
+.sheet-bd.open{display:flex}
+.sheet{background:var(--bg);border-radius:var(--r-lg) var(--r-lg) 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--brd2);margin:0 auto 4px}
+.sheet-title{font-size:16px;font-weight:600;color:var(--txt)}
+.sheet-sub{font-size:13px;color:var(--txt2);line-height:1.5}
+.pac-opt{display:flex;align-items:center;gap:12px;padding:13px 14px;border:0.5px solid var(--brd);border-radius:var(--r);cursor:pointer;margin-bottom:6px;transition:all .12s;background:var(--bg);text-align:left;width:100%;-webkit-appearance:none}
+.pac-opt:active{background:var(--p-light);border-color:var(--p-mid)}
+.pac-opt.sel{border-color:var(--p);background:var(--p-light)}
+.po-av{width:36px;height:36px;border-radius:50%;background:var(--p-light);color:var(--p-dark);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.po-name{font-size:14px;font-weight:500;color:var(--txt)}
+.po-sub{font-size:11px;color:var(--txt2);margin-top:2px}
+.po-ruta{font-size:11px;color:var(--txt3);margin-top:2px}
+.po-badge{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:500;margin-left:auto;flex-shrink:0}
+.motivo-wrap{display:flex;flex-direction:column;gap:5px}
+.motivo-lbl{font-size:11px;font-weight:500;color:var(--txt2);text-transform:uppercase;letter-spacing:.04em}
+.motivo-ta{width:100%;padding:12px;border:0.5px solid var(--brd2);border-radius:var(--r);background:var(--bg2);font-size:14px;color:var(--txt);font-family:inherit;resize:none;min-height:72px;-webkit-appearance:none}
+.motivo-ta:focus{outline:none;border-color:var(--p-mid);background:var(--bg)}
+.sheet-foot{display:flex;gap:8px;margin-top:4px}
+.sheet-btn-ok{flex:1;padding:14px;border:none;background:var(--p);color:#fff;border-radius:var(--r-lg);font-size:14px;font-weight:600;cursor:pointer}
+.sheet-btn-ok:active{background:var(--p-dark)}
+.sheet-btn-cancel{padding:14px 18px;border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);border-radius:var(--r-lg);font-size:14px;cursor:pointer}
+.cambio-banner{background:var(--s-warn-l);border:0.5px solid var(--s-warn-m);border-radius:var(--r);padding:10px 13px;margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--s-warn);line-height:1.5}
+.cambio-banner strong{display:block;font-weight:600;margin-bottom:2px}
+
+/* ESTADO EN CURSO */
+.estado-card{background:var(--bg);border-radius:var(--r-lg);border:0.5px solid var(--brd);overflow:hidden;margin-bottom:12px}
+.ec-head{padding:14px 16px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;gap:10px}
+.ec-dot{width:10px;height:10px;border-radius:50%;animation:blink 1.2s infinite;flex-shrink:0}
+.ec-title{font-size:15px;font-weight:500;color:var(--txt)}
+.ec-sub{font-size:11px;color:var(--txt2);margin-top:2px}
+.ec-body{padding:14px 16px}
+.ec-timer{font-size:28px;font-weight:600;color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:-0.5px;margin-bottom:4px}
+.ec-timer-sub{font-size:12px;color:var(--txt3)}
+
+/* CONFIRMACIÓN FINAL */
+.confirm-view{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:14px;text-align:center;padding:0 8px}
+.cv-icon{width:80px;height:80px;border-radius:50%;background:var(--s-ok-l);border:2px solid var(--s-ok-m);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.cv-icon svg{width:40px;height:40px}
+.cv-title{font-size:20px;font-weight:600;color:var(--txt)}
+.cv-sub{font-size:13px;color:var(--txt2);line-height:1.6}
+.cv-tiempo{font-size:12px;color:var(--txt3);background:var(--bg2);padding:5px 14px;border-radius:20px}
+
+/* RECHAZO MODAL */
+.modal-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center}
+.modal-bd.open{display:flex}
+.modal-sheet{background:var(--bg);border-radius:var(--r-lg) var(--r-lg) 0 0;width:100%;max-width:430px;padding:20px 18px;padding-bottom:calc(20px + var(--safe-bottom));display:flex;flex-direction:column;gap:12px}
+.ms-title{font-size:16px;font-weight:500;color:var(--txt)}
+.ms-sub{font-size:13px;color:var(--txt2);line-height:1.5}
+.ms-opts{display:flex;flex-direction:column;gap:7px}
+.ms-opt{padding:13px 14px;border:0.5px solid var(--brd2);border-radius:var(--r);font-size:14px;color:var(--txt);cursor:pointer;background:var(--bg);transition:all .12s;text-align:left;-webkit-appearance:none}
+.ms-opt:active{background:var(--s-err-l);border-color:var(--s-err-m);color:var(--s-err)}
+.ms-cancel{padding:13px;border:none;background:var(--bg2);border-radius:var(--r);font-size:14px;color:var(--txt2);cursor:pointer;-webkit-appearance:none}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-av">PS</div>
+    <div>
+      <div class="tb-name">Suárez, Pablo</div>
+      <div class="tb-role">Camillero · Turno mañana</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-clock" id="clock">10:47</div>
+    <div class="tb-live"><div class="live-dot"></div>En vivo</div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="content">
+  <!-- Se renderiza dinámicamente según estado -->
+</div>
+
+<!-- FOOTER -->
+<div class="footer-fixed" id="footer">
+  <!-- Botones según estado -->
+</div>
+
+<!-- SHEET CAMBIO DE PACIENTE -->
+<div class="sheet-bd" id="sheet-cambio">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Cambiar paciente asignado</div>
+    <div class="sheet-sub">Seleccioná el paciente que estás trasladando y el motivo del cambio. Queda registrado para el coordinador.</div>
+    <div id="sheet-pac-list"></div>
+    <div class="motivo-wrap">
+      <div class="motivo-lbl">Motivo del cambio</div>
+      <textarea class="motivo-ta" id="cambio-motivo" placeholder="Ej: El coordinador me reasignó verbalmente — Vega aún no estaba listo."></textarea>
+    </div>
+    <div class="sheet-foot">
+      <button class="sheet-btn-cancel" onclick="closeSheet()">Cancelar</button>
+      <button class="sheet-btn-ok" onclick="confirmarCambio()">Confirmar cambio</button>
+    </div>
+  </div>
+</div>
+<!-- MODAL RECHAZO -->
+<div class="modal-bd" id="modal-rechazo">
+  <div class="modal-sheet">
+    <div class="ms-title">Motivo de rechazo</div>
+    <div class="ms-sub">Seleccioná el motivo — queda registrado para el coordinador.</div>
+    <div class="ms-opts">
+      <button class="ms-opt" onclick="rechazar('Paciente no lista — cirugía no finalizada')">Paciente no lista — cirugía no finalizada</button>
+      <button class="ms-opt" onclick="rechazar('Requerimientos incorrectos — equipo no disponible')">Requerimientos incorrectos — equipo no disponible</button>
+      <button class="ms-opt" onclick="rechazar('Camilla no disponible en el área')">Camilla no disponible en el área</button>
+      <button class="ms-opt" onclick="rechazar('Error de destino — paciente ya trasladado')">Error de destino — paciente ya trasladado</button>
+      <button class="ms-opt" onclick="rechazar('Otro — ver nota coordinador')">Otro</button>
+    </div>
+    <button class="ms-cancel" onclick="closeRechazo()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// ── ESTADO ─────────────────────────────────────────────────────
+const ESTADOS = { IDLE:'idle', SOLICITUD:'solicitud', TRASLADO:'traslado', COMPLETADO:'completado' };
+let estado = ESTADOS.SOLICITUD; // empezamos con solicitud entrante para la demo
+let timerInterval = null;
+let timerSec = 0;
+let cambioPaciente = null; // registra si se cambió el paciente
+
+// Pacientes que pueden estar en cola para este camillero
+const pacientesCola = [
+  { id:'P1', iniciales:'VC', nombre:'Vega López, Carlos', hc:'00028741',
+    proc:'Artroplastia MAKO', desde:'Quirófano 2', hacia:'UTI · 3° piso',
+    pesado:true, equip:['Camilla con barandas','Monitor portátil','O₂ portátil'],
+    anestesia:'Espinal', solicitante:'Coordinador turno' },
+  { id:'P2', iniciales:'TA', nombre:'Torres, Andrés L.', hc:'00030021',
+    proc:'Hernia inguinal', desde:'Quirófano 3', hacia:'Hab. 3C recuperación',
+    pesado:false, equip:['Camilla estándar'],
+    anestesia:'Espinal', solicitante:'Circulante Pérez' },
+  { id:'P3', iniciales:'DS', nombre:'Díaz, Sara M.', hc:'00031120',
+    proc:'Apendicectomía', desde:'Hab. prequirúrgica 2D', hacia:'Quirófano 4',
+    pesado:false, equip:['Silla de ruedas'],
+    anestesia:'General', solicitante:'Enfermero Fernández' },
+];
+let pacSelCambio = null;
+
+const solicitud = {
+  pac: 'Vega López, Carlos',
+  hc: '00028741',
+  proc: 'Artroplastia MAKO',
+  anestesia: 'Espinal',
+  desde: 'Quirófano 2',
+  hacia: 'UTI · 3° piso',
+  pesado: true,
+  equip: [
+    { label:'Camilla con barandas', icon:'🛏', note:'Disponible en pasillo QX 2' },
+    { label:'Monitor portátil', icon:'📊', note:'Cargar en sala de equipos' },
+    { label:'O₂ portátil', icon:'💨', note:'Verificar carga antes de salir' },
+  ],
+  solicitante: 'Coordinador turno',
+  hora: '10:38',
+};
+
+let horaRetiro = null;
+let horaEntrega = null;
+
+// ── RENDER ─────────────────────────────────────────────────────
+function render() {
+  const content = document.getElementById('content');
+  const footer  = document.getElementById('footer');
+
+  if (estado === ESTADOS.SOLICITUD) {
+    content.innerHTML = solicitudHTML();
+    footer.innerHTML = `
+      <div class="btn-group">
+        <button class="btn-primary accept" onclick="aceptar()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Aceptar traslado
+        </button>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="volverIdle()">← Volver</button>
+          <button class="btn-secondary danger" onclick="openRechazo()">Rechazar</button>
+        </div>
+      </div>`;
+
+  } else if (estado === ESTADOS.TRASLADO) {
+    content.innerHTML = trasladadoHTML();
+    const btnLabel = enRetiro ? 'Registrar recogida' : 'Registrar entrega';
+    const btnColor = enRetiro ? 'confirm' : 'confirm';
+    footer.innerHTML = `
+      <div class="btn-group">
+        <button class="btn-primary confirm" id="btn-accion" onclick="accionTraslado()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="btn-label">${btnLabel}</span>
+        </button>
+        <div class="btn-row">
+          ${enRetiro ? `<button class="btn-secondary" onclick="volverSolicitud()">← Volver</button>` : ''}
+          <button class="btn-chip warn" onclick="openSheet()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+            Cambiar paciente
+          </button>
+        </div>
+      </div>`;
+    startTimer();
+
+  } else if (estado === ESTADOS.COMPLETADO) {
+    stopTimer();
+    content.innerHTML = completadoHTML();
+    footer.innerHTML = `<button class="btn-primary done" onclick="volverIdle()">Volver a inicio</button>`;
+
+  } else { // IDLE
+    content.innerHTML = idleHTML();
+    footer.innerHTML = '';
+  }
+}
+
+// ── VISTAS ─────────────────────────────────────────────────────
+function solicitudHTML() {
+  const urgente = solicitud.pesado;
+  return `
+    <div class="notif-banner">
+      <div class="nb-dot"></div>
+      <div>
+        <div class="nb-text">Nueva solicitud de traslado</div>
+        <div class="nb-sub">Solicitado por ${solicitud.solicitante} · ${solicitud.hora} hs</div>
+      </div>
+    </div>
+
+    <div class="sol-card ${urgente?'urgente':'normal'}">
+      <div class="sc-accent"></div>
+
+      <div class="sc-pac-block">
+        <div class="sc-pac-name">${solicitud.pac}</div>
+        <div class="sc-pac-sub">HC ${solicitud.hc} · Anestesia ${solicitud.anestesia}</div>
+        <div class="sc-badges">
+          <span class="badge b-proc">${solicitud.proc}</span>
+          ${solicitud.pesado ? '<span class="badge b-pesado">⚠ Paciente pesado</span>' : ''}
+        </div>
+      </div>
+
+      <div class="ruta-block">
+        <div class="ruta-title">Ruta de traslado</div>
+        <div class="ruta-visual">
+          <div class="ruta-punto">
+            <div class="rp-icon-wrap">
+              <div class="rp-icon" style="background:var(--p-light)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p-dark)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+              </div>
+              <div class="rp-line" style="background:var(--p-mid)"></div>
+            </div>
+            <div class="rp-text">
+              <div class="rp-lbl">Recoger en</div>
+              <div class="rp-val">${solicitud.desde}</div>
+            </div>
+          </div>
+          <div class="ruta-punto">
+            <div class="rp-icon-wrap">
+              <div class="rp-icon" style="background:var(--s-ok-l)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--s-ok)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+            </div>
+            <div class="rp-text">
+              <div class="rp-lbl">Entregar en</div>
+              <div class="rp-val">${solicitud.hacia}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="req-block">
+        <div class="req-title">Equipamiento requerido</div>
+        ${solicitud.equip.map(e=>`
+          <div class="req-item">
+            <div class="req-ico" style="background:var(--p-light);font-size:14px">${e.icon}</div>
+            <div>
+              <div class="req-label">${e.label}</div>
+              <div class="req-note">${e.note}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${solicitud.pesado ? `
+    <div class="alerta-pesado">
+      <div class="ap-icon">⚠</div>
+      <div>
+        <div class="ap-title">Paciente de alto peso</div>
+        <div class="ap-sub">Solicitá asistencia si es necesario antes de iniciar el traslado. Registrá cualquier incidencia al coordinador.</div>
+      </div>
+    </div>` : ''}
+  `;
+}
+
+let enRetiro = true; // true = esperando registrar retiro, false = esperando registrar entrega
+
+function trasladadoHTML() {
+  const fase = enRetiro ? 'Dirigiéndose al origen' : 'Traslado en curso';
+  const faseColor = enRetiro ? 'var(--s-warn-m)' : 'var(--p)';
+  const bannerCambio = cambioPaciente ? `
+    <div class="cambio-banner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+      <div>
+        <strong>Paciente cambiado — registrado · ${cambioPaciente.hora} hs</strong>
+        Anterior: ${cambioPaciente.original}<br>
+        ${cambioPaciente.motivo !== 'Sin motivo especificado' ? 'Motivo: ' + cambioPaciente.motivo : 'Sin motivo especificado'}
+      </div>
+    </div>` : '';
+  return `${bannerCambio}
+    <div class="estado-card">
+      <div class="ec-head">
+        <div class="ec-dot" style="background:${faseColor}"></div>
+        <div>
+          <div class="ec-title">${fase}</div>
+          <div class="ec-sub">${solicitud.pac} · ${solicitud.proc}</div>
+        </div>
+      </div>
+      <div class="ec-body">
+        <div class="ec-timer" id="timer-display">0:00</div>
+        <div class="ec-timer-sub">${enRetiro ? 'Tiempo desde aceptación' : 'Tiempo desde recogida · '+horaRetiro+' hs'}</div>
+      </div>
+    </div>
+
+    <div class="sol-card normal" style="border-left:3px solid ${faseColor}">
+      <div class="sc-accent" style="background:${faseColor}"></div>
+      <div class="sc-pac-block">
+        <div class="sc-pac-name">${solicitud.pac}</div>
+        <div class="sc-pac-sub">HC ${solicitud.hc} · ${solicitud.proc}</div>
+        <div class="sc-badges">
+          ${solicitud.pesado ? '<span class="badge b-pesado">⚠ Paciente pesado</span>' : ''}
+        </div>
+      </div>
+      <div class="ruta-block">
+        <div class="ruta-title">Ruta activa</div>
+        <div class="ruta-visual">
+          <div class="ruta-punto">
+            <div class="rp-icon-wrap">
+              <div class="rp-icon" style="background:${enRetiro?'var(--s-warn-l)':'var(--s-ok-l)'}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${enRetiro?'var(--s-warn)':'var(--s-ok)'}" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="rp-line" style="background:var(--brd2)"></div>
+            </div>
+            <div class="rp-text">
+              <div class="rp-lbl">${enRetiro?'Ir a buscar':'Recogida registrada · '+horaRetiro+' hs'}</div>
+              <div class="rp-val">${solicitud.desde}</div>
+            </div>
+          </div>
+          <div class="ruta-punto">
+            <div class="rp-icon-wrap">
+              <div class="rp-icon" style="background:${!enRetiro?'var(--p-light)':'var(--bg2)'}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${!enRetiro?'var(--p-dark)':'var(--txt3)'}" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+            </div>
+            <div class="rp-text">
+              <div class="rp-lbl">${!enRetiro?'Entregar en':'Destino'}</div>
+              <div class="rp-val">${solicitud.hacia}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function completadoHTML() {
+  return `
+    <div class="confirm-view">
+      <div class="cv-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--s-ok)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="cv-title">Traslado completado</div>
+      <div class="cv-sub">${solicitud.pac} entregado en ${solicitud.hacia}.<br>El coordinador fue notificado.</div>
+      <div class="cv-tiempo">Recogida ${horaRetiro} hs · Entrega ${horaEntrega} hs</div>
+    </div>
+
+    <div class="hist-section">
+      <div class="hist-title">Traslados del turno</div>
+      <div class="hist-row">
+        <div class="hr-dot" style="background:var(--s-ok)"></div>
+        <div style="flex:1"><div class="hr-name">García, Marta L.</div><div style="font-size:11px;color:var(--txt3)">Quirófano 3 → Hab. 2A</div></div>
+        <div style="text-align:right"><div class="hr-hora">09:37 – 09:51</div><div class="hr-badge" style="background:var(--s-ok-l);color:var(--s-ok);font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500">Completado</div></div>
+      </div>
+      <div class="hist-row">
+        <div class="hr-dot" style="background:var(--s-ok)"></div>
+        <div style="flex:1"><div class="hr-name">${solicitud.pac}</div><div style="font-size:11px;color:var(--txt3)">${solicitud.desde} → ${solicitud.hacia}</div></div>
+        <div style="text-align:right"><div class="hr-hora">${horaRetiro} – ${horaEntrega}</div><div class="hr-badge" style="background:var(--s-ok-l);color:var(--s-ok);font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500">Completado</div></div>
+      </div>
+    </div>`;
+}
+
+function idleHTML() {
+  return `
+    <div class="idle-view">
+      <div class="idle-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 5v5l3 3"/></svg>
+      </div>
+      <div class="idle-title">Sin solicitudes</div>
+      <div class="idle-sub">Las solicitudes de traslado aparecen acá cuando el circulante o el coordinador las generan.</div>
+      <div class="idle-badge">Disponible</div>
+    </div>
+    <div class="hist-section">
+      <div class="hist-title">Traslados del turno</div>
+      <div class="hist-row">
+        <div class="hr-dot" style="background:var(--s-ok)"></div>
+        <div style="flex:1"><div class="hr-name">García, Marta L.</div><div style="font-size:11px;color:var(--txt3)">Quirófano 3 → Hab. 2A</div></div>
+        <div style="text-align:right"><div class="hr-hora">09:37 – 09:51</div><div class="hr-badge" style="background:var(--s-ok-l);color:var(--s-ok);font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500">OK</div></div>
+      </div>
+      <div class="hist-row">
+        <div class="hr-dot" style="background:var(--s-err-m)"></div>
+        <div style="flex:1"><div class="hr-name">Paz, Silvana R.</div><div style="font-size:11px;color:var(--txt3)">Quirófano 2 → Sala rec.</div></div>
+        <div style="text-align:right"><div class="hr-hora">08:55</div><div class="hr-badge" style="background:var(--s-err-l);color:var(--s-err);font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500">Rechazado</div></div>
+      </div>
+    </div>`;
+}
+
+// ── ACCIONES ────────────────────────────────────────────────────
+function aceptar() {
+  estado = ESTADOS.TRASLADO;
+  enRetiro = true;
+  render();
+}
+
+function accionTraslado() {
+  const now = horaActual();
+  if (enRetiro) {
+    horaRetiro = now;
+    enRetiro = false;
+    stopTimer(); timerSec = 0; startTimer();
+    document.getElementById('btn-label').textContent = 'Registrar entrega';
+    // Re-render solo la vista para mostrar estado actualizado
+    document.getElementById('content').innerHTML = trasladadoHTML();
+  } else {
+    horaEntrega = now;
+    stopTimer();
+    estado = ESTADOS.COMPLETADO;
+    render();
+  }
+}
+
+function openRechazo() {
+  document.getElementById('modal-rechazo').classList.add('open');
+}
+function closeRechazo() {
+  document.getElementById('modal-rechazo').classList.remove('open');
+}
+function rechazar(motivo) {
+  closeRechazo();
+  estado = ESTADOS.IDLE;
+  render();
+}
+function volverIdle() {
+  estado = ESTADOS.IDLE;
+  render();
+}
+
+function volverSolicitud() {
+  // Solo permite volver si aún no se registró recogida
+  if (!enRetiro) return;
+  stopTimer(); timerSec = 0;
+  estado = ESTADOS.SOLICITUD;
+  render();
+}
+
+function openSheet() {
+  pacSelCambio = null;
+  // Poblar lista
+  const list = document.getElementById('sheet-pac-list');
+  list.innerHTML = pacientesCola.map(p => {
+    const esCurrent = p.id === 'P1'; // P1 es el actual en la demo
+    return `<button class="pac-opt ${esCurrent?'sel':''}" id="opt-${p.id}" onclick="selPac('${p.id}',this)">
+      <div class="po-av">${p.iniciales}</div>
+      <div style="flex:1">
+        <div class="po-name">${p.nombre}</div>
+        <div class="po-sub">${p.proc} · HC ${p.hc}</div>
+        <div class="po-ruta">${p.desde} → ${p.hacia}</div>
+      </div>
+      ${esCurrent ? '<div class="po-badge" style="background:var(--p-light);color:var(--p-dark)">Asignado</div>' : ''}
+      ${p.pesado ? '<div class="po-badge" style="background:var(--s-err-l);color:var(--s-err)">Pesado</div>' : ''}
+    </button>`;
+  }).join('');
+  document.getElementById('cambio-motivo').value = '';
+  document.getElementById('sheet-cambio').classList.add('open');
+}
+
+function selPac(id, el) {
+  pacSelCambio = id;
+  document.querySelectorAll('.pac-opt').forEach(o => {
+    o.classList.remove('sel');
+    o.querySelector('.po-badge[style*="p-light"]')?.remove();
+  });
+  el.classList.add('sel');
+}
+
+function closeSheet() {
+  document.getElementById('sheet-cambio').classList.remove('open');
+  pacSelCambio = null;
+}
+
+function confirmarCambio() {
+  const motivo = document.getElementById('cambio-motivo').value.trim();
+  if (!pacSelCambio) {
+    document.getElementById('sheet-pac-list').style.borderRadius = 'var(--r)';
+    document.getElementById('sheet-pac-list').style.border = '1.5px solid var(--s-err-m)';
+    setTimeout(() => {
+      document.getElementById('sheet-pac-list').style.border = '';
+    }, 1500);
+    return;
+  }
+  const nuevoPac = pacientesCola.find(p => p.id === pacSelCambio);
+  cambioPaciente = {
+    original: solicitud.pac,
+    nuevo: nuevoPac.nombre,
+    motivo: motivo || 'Sin motivo especificado',
+    hora: horaActual()
+  };
+  // Actualizar datos del traslado activo
+  Object.assign(solicitud, {
+    pac: nuevoPac.nombre, hc: nuevoPac.hc, proc: nuevoPac.proc,
+    desde: nuevoPac.desde, hacia: nuevoPac.hacia,
+    pesado: nuevoPac.pesado, equip: nuevoPac.equip, anestesia: nuevoPac.anestesia,
+    solicitante: nuevoPac.solicitante
+  });
+  closeSheet();
+  // Reset timer si aún no hubo recogida
+  if (enRetiro) { stopTimer(); timerSec = 0; startTimer(); }
+  document.getElementById('content').innerHTML = trasladadoHTML();
+}
+
+// ── TIMER ───────────────────────────────────────────────────────
+function startTimer() {
+  stopTimer();
+  timerInterval = setInterval(() => {
+    timerSec++;
+    const m = Math.floor(timerSec/60), s = timerSec%60;
+    const el = document.getElementById('timer-display');
+    if (el) el.textContent = m+':'+(s<10?'0':'')+s;
+  }, 1000);
+}
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function horaActual() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
+// ── RELOJ ───────────────────────────────────────────────────────
+(function tick(){
+  const d=new Date();
+  document.getElementById('clock').textContent=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  setTimeout(tick,10000);
+})();
+
+// ── INIT ────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>

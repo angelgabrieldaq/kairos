@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circulante · Consulta — Kairos · Zenoxia</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
+  --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
+  --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-ok:#0F6E56;--s-ok-l:#E1F5EE;--s-ok-m:#9FE1CB;
+  --s-warn:#633806;--s-warn-l:#FAEEDA;--s-warn-m:#EF9F27;
+  --s-err:#791F1F;--s-err-l:#FCEBEB;--s-err-m:#E24B4A;
+  --s-info:#0C447C;--s-info-l:#E6F1FB;--s-info-m:#B5D4F4;
+  --r:8px;--r-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);height:100vh;display:flex;flex-direction:column}
+
+.page-meta{display:flex;align-items:center;gap:10px;padding:12px 16px 0;flex-shrink:0}
+.logo-i{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-i svg{width:16px;height:16px;fill:#fff}
+.pm-title{font-size:14px;font-weight:500;color:var(--txt)}
+.pm-sub{font-size:10px;color:var(--txt3)}
+.slabel{font-size:10px;background:var(--s-warn-l);color:var(--s-warn);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--s-warn-m)}
+
+.shell{margin:12px 16px 16px;border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-direction:column;flex:1;min-height:0}
+
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-l{display:flex;align-items:center;gap:9px}
+.tb-av{width:32px;height:32px;border-radius:50%;background:var(--s-warn-l);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--s-warn);flex-shrink:0}
+.tb-name{font-size:12px;font-weight:500;color:var(--txt)}
+.tb-role{font-size:10px;color:var(--txt3)}
+.tb-r{display:flex;align-items:center;gap:8px}
+.clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
+.qx-badge{font-size:11px;font-weight:500;background:var(--s-info-l);color:var(--s-info);padding:3px 10px;border-radius:20px;border:0.5px solid var(--s-info-m)}
+
+/* LAYOUT */
+.main{display:grid;grid-template-columns:260px 1fr;flex:1;overflow:hidden;min-height:0}
+
+/* LISTA PACIENTES */
+.pac-list{border-right:0.5px solid var(--brd);overflow-y:auto;background:var(--bg);display:flex;flex-direction:column}
+.pl-head{padding:10px 14px;border-bottom:0.5px solid var(--brd);position:sticky;top:0;background:var(--bg);z-index:2;flex-shrink:0}
+.pl-title{font-size:11px;font-weight:500;color:var(--txt)}
+.pl-sub{font-size:9px;color:var(--txt3);margin-top:1px}
+
+.pac-item{padding:11px 14px;border-bottom:0.5px solid var(--brd);cursor:pointer;transition:background .12s}
+.pac-item:hover{background:var(--bg2)}
+.pac-item.active{background:var(--p-light)}
+.pi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.pi-name{font-size:12px;font-weight:500;color:var(--txt)}
+.pi-hora{font-size:10px;color:var(--txt3);background:var(--bg2);padding:1px 6px;border-radius:6px}
+.pac-item.active .pi-hora{background:rgba(255,255,255,.5)}
+.pi-proc{font-size:10px;color:var(--txt2);margin-bottom:5px}
+.pi-status{display:flex;align-items:center;gap:5px}
+.pi-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pi-lbl{font-size:10px;font-weight:500}
+
+/* PANEL DETALLE */
+.detalle{overflow-y:auto;display:flex;flex-direction:column;background:var(--bg3)}
+
+/* PAC HEADER */
+.pac-hdr{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:14px 16px;flex-shrink:0}
+.ph-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ph-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.ph-name{font-size:15px;font-weight:500;color:var(--txt)}
+.ph-sub{font-size:10px;color:var(--txt3);margin-top:2px}
+.ph-badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500}
+.b-proc{background:var(--s-info-l);color:var(--s-info)}
+.b-anest{background:var(--s-warn-l);color:var(--s-warn)}
+.b-alergia{background:var(--s-err-l);color:var(--s-err);border:0.5px solid var(--s-err-m)}
+
+/* ALERTAS CLINICAS */
+.alerta-clinica{padding:10px 16px;background:var(--s-err-l);border-bottom:0.5px solid var(--s-err-m);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--s-err);font-weight:500}
+
+/* CARDS */
+.det-body{padding:12px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden}
+.card-head{padding:9px 13px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:11px;font-weight:500;color:var(--txt)}
+.card-body{padding:11px 13px;display:flex;flex-direction:column;gap:0}
+
+/* TIMELINE DE HITOS */
+.hito-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
+.hito-row:last-child{border-bottom:none}
+.hito-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hi-done{background:var(--s-ok-l)}
+.hi-active{background:var(--p-light);animation:glow-p 2s infinite}
+@keyframes glow-p{0%,100%{box-shadow:0 0 0 0 rgba(43,87,217,.2)}50%{box-shadow:0 0 0 4px rgba(43,87,217,.08)}}
+.hi-pending{background:var(--bg2);border:1.5px dashed var(--brd2)}
+.hi-label{font-size:12px;font-weight:500;color:var(--txt);flex:1}
+.hi-sub{font-size:10px;color:var(--txt3);margin-top:1px}
+.hi-hora{font-size:11px;font-weight:500;color:var(--txt2);white-space:nowrap}
+
+/* SOLICITAR CAMILLERO */
+.cam-section{padding:11px 13px}
+.cam-needed{background:var(--p-light);border:0.5px solid var(--p-mid);border-radius:var(--r);padding:10px 12px;margin-bottom:9px}
+.cn-title{font-size:11px;font-weight:500;color:var(--p-dark);margin-bottom:3px}
+.cn-sub{font-size:10px;color:var(--p);line-height:1.5}
+.btn-solicitar{width:100%;padding:11px;font-size:12px;font-weight:500;border:none;background:var(--p);color:#fff;border-radius:var(--r);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s}
+.btn-solicitar:hover{background:var(--p-dark)}
+.btn-solicitar.solicitado{background:var(--s-ok);cursor:default}
+.btn-solicitar.pendiente{background:var(--s-warn-m);cursor:default}
+.sol-status{background:var(--p-light);border:0.5px solid var(--p-mid);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--p-dark)}
+.sol-dot{width:8px;height:8px;border-radius:50%;background:var(--p);animation:blink 1.5s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* CHECKLIST PREQUIRÚRGICO */
+.chk-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
+.chk-row:last-child{border-bottom:none}
+.chk-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--brd2);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.chk-box.done{background:var(--s-ok);border-color:var(--s-ok)}
+.chk-box.done::after{content:'✓';font-size:11px;color:#fff;font-weight:600}
+.chk-label{font-size:12px;color:var(--txt);flex:1}
+.chk-sub{font-size:10px;color:var(--txt3);margin-top:1px}
+.chk-src{font-size:9px;padding:1px 6px;border-radius:6px;font-weight:500;white-space:nowrap}
+
+/* DATOS GRID */
+.datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dato-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.dato-val{font-size:12px;font-weight:500;color:var(--txt)}
+
+/* EMPTY STATE */
+.empty-det{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--txt3);text-align:center;padding:32px}
+.ed-icon{font-size:36px;margin-bottom:4px}
+.ed-title{font-size:13px;font-weight:500;color:var(--txt2)}
+.ed-sub{font-size:11px;line-height:1.5}
+
+/* FASE BADGE */
+.fase-badge{font-size:10px;padding:2px 9px;border-radius:8px;font-weight:500}
+.fb-pre{background:var(--s-info-l);color:var(--s-info)}
+.fb-anest{background:var(--s-warn-l);color:var(--s-warn)}
+.fb-cir{background:var(--p-light);color:var(--p-dark)}
+.fb-esp{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd2)}
+.fb-ok{background:var(--s-ok-l);color:var(--s-ok)}
+</style>
+</head>
+<body>
+
+<div class="page-meta">
+  <div class="logo-i"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4z"/></svg></div>
+  <div><div class="pm-title">Kairos · Zenoxia</div><div class="pm-sub">Trazabilidad quirúrgica</div></div>
+  <div class="slabel">Pantalla 11 — Circulante · Consulta</div>
+</div>
+
+<div class="shell">
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-av">LV</div>
+      <div><div class="tb-name">Vidal, Laura</div><div class="tb-role">Circulante · Quirófano 1</div></div>
+    </div>
+    <div class="tb-r">
+      <div class="clock" id="clock">10:47 hs</div>
+      <div class="qx-badge">QX 1</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- LISTA DE PACIENTES DEL DÍA -->
+    <div class="pac-list">
+      <div class="pl-head">
+        <div class="pl-title">Pacientes del día — QX 1</div>
+        <div class="pl-sub">Tap para ver detalle y estado</div>
+      </div>
+      <div id="pac-list-items"></div>
+    </div>
+
+    <!-- PANEL DETALLE -->
+    <div class="detalle" id="detalle">
+      <div class="empty-det">
+        <div class="ed-icon">📋</div>
+        <div class="ed-title">Seleccioná un paciente</div>
+        <div class="ed-sub">Vas a ver su estado actual, checklist de requisitos y opción de solicitar camillero.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── DATOS ──────────────────────────────────────────────────────
+const pacientes = [
+  {
+    id:'P1', nombre:'Ramírez, Jorge A.', iniciales:'RJ', hc:'00031284',
+    hora:'12:00', proc:'Colostomía', anestesia:'General', dest:'Piso adultos',
+    alergia:null, pesado:false,
+    fase:'en-cirugia',
+    hitos:[
+      { lbl:'Ingreso a quirófano',       hora:'11:35', done:true,  quien:'Enfermero Fernández' },
+      { lbl:'Inicio anestesia',           hora:'11:48', done:true,  quien:'Anestesista Ortiz' },
+      { lbl:'Inicio cirugía (1er corte)', hora:'11:59', done:true,  quien:'Dr. Méndez' },
+      { lbl:'Fin cirugía',               hora:null,    done:false, quien:null, active:true },
+      { lbl:'Fin anestesia',             hora:null,    done:false, quien:null },
+      { lbl:'Listo · solicitar camillero',hora:null,   done:false, quien:null },
+    ],
+    camillero:{ estado:'no-solicitado' },
+    checklist:[
+      { lbl:'Identidad verificada (pulsera)',   done:true,  src:'Recepcionista', srcColor:'s-ok' },
+      { lbl:'Consentimiento informado',          done:true,  src:'HIS', srcColor:'s-ok' },
+      { lbl:'Alergias confirmadas',              done:true,  src:'Enfermero', srcColor:'s-ok' },
+      { lbl:'Prequirúrgicos en HIS',            done:true,  src:'HIS', srcColor:'s-ok' },
+      { lbl:'Medicación suspendida si indicado', done:true,  src:'Enfermero', srcColor:'s-ok' },
+      { lbl:'Vía periférica permeable',         done:true,  src:'Enfermero', srcColor:'s-ok' },
+    ],
+    datos:{ edad:'54 años', peso:'82 kg', grupo:'A+', destino:'Piso adultos', cirujano:'Dr. Méndez, C.', anestesista:'Dr. Ortiz, M.' }
+  },
+  {
+    id:'P2', nombre:'Torres, Andrés L.', iniciales:'TA', hc:'00030021',
+    hora:'13:30', proc:'Hernia inguinal', anestesia:'Espinal', dest:'Día · alta ambulatoria',
+    alergia:null, pesado:false,
+    fase:'prequirurgico',
+    hitos:[
+      { lbl:'Ingreso a quirófano',        hora:null, done:false, quien:null, active:true },
+      { lbl:'Inicio anestesia',           hora:null, done:false, quien:null },
+      { lbl:'Inicio cirugía (1er corte)', hora:null, done:false, quien:null },
+      { lbl:'Fin cirugía',               hora:null, done:false, quien:null },
+      { lbl:'Fin anestesia',             hora:null, done:false, quien:null },
+      { lbl:'Listo · solicitar camillero',hora:null, done:false, quien:null },
+    ],
+    camillero:{ estado:'no-solicitado' },
+    checklist:[
+      { lbl:'Identidad verificada (pulsera)',   done:true,  src:'Recepcionista', srcColor:'s-ok' },
+      { lbl:'Consentimiento informado',          done:false, src:'Pendiente', srcColor:'s-warn' },
+      { lbl:'Alergias confirmadas',              done:true,  src:'Enfermero', srcColor:'s-ok' },
+      { lbl:'Prequirúrgicos en HIS',            done:true,  src:'HIS', srcColor:'s-ok' },
+      { lbl:'Medicación suspendida si indicado', done:false, src:'Pendiente', srcColor:'s-warn' },
+      { lbl:'Vía periférica permeable',         done:false, src:'Pendiente', srcColor:'s-warn' },
+    ],
+    datos:{ edad:'41 años', peso:'74 kg', grupo:'O+', destino:'Alta ambulatoria', cirujano:'Dr. Méndez, C.', anestesista:'Dr. Ortiz, M.' }
+  },
+  {
+    id:'P3', nombre:'García, Marta L.', iniciales:'GM', hc:'00028990',
+    hora:'10:00', proc:'MAKO rodilla', anestesia:'Espinal', dest:'Hab. 2A recuperación',
+    alergia:'Penicilina', pesado:true,
+    fase:'completado',
+    hitos:[
+      { lbl:'Ingreso a quirófano',        hora:'09:48', done:true, quien:'Enfermero Fernández' },
+      { lbl:'Inicio anestesia',           hora:'10:02', done:true, quien:'Anestesista Ortiz' },
+      { lbl:'Inicio cirugía (1er corte)', hora:'10:15', done:true, quien:'Dra. Rodríguez, A.' },
+      { lbl:'Fin cirugía',               hora:'11:22', done:true, quien:'Dra. Rodríguez, A.' },
+      { lbl:'Fin anestesia',             hora:'11:35', done:true, quien:'Anestesista Ortiz' },
+      { lbl:'Listo · solicitar camillero',hora:'11:37', done:true, quien:'Circulante Vidal' },
+    ],
+    camillero:{ estado:'completado', nombre:'García, Rosa', retiro:'11:44', entrega:'11:58' },
+    checklist:[
+      { lbl:'Identidad verificada (pulsera)',    done:true, src:'Recepcionista', srcColor:'s-ok' },
+      { lbl:'Consentimiento informado',           done:true, src:'HIS', srcColor:'s-ok' },
+      { lbl:'Alergias confirmadas (Penicilina)',  done:true, src:'Enfermero', srcColor:'s-ok' },
+      { lbl:'Prequirúrgicos en HIS',             done:true, src:'HIS', srcColor:'s-ok' },
+      { lbl:'Medicación suspendida si indicado',  done:true, src:'Enfermero', srcColor:'s-ok' },
+      { lbl:'Vía periférica permeable',          done:true, src:'Enfermero', srcColor:'s-ok' },
+    ],
+    datos:{ edad:'63 años', peso:'91 kg', grupo:'B+', destino:'Hab. 2A recuperación', cirujano:'Dra. Rodríguez, A.', anestesista:'Dr. Ortiz, M.' }
+  },
+];
+
+const FASE_CONFIG = {
+  prequirurgico: { lbl:'Pre-quirúrgico', cls:'fb-pre', dot:'var(--s-info)' },
+  anestesia:     { lbl:'Anestesia',      cls:'fb-anest', dot:'var(--s-warn-m)' },
+  'en-cirugia':  { lbl:'En cirugía',     cls:'fb-cir', dot:'var(--p)' },
+  esperando:     { lbl:'Esperando camillero', cls:'fb-esp', dot:'var(--txt3)' },
+  completado:    { lbl:'Completado',     cls:'fb-ok', dot:'var(--s-ok)' },
+};
+
+let pacActivo = null;
+
+// ── RENDER LISTA ────────────────────────────────────────────────
+function renderLista() {
+  const container = document.getElementById('pac-list-items');
+  container.innerHTML = pacientes.map(p => {
+    const f = FASE_CONFIG[p.fase] || FASE_CONFIG.prequirurgico;
+    const active = pacActivo?.id === p.id;
+    return `<div class="pac-item ${active?'active':''}" onclick="selectPac('${p.id}')">
+      <div class="pi-top">
+        <div class="pi-name">${p.nombre}</div>
+        <div class="pi-hora">${p.hora}</div>
+      </div>
+      <div class="pi-proc">${p.proc}</div>
+      <div class="pi-status">
+        <div class="pi-dot" style="background:${f.dot}"></div>
+        <span class="pi-lbl fase-badge ${f.cls}">${f.lbl}</span>
+        ${p.alergia ? `<span class="pi-lbl" style="font-size:9px;background:var(--s-err-l);color:var(--s-err);padding:1px 6px;border-radius:6px;font-weight:500">⚠ ${p.alergia}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER DETALLE ──────────────────────────────────────────────
+function selectPac(id) {
+  pacActivo = pacientes.find(p => p.id === id);
+  renderLista();
+  renderDetalle();
+}
+
+function renderDetalle() {
+  const p = pacActivo;
+  if (!p) return;
+  const f = FASE_CONFIG[p.fase];
+  const det = document.getElementById('detalle');
+
+  let alertaHTML = '';
+  if (p.alergia) {
+    alertaHTML = `<div class="alerta-clinica">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Alergia documentada: <strong>${p.alergia}</strong> — Verificar antes de cualquier medicación
+    </div>`;
+  }
+
+  // HITOS
+  const hitosHTML = p.hitos.map((h,i) => {
+    const cls = h.done ? 'hi-done' : h.active ? 'hi-active' : 'hi-pending';
+    const ico = h.done
+      ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--s-ok)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`
+      : h.active
+        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2.5"><circle cx="12" cy="12" r="3"/></svg>`
+        : `<div style="width:8px;height:8px;border-radius:50%;background:var(--brd2)"></div>`;
+    return `<div class="hito-row">
+      <div class="hito-ico ${cls}">${ico}</div>
+      <div style="flex:1">
+        <div class="hi-label" style="${h.active?'color:var(--p);font-weight:600':h.done?'':'color:var(--txt3)'}">${h.lbl}</div>
+        ${h.done ? `<div class="hi-sub">${h.quien} · ${h.hora} hs</div>` : h.active ? `<div class="hi-sub" style="color:var(--p)">Pendiente de registro</div>` : ''}
+      </div>
+      ${h.hora ? `<div class="hi-hora">${h.hora}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // CAMILLERO
+  let camHTML = '';
+  const cam = p.camillero;
+  if (cam.estado === 'no-solicitado' && p.fase !== 'completado') {
+    const puedesSolicitar = p.hitos.filter(h=>h.done).length >= 4;
+    camHTML = `<div class="cam-section">
+      ${puedesSolicitar ? `<div class="cam-needed">
+        <div class="cn-title">Paciente listo para traslado</div>
+        <div class="cn-sub">Al solicitar, se genera una solicitud en el tablero del coordinador de camilleros. Hora quedará registrada.</div>
+      </div>
+      <button class="btn-solicitar" id="btn-cam-${p.id}" onclick="solicitarCamillero('${p.id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18a2 2 0 012-2.18h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 17z"/></svg>
+        Solicitar camillero
+      </button>` : `<div style="font-size:11px;color:var(--txt3);text-align:center;padding:10px 0;line-height:1.6">Disponible cuando se registre fin de anestesia y se confirme que el paciente está listo.</div>`}
+    </div>`;
+  } else if (cam.estado === 'solicitado') {
+    camHTML = `<div class="cam-section">
+      <div class="sol-status">
+        <div class="sol-dot"></div>
+        <div>
+          <div style="font-weight:500">Solicitud enviada al coordinador</div>
+          <div style="font-size:10px;color:var(--p);margin-top:1px">En espera de asignación de camillero</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (cam.estado === 'en-traslado') {
+    camHTML = `<div class="cam-section">
+      <div class="sol-status" style="background:var(--s-ok-l);border-color:var(--s-ok-m)">
+        <div class="sol-dot" style="background:var(--s-ok)"></div>
+        <div>
+          <div style="font-weight:500;color:var(--s-ok)">Camillero asignado — en traslado</div>
+          <div style="font-size:10px;color:var(--s-ok);margin-top:1px">${cam.nombre} · Retiro ${cam.retiro} hs</div>
+        </div>
+      </div>
+    </div>`;
+  } else if (cam.estado === 'completado') {
+    camHTML = `<div class="cam-section">
+      <div class="sol-status" style="background:var(--s-ok-l);border-color:var(--s-ok-m)">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--s-ok);flex-shrink:0"></div>
+        <div>
+          <div style="font-weight:500;color:var(--s-ok)">Traslado completado</div>
+          <div style="font-size:10px;color:var(--s-ok);margin-top:1px">${cam.nombre} · ${cam.retiro} → ${cam.entrega} hs</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // CHECKLIST
+  const checklistHTML = p.checklist.map(c => {
+    const bgColor = c.done ? 'var(--s-ok-l)' : 'var(--s-warn-l)';
+    const txtColor = c.done ? 'var(--s-ok)' : 'var(--s-warn)';
+    return `<div class="chk-row">
+      <div class="chk-box ${c.done?'done':''}" onclick="${p.fase!=='completado'?`toggleChk(this)`:''}"></div>
+      <div style="flex:1">
+        <div class="chk-label" style="${c.done?'':'color:var(--txt2)'}">${c.lbl}</div>
+      </div>
+      <span class="chk-src" style="background:${bgColor};color:${txtColor}">${c.src}</span>
+    </div>`;
+  }).join('');
+
+  det.innerHTML = `
+    <div class="pac-hdr">
+      <div class="ph-top">
+        <div class="ph-av" style="background:${p.alergia?'var(--s-err-l)':'var(--p-light)'};color:${p.alergia?'var(--s-err)':'var(--p-dark)'}">${p.iniciales}</div>
+        <div style="flex:1">
+          <div class="ph-name">${p.nombre}</div>
+          <div class="ph-sub">HC ${p.hc} · ${p.hora} hs</div>
+        </div>
+        <span class="fase-badge ${f.cls}">${f.lbl}</span>
+      </div>
+      <div class="ph-badges">
+        <span class="badge b-proc">${p.proc}</span>
+        <span class="badge b-anest">${p.anestesia}</span>
+        ${p.alergia ? `<span class="badge b-alergia">⚠ ${p.alergia}</span>` : ''}
+        ${p.pesado ? `<span class="badge" style="background:var(--s-err-l);color:var(--s-err);border:0.5px solid var(--s-err-m)">Paciente pesado</span>` : ''}
+      </div>
+    </div>
+
+    ${alertaHTML}
+
+    <div class="det-body">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Registro de hitos</div>
+          <span style="font-size:9px;padding:2px 7px;border-radius:6px;background:var(--bg2);color:var(--txt3);border:0.5px solid var(--brd2)">${p.hitos.filter(h=>h.done).length}/${p.hitos.length} completados</span>
+        </div>
+        <div class="card-body">${hitosHTML}</div>
+        ${camHTML ? `<div style="border-top:0.5px solid var(--brd)">${camHTML}</div>` : ''}
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Checklist prequirúrgico</div>
+          <span style="font-size:9px;padding:2px 7px;border-radius:6px;background:${p.checklist.every(c=>c.done)?'var(--s-ok-l)':'var(--s-warn-l)'};color:${p.checklist.every(c=>c.done)?'var(--s-ok)':'var(--s-warn)'}">
+            ${p.checklist.filter(c=>c.done).length}/${p.checklist.length}
+          </span>
+        </div>
+        <div class="card-body">${checklistHTML}</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">Datos del caso</div></div>
+        <div class="card-body" style="padding:12px 13px">
+          <div class="datos-grid">
+            <div><div class="dato-lbl">Cirujano</div><div class="dato-val" style="font-size:11px">${p.datos.cirujano}</div></div>
+            <div><div class="dato-lbl">Anestesista</div><div class="dato-val" style="font-size:11px">${p.datos.anestesista}</div></div>
+            <div><div class="dato-lbl">Edad / Peso</div><div class="dato-val">${p.datos.edad} · ${p.datos.peso}</div></div>
+            <div><div class="dato-lbl">Grupo sanguíneo</div><div class="dato-val">${p.datos.grupo}</div></div>
+            <div><div class="dato-lbl">Destino post-op</div><div class="dato-val" style="font-size:11px">${p.datos.destino}</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>`;
+}
+
+// ── ACCIONES ────────────────────────────────────────────────────
+function solicitarCamillero(id) {
+  const p = pacientes.find(x => x.id === id);
+  p.camillero.estado = 'solicitado';
+  // Marcar último hito como activo
+  const lastHito = p.hitos[p.hitos.length - 1];
+  lastHito.done = true; lastHito.hora = horaActual(); lastHito.quien = 'Circulante Vidal';
+  renderDetalle();
+}
+
+function toggleChk(el) {
+  el.classList.toggle('done');
+}
+
+function horaActual() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+// ── RELOJ ───────────────────────────────────────────────────────
+(function tick(){
+  const d = new Date();
+  document.getElementById('clock').textContent = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0') + ' hs';
+  setTimeout(tick, 10000);
+})();
+
+// ── INIT ────────────────────────────────────────────────────────
+renderLista();
+</script>
+</body>
+</html>

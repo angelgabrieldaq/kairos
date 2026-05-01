@@ -329,10 +329,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <span class="bc-sep">/</span>
       <span class="bc-current" id="bc-current">—</span>
       <div class="bc-right">
-        <a class="bc-open" id="bc-open-link" target="_blank" rel="noopener noreferrer">
-          <span>Abrir en nueva pestaña</span>
-          <span>↗</span>
-        </a>
+        
       </div>
     </div>
 
@@ -427,15 +424,17 @@ const ROLES_CONFIG = {
 
 // ── DEFINICIÓN DE PANTALLAS ──────────────────────────────
 const SCREENS = {
-  dashboard:  { file:'03_dashboard_monitoreo.html',      label:'Dashboard · Monitoreo' },
-  coord:      { file:'02_coordinador_turno_qx_v2.html',  label:'Coordinador turno QX' },
-  circulante: { file:'05_circulante_qx.html',            label:'Circulante · QX' },
-  camilleros: { file:'08_tablero_camilleros.html',       label:'Tablero camilleros' },
-  uca:        { file:'06_recepcionista_uca.html',        label:'Recepcionista UCA' },
-  enfermero:  { file:'07_enfermero_uca.html',            label:'Enfermero UCA' },
-  paciente:   { file:'04_flujo_paciente_v3.html',        label:'Flujo del paciente' },
-  jefatura:   { file:'09_jefatura.html',                 label:'Jefatura · Analítica' },
-  roles:      { file:'01_panel_roles.html',              label:'Panel de roles' },
+  dashboard:           { file:'03_dashboard_monitoreo.html',      label:'Dashboard · Monitoreo',   desc:'Estado en tiempo real: quirófanos, alertas y próximos ingresos del turno.' },
+  coord:               { file:'02_coordinador_turno_qx_v2.html',  label:'Coordinador turno QX',    desc:'Gestión de agenda, equipo asignado y comunicaciones del turno quirúrgico.' },
+  circulante:          { file:'05_circulante_qx.html',            label:'Circulante · QX',         desc:'Registro de hitos en quirófano: anestesia, cirugía y solicitud de camillero.' },
+  camilleros:          { file:'08_tablero_camilleros.html',       label:'Coordinador camilleros',  desc:'Cola dinámica de traslados, asignación de camilleros y métricas de carga.' },
+  uca:                 { file:'06_recepcionista_uca.html',        label:'Recepcionista UCA',       desc:'Validación de documentación y registro de eficiencia del flujo digital.' },
+  enfermero:           { file:'07_enfermero_uca.html',            label:'Enfermero UCA',           desc:'Gestión de habitaciones prequirúrgicas y checklist de ingreso del paciente.' },
+  paciente:            { file:'04_flujo_paciente_v3.html',        label:'Flujo del paciente',      desc:'Formulario digital prequirúrgico que el paciente completa desde su domicilio.' },
+  jefatura:            { file:'09_jefatura.html',                 label:'Jefatura · Analítica',    desc:'Indicadores operativos, tiempos de quirófano y análisis de eficiencia.' },
+  camillero_mobile:    { file:'10_camillero_mobile.html',         label:'Camillero · Móvil',       desc:'App móvil: solicitudes de traslado, confirmación y registro de recogida/entrega.' },
+  circulante_consulta: { file:'11_circulante_consulta.html',      label:'Circulante · Consulta',   desc:'Vista de pacientes del día: estado, checklist de requisitos y solicitud de camillero.' },
+  roles:               { file:'01_panel_roles.html',              label:'Panel de roles',          desc:'Configuración de roles de usuario y permisos de acceso al sistema.' },
 };
 
 let currentRole = null;
@@ -547,9 +546,7 @@ function filterMenuByRole(roleId) {
 
 function generateWelcomeContent(roleId) {
   const container = document.getElementById('role-specific-content');
-  const roleData = ROLES_CONFIG[roleId];
-  
-  // Determinar qué pantallas mostrar para este rol
+
   const availableScreens = [];
   Object.entries(SCREENS).forEach(([screenId, screenData]) => {
     const navItem = document.getElementById('nav-' + screenId);
@@ -557,65 +554,35 @@ function generateWelcomeContent(roleId) {
       availableScreens.push({ id: screenId, ...screenData });
     }
   });
-  
+
+  const ICONS = {
+    dashboard:'📊', coord:'📋', circulante:'⬡', camilleros:'🚑',
+    paciente:'👤', uca:'🏥', enfermero:'🩺',
+    jefatura:'📈', roles:'⚙️', camillero_mobile:'📱', circulante_consulta:'📋'
+  };
+
+  const GRUPOS = [
+    { titulo:'Operaciones Quirúrgicas', ids:['dashboard','coord','circulante','camilleros','circulante_consulta','camillero_mobile'], bg:'var(--s-info-l)' },
+    { titulo:'Flujos de Pacientes',     ids:['paciente','uca','enfermero'],                                                           bg:'var(--p-light)' },
+    { titulo:'Administración',          ids:['jefatura','roles'],                                                                     bg:'var(--bg2)' },
+  ];
+
   let html = '';
-  
-  // Agrupar pantallas por categoría
-  const opScreens = availableScreens.filter(s => 
-    ['dashboard', 'coord', 'circulante', 'camilleros'].includes(s.id)
-  );
-  const pacScreens = availableScreens.filter(s => 
-    ['paciente', 'uca'].includes(s.id)
-  );
-  const adminScreens = availableScreens.filter(s => 
-    ['jefatura', 'roles'].includes(s.id)
-  );
-  
-  if (opScreens.length > 0) {
-    html += `<div class="w-section-title">Operaciones Quirúrgicas</div><div class="w-grid">`;
-    opScreens.forEach(s => {
-      const icons = {dashboard:'📊', coord:'📋', circulante:'⬡', camilleros:'🚑'};
+  GRUPOS.forEach(g => {
+    const screens = availableScreens.filter(s => g.ids.includes(s.id));
+    if (!screens.length) return;
+    html += `<div class="w-section-title">${g.titulo}</div><div class="w-grid">`;
+    screens.forEach(s => {
       html += `
         <div class="w-card" onclick="loadScreen('${s.id}')">
-          <div class="wc-icon" style="background:var(--s-info-l)">${icons[s.id] || '📱'}</div>
+          <div class="wc-icon" style="background:${g.bg}">${ICONS[s.id] || '📱'}</div>
           <div class="wc-title">${s.label}</div>
-          <div class="wc-desc">Acceso disponible para tu rol.</div>
-        </div>
-      `;
+          <div class="wc-desc">${s.desc || 'Acceso disponible para tu rol.'}</div>
+        </div>`;
     });
     html += `</div>`;
-  }
-  
-  if (pacScreens.length > 0) {
-    html += `<div class="w-section-title">Flujos de Pacientes</div><div class="w-grid">`;
-    pacScreens.forEach(s => {
-      const icons = {paciente:'👤', uca:'🏥'};
-      html += `
-        <div class="w-card" onclick="loadScreen('${s.id}')">
-          <div class="wc-icon" style="background:var(--pl)">${icons[s.id] || '📱'}</div>
-          <div class="wc-title">${s.label}</div>
-          <div class="wc-desc">Acceso disponible para tu rol.</div>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
-  if (adminScreens.length > 0) {
-    html += `<div class="w-section-title">Administración</div><div class="w-grid">`;
-    adminScreens.forEach(s => {
-      const icons = {jefatura:'📈', roles:'⚙️'};
-      html += `
-        <div class="w-card" onclick="loadScreen('${s.id}')">
-          <div class="wc-icon" style="background:var(--bg2)">${icons[s.id] || '⚙️'}</div>
-          <div class="wc-title">${s.label}</div>
-          <div class="wc-desc">Acceso disponible para tu rol.</div>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
+  });
+
   container.innerHTML = html;
 }
 
@@ -649,7 +616,7 @@ function loadScreen(id) {
   // Verificar que el rol tiene acceso
   const navItem = document.getElementById('nav-' + id);
   if (!navItem || navItem.classList.contains('hidden')) {
-    alert('No tienes acceso a esta pantalla con tu rol actual.');
+    showToast('Sin acceso', 'Tu rol actual no puede ver esta pantalla.', 'warn');
     return;
   }
   
@@ -662,7 +629,7 @@ function loadScreen(id) {
   // Breadcrumb
   document.getElementById('breadcrumb').style.display = 'flex';
   document.getElementById('bc-current').textContent   = s.label;
-  document.getElementById('bc-open-link').href        = s.file;
+  
 
   // Ocultar welcome
   document.getElementById('welcome-screen').style.display = 'none';
@@ -696,6 +663,24 @@ function goHome() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-confirm-role').addEventListener('click', confirmRole);
 });
+
+function showToast(titulo, mensaje, tipo) {
+  const existing = document.getElementById('kairos-toast');
+  if (existing) existing.remove();
+  const colors = {
+    warn: { bg:'var(--s-warn-l)', brd:'var(--s-warn-m)', txt:'var(--s-warn)' },
+    err:  { bg:'var(--s-err-l)',  brd:'var(--s-err-m)',  txt:'var(--s-err)'  },
+    ok:   { bg:'var(--s-ok-l)',   brd:'var(--s-ok-m)',   txt:'var(--s-ok)'   },
+  };
+  const c = colors[tipo] || colors.warn;
+  const toast = document.createElement('div');
+  toast.id = 'kairos-toast';
+  toast.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:${c.bg};border:0.5px solid ${c.brd};color:${c.txt};border-radius:10px;padding:10px 18px;font-size:12px;font-weight:500;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.12);opacity:0;transition:all .25s;max-width:340px;text-align:center;line-height:1.5`;
+  toast.innerHTML = `<strong>${titulo}</strong><br><span style="font-weight:400">${mensaje}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='1'; toast.style.transform='translateX(-50%) translateY(0)'; }, 10);
+  setTimeout(() => { toast.style.opacity='0'; setTimeout(() => toast.remove(), 300); }, 3500);
+}
 </script>
 </body>
 </html>
