@@ -9,24 +9,24 @@
   --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
   --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
   --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
-  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
-  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
-  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
-  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-info-l:#E6F1FB;--s-info:#0C447C;--s-info-m:#B5D4F4;
+  --s-warn-l:#FAEEDA;--s-warn:#633806;--s-warn-m:#EF9F27;
+  --s-err-l:#FCEBEB;--s-err:#791F1F;--s-err-m:#E24B4A;
   --tl:#E0F7F4;--t:#065F55;
-  --rr:8px;--rl2:12px;
+  --r:8px;--r-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
 
 .page-meta{width:100%;max-width:520px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.logo-i{width:28px;height:28px;background:var(--t);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo-i svg{width:16px;height:16px;fill:#fff}
 .pm-title{font-size:14px;font-weight:500;color:var(--txt)}
 .pm-sub{font-size:10px;color:var(--txt3)}
-.slabel{font-size:10px;background:var(--tl);color:var(--t);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--gm)}
+.slabel{font-size:10px;background:var(--tl);color:var(--t);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--p-mid)}
 
-.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 
 /* TOPBAR */
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
@@ -36,7 +36,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .tb-role{font-size:10px;color:var(--txt3)}
 .tb-right{display:flex;align-items:center;gap:8px}
 .clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
-.hab-badge{font-size:11px;font-weight:500;background:var(--tl);color:var(--t);padding:4px 12px;border-radius:20px;border:0.5px solid var(--gm)}
+.hab-badge{font-size:11px;font-weight:500;background:var(--tl);color:var(--t);padding:4px 12px;border-radius:20px;border:0.5px solid var(--p-mid)}
 
 /* VIEWS */
 .view{display:none}
@@ -49,9 +49,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .section-hdr:first-child{margin-top:0}
 
 /* NOTIF CARD */
-.notif-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.notif-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;margin-bottom:8px;cursor:pointer;transition:all .15s}
 .notif-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.notif-card.urgent{border-left:3px solid var(--g);animation:pulse-border 2s infinite}
+.notif-card.urgent{border-left:3px solid var(--p);animation:pulse-border 2s infinite}
 @keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(15,110,86,.2)}50%{box-shadow:0 0 0 4px rgba(15,110,86,.05)}}
 .nc-top{padding:10px 14px;display:flex;align-items:center;gap:10px}
 .nc-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
@@ -61,19 +61,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .nc-time{font-size:10px;color:var(--txt3)}
 .nc-bottom{padding:8px 14px;background:var(--bg2);border-top:0.5px solid var(--brd);display:flex;gap:6px;align-items:center}
 .nc-tag{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500}
-.t-green{background:var(--gl);color:var(--gd)}
-.t-amber{background:var(--al);color:var(--a)}
+.t-ok{background:var(--p-light);color:var(--p-dark)}
+.t-amber{background:var(--s-warn-l);color:var(--s-warn)}
 .t-teal{background:var(--tl);color:var(--t)}
-.t-blue{background:var(--bl);color:var(--b)}
-.nc-action-btn{margin-left:auto;font-size:10px;padding:4px 10px;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;font-weight:500}
+.t-blue{background:var(--s-info-l);color:var(--s-info)}
+.nc-action-btn{margin-left:auto;font-size:10px;padding:4px 10px;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;font-weight:500}
 
 /* HABITACIONES */
 .hab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.hab-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:12px;cursor:pointer;transition:all .15s}
-.hab-card:hover{border-color:var(--gm)}
-.hab-card.ocupada{border-left:3px solid var(--b)}
-.hab-card.libre{border-left:3px solid var(--g)}
-.hab-card.prep{border-left:3px solid var(--am);animation:pulse-amber 2s infinite}
+.hab-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);padding:12px;cursor:pointer;transition:all .15s}
+.hab-card:hover{border-color:var(--p-mid)}
+.hab-card.ocupada{border-left:3px solid var(--s-info)}
+.hab-card.libre{border-left:3px solid var(--p)}
+.hab-card.prep{border-left:3px solid var(--s-warn-m);animation:pulse-amber 2s infinite}
 @keyframes pulse-amber{0%,100%{box-shadow:0 0 0 0 rgba(239,159,39,.2)}50%{box-shadow:0 0 0 4px rgba(239,159,39,.05)}}
 .hab-nro{font-size:16px;font-weight:600;color:var(--txt);margin-bottom:3px}
 .hab-estado{font-size:10px;font-weight:500;margin-bottom:5px}
@@ -89,8 +89,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .ph-sub{font-size:10px;color:var(--txt3);margin-top:2px}
 .ph-badges{display:flex;gap:5px;flex-wrap:wrap}
 .badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500}
-.b-proc{background:var(--bl);color:var(--b)}
-.b-anest{background:var(--al);color:var(--a)}
+.b-proc{background:var(--s-info-l);color:var(--s-info)}
+.b-anest{background:var(--s-warn-l);color:var(--s-warn)}
 .b-hab{background:var(--tl);color:var(--t)}
 
 /* CHECKLIST */
@@ -100,7 +100,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .chk-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--brd)}
 .chk-item:last-child{border-bottom:none}
 .chk-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--brd2);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.chk-box.checked{background:var(--g);border-color:var(--g)}
+.chk-box.checked{background:var(--p);border-color:var(--p)}
 .chk-box.checked::after{content:'✓';font-size:11px;color:#fff;font-weight:600}
 .chk-label{font-size:12px;color:var(--txt);flex:1}
 .chk-sub{font-size:10px;color:var(--txt3);margin-top:1px}
@@ -109,14 +109,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 /* OBSERV */
 .obs-area{padding:12px 16px;border-top:0.5px solid var(--brd)}
 .obs-label{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-.obs-input{width:100%;padding:8px 10px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:var(--bg2);font-size:11px;color:var(--txt);font-family:inherit;resize:none;min-height:60px}
+.obs-input{width:100%;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--brd2);background:var(--bg2);font-size:11px;color:var(--txt);font-family:inherit;resize:none;min-height:60px}
 
 /* BOTTOM */
 .bottom-bar{background:var(--bg);border-top:0.5px solid var(--brd);padding:10px 16px;display:flex;gap:8px}
-.btn-primary{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
-.btn-primary:hover{background:var(--gd)}
+.btn-primary{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.btn-primary:hover{background:var(--p-dark)}
 .btn-primary.done{background:var(--bg2);color:var(--txt2);cursor:default}
-.btn-secondary{padding:11px 14px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
+.btn-secondary{padding:11px 14px;font-size:12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
 </style>
 </head>
 <body>
@@ -150,18 +150,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <!-- Paciente notificado — urgente -->
       <div class="notif-card urgent" onclick="openPaciente()">
         <div class="nc-top">
-          <div class="nc-av" style="background:var(--gl);color:var(--gd)">RJ</div>
+          <div class="nc-av" style="background:var(--p-light);color:var(--p-dark)">RJ</div>
           <div>
             <div class="nc-name">Ramírez, Jorge Alberto</div>
             <div class="nc-sub">Colostomía · QX 1 · 12:00 hs</div>
           </div>
           <div class="nc-right">
             <div class="nc-time">Hace 3 min</div>
-            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--gl);color:var(--gd);font-weight:500">Confirmado</span>
+            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--p-light);color:var(--p-dark);font-weight:500">Confirmado</span>
           </div>
         </div>
         <div class="nc-bottom">
-          <span class="nc-tag t-green">Doc. completa</span>
+          <span class="nc-tag t-ok">Doc. completa</span>
           <span class="nc-tag t-teal">Habilitado hab. 2B</span>
           <button class="nc-action-btn" onclick="event.stopPropagation();openPaciente()">Recibir →</button>
         </div>
@@ -170,14 +170,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <!-- Paciente en espera -->
       <div class="notif-card">
         <div class="nc-top">
-          <div class="nc-av" style="background:var(--al);color:var(--a)">TC</div>
+          <div class="nc-av" style="background:var(--s-warn-l);color:var(--s-warn)">TC</div>
           <div>
             <div class="nc-name">Torres, Carlos Andrés</div>
             <div class="nc-sub">Hernia inguinal · QX 3 · 13:30 hs</div>
           </div>
           <div class="nc-right">
             <div class="nc-time">Esperando</div>
-            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--al);color:var(--a);font-weight:500">Pendiente</span>
+            <span style="font-size:9px;padding:2px 7px;border-radius:8px;background:var(--s-warn-l);color:var(--s-warn);font-weight:500">Pendiente</span>
           </div>
         </div>
         <div class="nc-bottom">
@@ -191,25 +191,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="hab-grid">
         <div class="hab-card prep" onclick="openPaciente()">
           <div class="hab-nro">Hab. 2B</div>
-          <div class="hab-estado" style="color:var(--am)">⟳ En preparación</div>
+          <div class="hab-estado" style="color:var(--s-warn-m)">⟳ En preparación</div>
           <div class="hab-pac">Ramírez, J.</div>
           <div class="hab-proc">Colostomía · 12:00 hs</div>
         </div>
         <div class="hab-card ocupada">
           <div class="hab-nro">Hab. 2A</div>
-          <div class="hab-estado" style="color:var(--b)">● Ocupada</div>
+          <div class="hab-estado" style="color:var(--s-info)">● Ocupada</div>
           <div class="hab-pac">García, Marta</div>
           <div class="hab-proc">MAKO rodilla · 10:00 hs</div>
         </div>
         <div class="hab-card libre">
           <div class="hab-nro">Hab. 2C</div>
-          <div class="hab-estado" style="color:var(--g)">○ Libre</div>
+          <div class="hab-estado" style="color:var(--p)">○ Libre</div>
           <div class="hab-pac" style="color:var(--txt3)">Sin asignar</div>
           <div class="hab-proc" style="color:var(--txt3)">Torres · 13:30</div>
         </div>
         <div class="hab-card libre">
           <div class="hab-nro">Hab. 2D</div>
-          <div class="hab-estado" style="color:var(--g)">○ Libre</div>
+          <div class="hab-estado" style="color:var(--p)">○ Libre</div>
           <div class="hab-pac" style="color:var(--txt3)">Sin asignar</div>
           <div class="hab-proc" style="color:var(--txt3)">—</div>
         </div>
@@ -225,7 +225,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <!-- HEADER -->
       <div class="pac-header">
         <div class="ph-top">
-          <div class="ph-av" style="background:var(--gl);color:var(--gd)">RJ</div>
+          <div class="ph-av" style="background:var(--p-light);color:var(--p-dark)">RJ</div>
           <div style="flex:1">
             <div class="ph-name">Ramírez, Jorge Alberto</div>
             <div class="ph-sub">HC 00031284 · DNI 25.781.320 · 54 años</div>
@@ -251,7 +251,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
               <div class="chk-label">Documentación completa confirmada</div>
               <div class="chk-sub">Validada por Recepcionista Rodríguez · 10:44 hs</div>
             </div>
-            <span class="chk-badge" style="background:var(--gl);color:var(--gd)">Digital ✓</span>
+            <span class="chk-badge" style="background:var(--p-light);color:var(--p-dark)">Digital ✓</span>
           </div>
 
           <div class="chk-item">
@@ -297,7 +297,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
               <div class="chk-label">Ayuno verificado</div>
               <div class="chk-sub">Mínimo 8 hs sólidos · 4 hs líquidos</div>
             </div>
-            <span class="chk-badge" style="background:var(--gl);color:var(--gd)">Confirmado digital</span>
+            <span class="chk-badge" style="background:var(--p-light);color:var(--p-dark)">Confirmado digital</span>
           </div>
 
           <div class="chk-item">
@@ -343,7 +343,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
               <div class="chk-label">Paciente informado del proceso a seguir</div>
               <div class="chk-sub">Breve explicación · ansiedad: 3/5 reportada</div>
             </div>
-            <span class="chk-badge" style="background:var(--al);color:var(--a)">Ansioso moderado</span>
+            <span class="chk-badge" style="background:var(--s-warn-l);color:var(--s-warn)">Ansioso moderado</span>
           </div>
 
         </div>

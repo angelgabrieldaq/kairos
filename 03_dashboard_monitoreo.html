@@ -9,12 +9,12 @@
   --bg:#ffffff;--bg2:#f5f4f0;--bg3:#f0efea;
   --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
   --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
-  --green:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
-  --blue:#0C447C;--bl:#E6F1FB;--bm:#B5D4F4;
-  --amber:#633806;--al:#FAEEDA;--am:#EF9F27;
-  --red:#791F1F;--rl:#FCEBEB;--rm:#E24B4A;
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-info:#0C447C;--s-info-l:#E6F1FB;--s-info-m:#B5D4F4;
+  --s-warn:#633806;--s-warn-l:#FAEEDA;--s-warn-m:#EF9F27;
+  --s-err:#791F1F;--s-err-l:#FCEBEB;--s-err-m:#E24B4A;
   --purple:#3C3489;--pl:#EEEDFE;
-  --r:8px;--rl2:12px;
+  --r:8px;--r-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:0}
@@ -22,13 +22,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 /* ── TOPBAR ── */
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 .tb-left{display:flex;align-items:center;gap:10px}
-.logo{width:28px;height:28px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo svg{width:16px;height:16px;fill:#fff}
 .tb-title{font-size:13px;font-weight:500;color:var(--txt)}
 .tb-sub{font-size:10px;color:var(--txt3)}
 .tb-right{display:flex;align-items:center;gap:10px}
-.live-badge{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green);background:var(--gl);padding:3px 10px;border-radius:20px;border:0.5px solid var(--gm)}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--p);background:var(--p-light);padding:3px 10px;border-radius:20px;border:0.5px solid var(--p-mid)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--p);animation:pulse 1.8s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .tb-clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
 .slabel{font-size:10px;background:var(--pl);color:var(--purple);padding:3px 10px;border-radius:20px;font-weight:500;border:0.5px solid #AFA9EC}
@@ -38,40 +38,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 /* ── KPI STRIP ── */
 .kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.kpi{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:11px 14px}
+.kpi{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);padding:11px 14px}
 .kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .kpi-val{font-size:24px;font-weight:500;color:var(--txt);line-height:1}
 .kpi-sub{font-size:10px;color:var(--txt3);margin-top:4px}
 .kpi.danger .kpi-val{color:#A32D2D}
 .kpi.warn .kpi-val{color:#BA7517}
-.kpi.ok .kpi-val{color:var(--green)}
-.kpi.info .kpi-val{color:var(--blue)}
+.kpi.ok .kpi-val{color:var(--p)}
+.kpi.info .kpi-val{color:var(--s-info)}
 
 /* ── SECTION TITLES ── */
 .sec-title{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
 
 /* ── QX GRID ── */
 .qx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.qx-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;cursor:pointer;transition:box-shadow .15s}
+.qx-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:box-shadow .15s}
 .qx-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.qx-card.selected{border-color:var(--green);box-shadow:0 0 0 2px var(--gm)}
+.qx-card.selected{border-color:var(--p);box-shadow:0 0 0 2px var(--p-mid)}
 .qx-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--brd)}
 .qx-num{font-size:11px;font-weight:500;color:var(--txt);display:flex;align-items:center;gap:5px}
 .qx-type{font-size:10px;color:var(--txt3)}
 .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sd-active{background:var(--blue);box-shadow:0 0 0 2px var(--bl)}
-.sd-free{background:var(--green)}
-.sd-prep{background:var(--am)}
-.sd-suspend{background:var(--rm)}
+.sd-active{background:var(--s-info);box-shadow:0 0 0 2px var(--s-info-l)}
+.sd-free{background:var(--p)}
+.sd-prep{background:var(--s-warn-m)}
+.sd-suspend{background:var(--s-err-m)}
 .qx-body{padding:10px 14px}
 .qx-pac{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:2px}
 .qx-proc{font-size:11px;color:var(--txt2);margin-bottom:8px}
 .qx-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
 .tag{font-size:9px;padding:1px 6px;border-radius:8px}
-.t-red{background:var(--rl);color:var(--red)}
-.t-amber{background:var(--al);color:var(--amber)}
-.t-green{background:var(--gl);color:var(--gd)}
-.t-blue{background:var(--bl);color:var(--blue)}
+.t-red{background:var(--s-err-l);color:var(--s-err)}
+.t-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.t-ok{background:var(--p-light);color:var(--p-dark)}
+.t-blue{background:var(--s-info-l);color:var(--s-info)}
 .t-gray{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
 .qx-progress{margin-bottom:6px}
 .prog-label{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:4px}
@@ -81,7 +81,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .qx-actors{display:flex;gap:-4px}
 .qx-actor-av{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:500;margin-left:-4px}
 .qx-actor-av:first-child{margin-left:0}
-.free-label{font-size:12px;font-weight:500;color:var(--green);padding:8px 0}
+.free-label{font-size:12px;font-weight:500;color:var(--p);padding:8px 0}
 .suspend-label{font-size:12px;font-weight:500;color:#A32D2D;padding:8px 0}
 .next-label{font-size:11px;color:var(--txt2);padding:4px 0}
 
@@ -89,7 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .bottom-grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
 
 /* ── PACIENTES EN MOVIMIENTO ── */
-.movement-table{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden}
+.movement-table{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden}
 .mt-head{padding:10px 14px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
 .mt-title{font-size:12px;font-weight:500;color:var(--txt)}
 .mt-count{font-size:10px;color:var(--txt3);background:var(--bg2);padding:2px 8px;border-radius:10px;border:0.5px solid var(--brd)}
@@ -102,21 +102,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .pac-name{font-size:12px;font-weight:500;color:var(--txt)}
 .pac-proc{font-size:10px;color:var(--txt2)}
 .pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
-.p-blue{background:var(--bl);color:var(--blue)}
-.p-amber{background:var(--al);color:var(--amber)}
-.p-green{background:var(--gl);color:var(--gd)}
-.p-red{background:var(--rl);color:var(--red)}
+.p-blue{background:var(--s-info-l);color:var(--s-info)}
+.p-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.p-ok{background:var(--p-light);color:var(--p-dark)}
+.p-red{background:var(--s-err-l);color:var(--s-err)}
 .p-gray{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
 .loc-from{font-size:11px;color:var(--txt2)}
 .loc-arrow{color:var(--txt3);margin:0 3px}
 .loc-to{font-size:11px;font-weight:500;color:var(--txt)}
 .eta-val{font-size:11px;font-weight:500;color:var(--txt)}
 .eta-sub{font-size:10px;color:var(--txt3)}
-.latex-flag{font-size:9px;background:var(--rl);color:var(--red);padding:2px 6px;border-radius:6px;font-weight:500;border:0.5px solid #F7C1C1}
+.latex-flag{font-size:9px;background:var(--s-err-l);color:var(--s-err);padding:2px 6px;border-radius:6px;font-weight:500;border:0.5px solid #F7C1C1}
 
 /* ── PANEL LATERAL ACTORES ── */
 .actors-panel{display:flex;flex-direction:column;gap:10px}
-.actor-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden}
+.actor-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden}
 .ac-head{padding:9px 12px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
 .ac-title{font-size:11px;font-weight:500;color:var(--txt)}
 .ac-count{font-size:10px;color:var(--txt3)}
@@ -128,10 +128,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .ac-status{font-size:10px;font-weight:500}
 
 /* ── ALERTS STRIP ── */
-.alerts-strip{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden}
+.alerts-strip{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden}
 .as-head{padding:9px 14px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
 .as-title{font-size:11px;font-weight:500;color:var(--txt)}
-.as-badge{font-size:10px;color:var(--red);background:var(--rl);padding:2px 8px;border-radius:8px;font-weight:500;border:0.5px solid #F7C1C1}
+.as-badge{font-size:10px;color:var(--s-err);background:var(--s-err-l);padding:2px 8px;border-radius:8px;font-weight:500;border:0.5px solid #F7C1C1}
 .as-body{display:flex;flex-direction:column}
 .alert-row{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:0.5px solid var(--brd);font-size:11px}
 .alert-row:last-child{border-bottom:none}
@@ -161,15 +161,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .tl-item{display:flex;gap:9px;margin-bottom:14px}
 .tl-left{display:flex;flex-direction:column;align-items:center;width:28px}
 .tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.td-done{background:var(--green)}
-.td-now{background:var(--blue);box-shadow:0 0 0 3px var(--bl)}
+.td-done{background:var(--p)}
+.td-now{background:var(--s-info);box-shadow:0 0 0 3px var(--s-info-l)}
 .td-pend{background:var(--bg2);border:1.5px solid var(--brd2)}
 .tl-line{flex:1;width:1.5px;background:var(--brd);min-height:14px;margin:3px 0}
 .tl-body{flex:1;padding-bottom:0}
 .tl-time{font-size:10px;color:var(--txt3);margin-bottom:1px}
 .tl-event{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:1px}
 .tl-who{font-size:10px;color:var(--txt2)}
-.tl-scan{display:inline-flex;align-items:center;gap:3px;font-size:9px;background:var(--gl);color:var(--gd);padding:2px 7px;border-radius:8px;margin-top:3px;border:0.5px solid var(--gm)}
+.tl-scan{display:inline-flex;align-items:center;gap:3px;font-size:9px;background:var(--p-light);color:var(--p-dark);padding:2px 7px;border-radius:8px;margin-top:3px;border:0.5px solid var(--p-mid)}
 
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:99}
 .overlay.open{display:block}
@@ -206,10 +206,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <div class="alerts-strip">
     <div class="as-head"><div class="as-title">Alertas activas</div><div class="as-badge">4 alertas</div></div>
     <div class="as-body">
-      <div class="alert-row"><div class="adot" style="background:var(--rm)"></div><div class="alert-txt"><strong>Ramírez, J.</strong> — Consentimiento + autorización OS faltantes. Ingresa a QX 1 en 1 h 13 min</div><div class="alert-time">hace 22 min</div><button class="btn-resolve">Ver</button></div>
-      <div class="alert-row"><div class="adot" style="background:var(--rm)"></div><div class="alert-txt"><strong>Conflicto Arco en C</strong> — Solicitado para QX 1 y QX 3 simultáneamente a las 14:00 hs</div><div class="alert-time">hace 8 min</div><button class="btn-resolve">Resolver</button></div>
-      <div class="alert-row"><div class="adot" style="background:var(--am)"></div><div class="alert-txt"><strong>Torres, A.</strong> — Evaluación preanestésica incompleta. Cirugía a las 13:30 hs</div><div class="alert-time">hace 35 min</div><button class="btn-resolve">Ver</button></div>
-      <div class="alert-row"><div class="adot" style="background:var(--am)"></div><div class="alert-txt"><strong>Dra. Suárez</strong> (anestesióloga) — No confirmó asistencia a cirugía de las 12:00 hs</div><div class="alert-time">hace 1 h</div><button class="btn-resolve">Notificar</button></div>
+      <div class="alert-row"><div class="adot" style="background:var(--s-err-m)"></div><div class="alert-txt"><strong>Ramírez, J.</strong> — Consentimiento + autorización OS faltantes. Ingresa a QX 1 en 1 h 13 min</div><div class="alert-time">hace 22 min</div><button class="btn-resolve">Ver</button></div>
+      <div class="alert-row"><div class="adot" style="background:var(--s-err-m)"></div><div class="alert-txt"><strong>Conflicto Arco en C</strong> — Solicitado para QX 1 y QX 3 simultáneamente a las 14:00 hs</div><div class="alert-time">hace 8 min</div><button class="btn-resolve">Resolver</button></div>
+      <div class="alert-row"><div class="adot" style="background:var(--s-warn-m)"></div><div class="alert-txt"><strong>Torres, A.</strong> — Evaluación preanestésica incompleta. Cirugía a las 13:30 hs</div><div class="alert-time">hace 35 min</div><button class="btn-resolve">Ver</button></div>
+      <div class="alert-row"><div class="adot" style="background:var(--s-warn-m)"></div><div class="alert-txt"><strong>Dra. Suárez</strong> (anestesióloga) — No confirmó asistencia a cirugía de las 12:00 hs</div><div class="alert-time">hace 1 h</div><button class="btn-resolve">Notificar</button></div>
     </div>
   </div>
 
@@ -226,16 +226,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="qx-body">
           <div class="qx-pac">García, María</div>
           <div class="qx-proc">Colecistectomía laparoscópica</div>
-          <div class="qx-tags"><span class="tag t-green">Req. completos</span></div>
+          <div class="qx-tags"><span class="tag t-ok">Req. completos</span></div>
           <div class="qx-progress">
             <div class="prog-label"><span>Inicio 08:12 hs</span><span>ETA fin ~11:30 hs</span></div>
             <div class="prog-bar"><div class="prog-fill" style="width:68%;background:#378ADD"></div></div>
           </div>
           <div class="qx-footer">
             <div class="qx-actors">
-              <div class="qx-actor-av" style="background:var(--bl);color:var(--blue)">MC</div>
-              <div class="qx-actor-av" style="background:var(--al);color:var(--amber)">SP</div>
-              <div class="qx-actor-av" style="background:var(--gl);color:var(--gd)">LV</div>
+              <div class="qx-actor-av" style="background:var(--s-info-l);color:var(--s-info)">MC</div>
+              <div class="qx-actor-av" style="background:var(--s-warn-l);color:var(--s-warn)">SP</div>
+              <div class="qx-actor-av" style="background:var(--p-light);color:var(--p-dark)">LV</div>
             </div>
             <span>68% avance · Dr. Méndez</span>
           </div>
@@ -258,8 +258,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="qx-footer">
             <div class="qx-actors">
               <div class="qx-actor-av" style="background:var(--pl);color:var(--purple)">RC</div>
-              <div class="qx-actor-av" style="background:var(--al);color:var(--amber)">AP</div>
-              <div class="qx-actor-av" style="background:var(--gl);color:var(--gd)">FG</div>
+              <div class="qx-actor-av" style="background:var(--s-warn-l);color:var(--s-warn)">AP</div>
+              <div class="qx-actor-av" style="background:var(--p-light);color:var(--p-dark)">FG</div>
             </div>
             <span>32% avance · Dr. Castillo</span>
           </div>
@@ -269,7 +269,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="qx-card" onclick="openDrawer('qx3')">
         <div class="qx-header">
           <div><div class="qx-num"><div class="status-dot sd-free"></div>QX 3 — Ambulatorio</div><div class="qx-type">Cirugía ambulatoria</div></div>
-          <span class="pill p-green">Libre</span>
+          <span class="pill p-ok">Libre</span>
         </div>
         <div class="qx-body">
           <div class="free-label">Disponible</div>
@@ -277,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="qx-tags" style="margin-top:6px"><span class="tag t-amber">Req. incompletos · eval. preanest.</span></div>
           <div class="qx-progress">
             <div class="prog-label"><span>Limpieza terminal completada</span><span>Ingreso en 13 min</span></div>
-            <div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--green)"></div></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--p)"></div></div>
           </div>
           <div class="qx-footer"><span style="color:var(--txt3)">Sin equipo en sala</span><span>Próx. cirujano: Dr. Suárez</span></div>
         </div>
@@ -291,15 +291,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="qx-body">
           <div class="qx-pac">Ferreyra, Carlos</div>
           <div class="qx-proc">Apendicectomía laparoscópica</div>
-          <div class="qx-tags"><span class="tag t-green">Req. completos</span></div>
+          <div class="qx-tags"><span class="tag t-ok">Req. completos</span></div>
           <div class="qx-progress">
             <div class="prog-label"><span>Ingreso previsto: 11:00 hs</span><span>Preparación 80%</span></div>
-            <div class="prog-bar"><div class="prog-fill" style="width:80%;background:var(--am)"></div></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:80%;background:var(--s-warn-m)"></div></div>
           </div>
           <div class="qx-footer">
             <div class="qx-actors">
-              <div class="qx-actor-av" style="background:var(--bl);color:var(--blue)">GR</div>
-              <div class="qx-actor-av" style="background:var(--gl);color:var(--gd)">MV</div>
+              <div class="qx-actor-av" style="background:var(--s-info-l);color:var(--s-info)">GR</div>
+              <div class="qx-actor-av" style="background:var(--p-light);color:var(--p-dark)">MV</div>
             </div>
             <span>Preparando sala</span>
           </div>
@@ -317,7 +317,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="qx-tags"><span class="tag t-red">Recursos no disponibles</span></div>
           <div class="qx-progress">
             <div class="prog-label"><span style="color:#A32D2D">Motivo: Sin cama UTI disponible</span></div>
-            <div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--rm)"></div></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--s-err-m)"></div></div>
           </div>
           <div class="qx-footer"><span style="color:#A32D2D">Pendiente reasignación</span><span style="color:var(--txt3)">Notificar paciente</span></div>
         </div>
@@ -349,7 +349,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="mt-row hdr"><span></span><span>Paciente · Procedimiento</span><span>Estado</span><span>Ubicación</span><span>ETA / Destino</span><span>Flags</span></div>
 
       <div class="mt-row" onclick="openDrawer('garcia')">
-        <div class="pac-av" style="background:var(--bl);color:var(--blue)">GM</div>
+        <div class="pac-av" style="background:var(--s-info-l);color:var(--s-info)">GM</div>
         <div><div class="pac-name">García, María</div><div class="pac-proc">Colecistectomía · QX 1</div></div>
         <span class="pill p-blue">En cirugía</span>
         <div><div class="loc-from">QX 1</div></div>
@@ -358,7 +358,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       </div>
 
       <div class="mt-row" onclick="openDrawer('vega')">
-        <div class="pac-av" style="background:var(--rl);color:var(--red)">VC</div>
+        <div class="pac-av" style="background:var(--s-err-l);color:var(--s-err)">VC</div>
         <div><div class="pac-name">Vega, Carlos</div><div class="pac-proc">MAKO rodilla · QX 2</div></div>
         <span class="pill p-blue">En cirugía</span>
         <div><div class="loc-from">QX 2</div></div>
@@ -367,7 +367,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       </div>
 
       <div class="mt-row">
-        <div class="pac-av" style="background:var(--al);color:var(--amber)">GL</div>
+        <div class="pac-av" style="background:var(--s-warn-l);color:var(--s-warn)">GL</div>
         <div><div class="pac-name">Gómez, Laura</div><div class="pac-proc">Cesárea · fin QX 3</div></div>
         <span class="pill p-amber">En traslado</span>
         <div><div class="loc-from">Recuperación<span class="loc-arrow">→</span></div><div class="loc-to">Hab. 308</div></div>
@@ -376,16 +376,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       </div>
 
       <div class="mt-row">
-        <div class="pac-av" style="background:var(--gl);color:var(--gd)">MR</div>
+        <div class="pac-av" style="background:var(--p-light);color:var(--p-dark)">MR</div>
         <div><div class="pac-name">Mendoza, Rosa</div><div class="pac-proc">Histerectomía · fin 09:30</div></div>
-        <span class="pill p-green">Alta médica</span>
+        <span class="pill p-ok">Alta médica</span>
         <div><div class="loc-from">Hab. 115 · Piso 1</div></div>
         <div><div class="eta-val">Egreso 12:00</div><div class="eta-sub">Hab. libre · hotelería</div></div>
         <div></div>
       </div>
 
       <div class="mt-row" onclick="openDrawer('ramirez')">
-        <div class="pac-av" style="background:var(--rl);color:var(--red)">RJ</div>
+        <div class="pac-av" style="background:var(--s-err-l);color:var(--s-err)">RJ</div>
         <div><div class="pac-name">Ramírez, Jorge</div><div class="pac-proc">Colostomía · QX 1 · 12:00</div></div>
         <span class="pill p-gray">Esperando</span>
         <div><div class="loc-from">Hab. 215</div></div>
@@ -394,7 +394,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       </div>
 
       <div class="mt-row">
-        <div class="pac-av" style="background:var(--al);color:var(--amber)">FC</div>
+        <div class="pac-av" style="background:var(--s-warn-l);color:var(--s-warn)">FC</div>
         <div><div class="pac-name">Ferreyra, Carlos</div><div class="pac-proc">Apendicectomía · QX 4 · 11:00</div></div>
         <span class="pill p-amber">En preparación</span>
         <div><div class="loc-from">Prep. QX 4</div></div>
@@ -403,7 +403,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       </div>
 
       <div class="mt-row">
-        <div class="pac-av" style="background:var(--al);color:var(--amber)">TA</div>
+        <div class="pac-av" style="background:var(--s-warn-l);color:var(--s-warn)">TA</div>
         <div><div class="pac-name">Torres, Andrés</div><div class="pac-proc">Hernia inguinal · QX 3 · 13:30</div></div>
         <span class="pill p-gray">Esperando</span>
         <div><div class="loc-from">Hab. 319</div></div>
@@ -428,14 +428,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="ac-head"><div class="ac-title">Coordinadores de turno QX</div><div class="ac-count">2 activos</div></div>
         <div class="ac-body">
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--gl);color:var(--gd)">GR</div>
+            <div class="ac-av" style="background:var(--p-light);color:var(--p-dark)">GR</div>
             <div><div class="ac-name">González, Romina</div><div class="ac-where">Turno mañana · Coord. general</div></div>
-            <div class="ac-status" style="color:var(--green)">Activa</div>
+            <div class="ac-status" style="color:var(--p)">Activa</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--bl);color:var(--blue)">LP</div>
+            <div class="ac-av" style="background:var(--s-info-l);color:var(--s-info)">LP</div>
             <div><div class="ac-name">López, Patricia</div><div class="ac-where">Admisión / requisitos</div></div>
-            <div class="ac-status" style="color:var(--green)">Activa</div>
+            <div class="ac-status" style="color:var(--p)">Activa</div>
           </div>
         </div>
       </div>
@@ -446,17 +446,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="ac-person">
             <div class="ac-av" style="background:var(--pl);color:var(--purple)">DJ</div>
             <div><div class="ac-name">Jiménez, Diego</div><div class="ac-where">En traslado — Recuper. → Hab. 308</div></div>
-            <div class="ac-status" style="color:var(--amber)">En traslado</div>
+            <div class="ac-status" style="color:var(--s-warn)">En traslado</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--gl);color:var(--gd)">MF</div>
+            <div class="ac-av" style="background:var(--p-light);color:var(--p-dark)">MF</div>
             <div><div class="ac-name">Flores, Martín</div><div class="ac-where">Disponible · Base PB</div></div>
-            <div class="ac-status" style="color:var(--green)">Libre</div>
+            <div class="ac-status" style="color:var(--p)">Libre</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--gl);color:var(--gd)">CR</div>
+            <div class="ac-av" style="background:var(--p-light);color:var(--p-dark)">CR</div>
             <div><div class="ac-name">Rodas, Carlos</div><div class="ac-where">Disponible · Piso 3</div></div>
-            <div class="ac-status" style="color:var(--green)">Libre</div>
+            <div class="ac-status" style="color:var(--p)">Libre</div>
           </div>
         </div>
       </div>
@@ -465,14 +465,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="ac-head"><div class="ac-title">Hotelería y admisión</div><div class="ac-count">2 activos</div></div>
         <div class="ac-body">
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--al);color:var(--amber)">MC</div>
+            <div class="ac-av" style="background:var(--s-warn-l);color:var(--s-warn)">MC</div>
             <div><div class="ac-name">Castillo, Marcela</div><div class="ac-where">Admisión PB · Pacientes en espera</div></div>
-            <div class="ac-status" style="color:var(--green)">Activa</div>
+            <div class="ac-status" style="color:var(--p)">Activa</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--al);color:var(--amber)">SR</div>
+            <div class="ac-av" style="background:var(--s-warn-l);color:var(--s-warn)">SR</div>
             <div><div class="ac-name">Reyes, Sofía</div><div class="ac-where">Hotelería · Hab. 115 en proceso alta</div></div>
-            <div class="ac-status" style="color:var(--amber)">En alta</div>
+            <div class="ac-status" style="color:var(--s-warn)">En alta</div>
           </div>
         </div>
       </div>
@@ -481,24 +481,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="ac-head"><div class="ac-title">Circulantes activos en QX</div><div class="ac-count">4 en sala</div></div>
         <div class="ac-body">
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--al);color:var(--amber)">LV</div>
+            <div class="ac-av" style="background:var(--s-warn-l);color:var(--s-warn)">LV</div>
             <div><div class="ac-name">Vidal, Laura</div><div class="ac-where">QX 1 — García, M.</div></div>
-            <div class="ac-status" style="color:var(--blue)">En cirugía</div>
+            <div class="ac-status" style="color:var(--s-info)">En cirugía</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--al);color:var(--amber)">FG</div>
+            <div class="ac-av" style="background:var(--s-warn-l);color:var(--s-warn)">FG</div>
             <div><div class="ac-name">Fernández, G.</div><div class="ac-where">QX 2 — Vega, C. · Téc. anest.</div></div>
-            <div class="ac-status" style="color:var(--blue)">En cirugía</div>
+            <div class="ac-status" style="color:var(--s-info)">En cirugía</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--gl);color:var(--gd)">MV</div>
+            <div class="ac-av" style="background:var(--p-light);color:var(--p-dark)">MV</div>
             <div><div class="ac-name">Vázquez, María</div><div class="ac-where">QX 4 — Preparando sala</div></div>
-            <div class="ac-status" style="color:var(--amber)">Preparación</div>
+            <div class="ac-status" style="color:var(--s-warn)">Preparación</div>
           </div>
           <div class="ac-person">
-            <div class="ac-av" style="background:var(--bl);color:var(--blue)">GR</div>
+            <div class="ac-av" style="background:var(--s-info-l);color:var(--s-info)">GR</div>
             <div><div class="ac-name">Romero, Gabriel</div><div class="ac-where">QX 4 — Preparando sala</div></div>
-            <div class="ac-status" style="color:var(--amber)">Preparación</div>
+            <div class="ac-status" style="color:var(--s-warn)">Preparación</div>
           </div>
         </div>
       </div>
@@ -539,7 +539,7 @@ const DRAWER_DATA = {
       <div class="d-section">
         <div class="d-lbl">Datos de la cirugía</div>
         <div class="d-row"><span class="d-k">Quirófano</span><span class="d-v">QX 1 — Central</span></div>
-        <div class="d-row"><span class="d-k">Inicio real</span><span class="d-v" style="color:var(--green)">08:12 hs (programado 08:00)</span></div>
+        <div class="d-row"><span class="d-k">Inicio real</span><span class="d-v" style="color:var(--p)">08:12 hs (programado 08:00)</span></div>
         <div class="d-row"><span class="d-k">ETA fin</span><span class="d-v">~11:30 hs</span></div>
         <div class="d-row"><span class="d-k">Cirujano</span><span class="d-v">Dr. Méndez, Carlos</span></div>
         <div class="d-row"><span class="d-k">Anestesia</span><span class="d-v">General · Dra. Suárez</span></div>
@@ -551,7 +551,7 @@ const DRAWER_DATA = {
         <div class="timeline">
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-done"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">08:04</div><div class="tl-event">Ingreso a QX 1</div><div class="tl-scan">Scan #1 · Circulante Vidal</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-done"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">08:19</div><div class="tl-event">Inicio anestesia</div><div class="tl-scan">Scan #2 · Téc. Fernández</div></div></div>
-          <div class="tl-item"><div class="tl-left"><div class="tl-dot td-now"></div><div class="tl-line" style="background:var(--bl)"></div></div><div class="tl-body"><div class="tl-time">08:28 · <strong style="color:var(--blue)">AHORA</strong></div><div class="tl-event" style="color:var(--blue)">Cirugía en curso</div><div class="tl-scan" style="background:var(--bl);color:var(--blue);border-color:var(--bm)">Scan #3 · Circulante Vidal</div></div></div>
+          <div class="tl-item"><div class="tl-left"><div class="tl-dot td-now"></div><div class="tl-line" style="background:var(--s-info-l)"></div></div><div class="tl-body"><div class="tl-time">08:28 · <strong style="color:var(--s-info)">AHORA</strong></div><div class="tl-event" style="color:var(--s-info)">Cirugía en curso</div><div class="tl-scan" style="background:var(--s-info-l);color:var(--s-info);border-color:var(--s-info-m)">Scan #3 · Circulante Vidal</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-pend"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">~11:00 hs</div><div class="tl-event" style="color:var(--txt3)">Fin cirugía</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-pend"></div></div><div class="tl-body"><div class="tl-time">~11:30 hs</div><div class="tl-event" style="color:var(--txt3)">Traslado → Hab. 210</div></div></div>
         </div>
@@ -567,7 +567,7 @@ const DRAWER_DATA = {
     title:'Vega, Carlos ⚠ Alérgico al látex',
     sub:'HC 00028741 · Artroplastia MAKO · QX 2',
     body:`
-      <div style="background:var(--rl);border-left:3px solid var(--rm);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--red);font-weight:500;margin-bottom:4px">⚠ PROTOCOLO LÁTEX ACTIVO — Guantes nitrilo obligatorios. QX 2 acondicionado.</div>
+      <div style="background:var(--s-err-l);border-left:3px solid var(--s-err-m);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--s-err);font-weight:500;margin-bottom:4px">⚠ PROTOCOLO LÁTEX ACTIVO — Guantes nitrilo obligatorios. QX 2 acondicionado.</div>
       <div class="d-section">
         <div class="d-lbl">Datos de la cirugía</div>
         <div class="d-row"><span class="d-k">Quirófano</span><span class="d-v">QX 2 — Central</span></div>
@@ -575,14 +575,14 @@ const DRAWER_DATA = {
         <div class="d-row"><span class="d-k">ETA fin</span><span class="d-v">~13:00 hs</span></div>
         <div class="d-row"><span class="d-k">Robot MAKO</span><span class="d-v">Activo · Stryker</span></div>
         <div class="d-row"><span class="d-k">Destino post-op</span><span class="d-v" style="color:#A32D2D">UTI — Piso 7 · Cama 3</span></div>
-        <div class="d-row"><span class="d-k">Autorizac. OS</span><span class="d-v" style="color:var(--amber)">Pendiente · OSDE 410</span></div>
+        <div class="d-row"><span class="d-k">Autorizac. OS</span><span class="d-v" style="color:var(--s-warn)">Pendiente · OSDE 410</span></div>
       </div>
       <div class="d-section">
         <div class="d-lbl">Trazabilidad de hitos</div>
         <div class="timeline">
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-done"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">09:51</div><div class="tl-event">Traslado hab. → QX 2</div><div class="tl-scan">Scan #1 · Camillero Jiménez</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-done"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">09:58</div><div class="tl-event">Recibido en antequirófano</div><div class="tl-scan">Scan #2 · Circulante Vázquez</div></div></div>
-          <div class="tl-item"><div class="tl-left"><div class="tl-dot td-now"></div><div class="tl-line" style="background:var(--bl)"></div></div><div class="tl-body"><div class="tl-time">10:04 · <strong style="color:var(--blue)">AHORA</strong></div><div class="tl-event" style="color:var(--blue)">Cirugía en curso — MAKO activo</div><div class="tl-scan" style="background:var(--bl);color:var(--blue);border-color:var(--bm)">Scan #3 · Circulante</div></div></div>
+          <div class="tl-item"><div class="tl-left"><div class="tl-dot td-now"></div><div class="tl-line" style="background:var(--s-info-l)"></div></div><div class="tl-body"><div class="tl-time">10:04 · <strong style="color:var(--s-info)">AHORA</strong></div><div class="tl-event" style="color:var(--s-info)">Cirugía en curso — MAKO activo</div><div class="tl-scan" style="background:var(--s-info-l);color:var(--s-info);border-color:var(--s-info-m)">Scan #3 · Circulante</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-pend"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-time">~13:00 hs</div><div class="tl-event" style="color:var(--txt3)">Fin cirugía + solicitud camillero</div></div></div>
           <div class="tl-item"><div class="tl-left"><div class="tl-dot td-pend"></div></div><div class="tl-body"><div class="tl-time">~13:30 hs</div><div class="tl-event" style="color:var(--txt3)">Traslado directo → UTI Piso 7</div></div></div>
         </div>
@@ -592,13 +592,13 @@ const DRAWER_DATA = {
     title:'Ramírez, Jorge — 2 alertas críticas',
     sub:'HC 00031284 · Colostomía · QX 1 · 12:00 hs',
     body:`
-      <div style="background:var(--rl);border-left:3px solid var(--rm);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--red);margin-bottom:4px"><strong>Consentimiento informado</strong> no firmado y <strong>autorización de OSDE</strong> pendiente. Cirugía en 1 h 13 min.</div>
+      <div style="background:var(--s-err-l);border-left:3px solid var(--s-err-m);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--s-err);margin-bottom:4px"><strong>Consentimiento informado</strong> no firmado y <strong>autorización de OSDE</strong> pendiente. Cirugía en 1 h 13 min.</div>
       <div class="d-section">
         <div class="d-lbl">Requisitos pendientes</div>
         <div class="d-row"><span class="d-k">Consentimiento Qx</span><span class="d-v" style="color:#A32D2D">No firmado</span></div>
         <div class="d-row"><span class="d-k">Autorización OSDE 310</span><span class="d-v" style="color:#A32D2D">Pendiente</span></div>
-        <div class="d-row"><span class="d-k">Eval. preanestésica</span><span class="d-v" style="color:var(--green)">En HIS ✓</span></div>
-        <div class="d-row"><span class="d-k">Estudios previos</span><span class="d-v" style="color:var(--green)">Cargados ✓</span></div>
+        <div class="d-row"><span class="d-k">Eval. preanestésica</span><span class="d-v" style="color:var(--p)">En HIS ✓</span></div>
+        <div class="d-row"><span class="d-k">Estudios previos</span><span class="d-v" style="color:var(--p)">Cargados ✓</span></div>
       </div>
       <div class="d-section">
         <div class="d-lbl">Contacto</div>
@@ -607,7 +607,7 @@ const DRAWER_DATA = {
         <div class="d-row"><span class="d-k">Último contacto</span><span class="d-v">18/04 · 16:00 — WhatsApp automático</span></div>
       </div>
       <div style="margin-top:4px">
-        <button onclick="void(0)" style="width:100%;padding:9px;font-size:12px;font-weight:500;border-radius:var(--r);border:none;background:var(--green);color:#fff;cursor:pointer">Notificar al paciente ahora</button>
+        <button onclick="void(0)" style="width:100%;padding:9px;font-size:12px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer">Notificar al paciente ahora</button>
       </div>`
   },
   ferreyra: {
@@ -616,7 +616,7 @@ const DRAWER_DATA = {
     body:`
       <div class="d-section">
         <div class="d-lbl">Estado</div>
-        <div class="d-row"><span class="d-k">Requisitos</span><span class="d-v" style="color:var(--green)">Todos completos ✓</span></div>
+        <div class="d-row"><span class="d-k">Requisitos</span><span class="d-v" style="color:var(--p)">Todos completos ✓</span></div>
         <div class="d-row"><span class="d-k">Quirófano</span><span class="d-v">QX 4 — Ambulatorio · En preparación</span></div>
         <div class="d-row"><span class="d-k">Ingreso previsto</span><span class="d-v">11:00 hs</span></div>
         <div class="d-row"><span class="d-k">Destino post-op</span><span class="d-v">Alta domiciliaria</span></div>
@@ -627,13 +627,13 @@ const DRAWER_DATA = {
     title:'Branca, Sandra — Cirugía suspendida',
     sub:'Cirugía de columna · QX 5 · suspendida',
     body:`
-      <div style="background:var(--rl);border-left:3px solid var(--rm);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--red);margin-bottom:4px"><strong>Motivo de suspensión:</strong> Sin cama disponible en UTI para recuperación post-operatoria.</div>
+      <div style="background:var(--s-err-l);border-left:3px solid var(--s-err-m);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--s-err);margin-bottom:4px"><strong>Motivo de suspensión:</strong> Sin cama disponible en UTI para recuperación post-operatoria.</div>
       <div class="d-section">
         <div class="d-lbl">Acciones necesarias</div>
         <div class="d-row"><span class="d-k">Estado cama UTI</span><span class="d-v" style="color:#A32D2D">Sin disponibilidad hoy</span></div>
         <div class="d-row"><span class="d-k">Próxima disponibilidad</span><span class="d-v">Mañana 20/04 · am</span></div>
-        <div class="d-row"><span class="d-k">Notificación al paciente</span><span class="d-v" style="color:var(--amber)">Pendiente</span></div>
-        <div class="d-row"><span class="d-k">Notificación al cirujano</span><span class="d-v" style="color:var(--amber)">Pendiente</span></div>
+        <div class="d-row"><span class="d-k">Notificación al paciente</span><span class="d-v" style="color:var(--s-warn)">Pendiente</span></div>
+        <div class="d-row"><span class="d-k">Notificación al cirujano</span><span class="d-v" style="color:var(--s-warn)">Pendiente</span></div>
       </div>
       <div style="margin-top:4px;display:flex;flex-direction:column;gap:6px">
         <button onclick="void(0)" style="width:100%;padding:9px;font-size:12px;font-weight:500;border-radius:var(--r);border:none;background:#A32D2D;color:#fff;cursor:pointer">Notificar paciente y cirujano</button>
@@ -650,10 +650,10 @@ const DRAWER_DATA = {
         <div class="d-row"><span class="d-k">Procedimiento</span><span class="d-v">Hernia inguinal</span></div>
         <div class="d-row"><span class="d-k">Cirujano</span><span class="d-v">Dr. Suárez, Jorge</span></div>
         <div class="d-row"><span class="d-k">Anestesia</span><span class="d-v">Locoregional</span></div>
-        <div class="d-row"><span class="d-k">Eval. preanestésica</span><span class="d-v" style="color:var(--amber)">Incompleta — pendiente</span></div>
+        <div class="d-row"><span class="d-k">Eval. preanestésica</span><span class="d-v" style="color:var(--s-warn)">Incompleta — pendiente</span></div>
         <div class="d-row"><span class="d-k">Ingreso</span><span class="d-v">11:00 hs · en 13 min</span></div>
       </div>
-      <div style="background:var(--al);border-left:3px solid var(--am);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--amber);margin-top:4px">Evaluación preanestésica incompleta. Coordinar con el médico anestesiólogo antes del ingreso.</div>`
+      <div style="background:var(--s-warn-l);border-left:3px solid var(--s-warn-m);padding:9px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--s-warn);margin-top:4px">Evaluación preanestésica incompleta. Coordinar con el médico anestesiólogo antes del ingreso.</div>`
   }
 };
 

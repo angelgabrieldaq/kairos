@@ -10,31 +10,31 @@
   --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
   --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
   --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
-  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
-  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
-  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
-  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-info-l:#E6F1FB;--s-info:#0C447C;--s-info-m:#B5D4F4;
+  --s-warn-l:#FAEEDA;--s-warn:#633806;--s-warn-m:#EF9F27;
+  --s-err-l:#FCEBEB;--s-err:#791F1F;--s-err-m:#E24B4A;
   --pl:#EEEDFE;--p:#3C3489;
-  --rr:8px;--rl2:12px;
+  --r:8px;--r-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px}
 
 .meta-bar{display:flex;align-items:center;gap:9px;max-width:1100px;margin:0 auto 14px}
-.logo{width:28px;height:28px;background:var(--g);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo svg{width:16px;height:16px;fill:#fff}
 .m-title{font-size:14px;font-weight:500;color:var(--txt)}
 .m-sub{font-size:10px;color:var(--txt3)}
 .screen-tabs{display:flex;gap:6px;margin-left:auto}
 .stab{font-size:10px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--brd2);background:var(--bg);color:var(--txt2);cursor:pointer}
-.stab.active{background:var(--g);border-color:var(--g);color:#fff;font-weight:500}
+.stab.active{background:var(--p);border-color:var(--p);color:#fff;font-weight:500}
 
 .screen{display:none;max-width:1100px;margin:0 auto}
 .screen.active{display:block;animation:fi .2s ease}
 @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 
 /* ═══════ UCA ═══════ */
-.uca-shell{background:var(--bg3);border-radius:var(--rl2);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.uca-shell{background:var(--bg3);border-radius:var(--r-lg);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 
 /* UCA TOPBAR */
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
@@ -54,26 +54,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .us-head{padding:10px 13px;border-bottom:0.5px solid var(--brd)}
 .us-title{font-size:11px;font-weight:500;color:var(--txt);margin-bottom:6px}
 .us-stats{display:flex;gap:6px}
-.us-stat{flex:1;background:var(--bg2);border-radius:var(--rr);padding:7px 10px;text-align:center}
+.us-stat{flex:1;background:var(--bg2);border-radius:var(--r);padding:7px 10px;text-align:center}
 .us-stat-val{font-size:18px;font-weight:500;color:var(--txt)}
 .us-stat-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
 .pac-list{flex:1;overflow-y:auto}
 .pac-item{padding:9px 13px;border-bottom:0.5px solid var(--brd);cursor:pointer;border-left:2.5px solid transparent;transition:background .12s}
 .pac-item:hover{background:var(--bg2)}
-.pac-item.active{background:var(--gl);border-left-color:var(--g)}
-.pac-item.alert{border-left-color:var(--rm)}
-.pac-item.warn{border-left-color:var(--am)}
-.pac-item.ready{border-left-color:var(--g)}
+.pac-item.active{background:var(--p-light);border-left-color:var(--p)}
+.pac-item.alert{border-left-color:var(--s-err-m)}
+.pac-item.warn{border-left-color:var(--s-warn-m)}
+.pac-item.ready{border-left-color:var(--p)}
 .pi-top{display:flex;justify-content:space-between;margin-bottom:2px}
 .pi-name{font-size:12px;font-weight:500;color:var(--txt)}
 .pi-time{font-size:10px;font-weight:500;color:var(--txt2)}
 .pi-proc{font-size:10px;color:var(--txt2);margin-bottom:4px}
 .pi-bottom{display:flex;gap:4px;flex-wrap:wrap}
 .tag{font-size:9px;padding:1px 6px;border-radius:8px}
-.t-red{background:var(--rl);color:var(--r2)}
-.t-amber{background:var(--al);color:var(--a)}
-.t-green{background:var(--gl);color:var(--gd)}
-.t-blue{background:var(--bl);color:var(--b)}
+.t-red{background:var(--s-err-l);color:var(--s-err)}
+.t-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.t-ok{background:var(--p-light);color:var(--p-dark)}
+.t-blue{background:var(--s-info-l);color:var(--s-info)}
 
 /* MAIN UCA */
 .uca-main{display:flex;flex-direction:column}
@@ -83,21 +83,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .um-name{font-size:14px;font-weight:500;color:var(--txt)}
 .um-sub{font-size:10px;color:var(--txt3);margin-top:2px}
 .um-actions{display:flex;gap:7px;align-items:center}
-.btn-primary{font-size:11px;padding:7px 14px;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;font-weight:500}
-.btn-ghost{font-size:11px;padding:7px 12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
+.btn-primary{font-size:11px;padding:7px 14px;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;font-weight:500}
+.btn-ghost{font-size:11px;padding:7px 12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
 
 .um-content{flex:1;overflow-y:auto;padding:14px 16px;background:var(--bg3);display:flex;flex-direction:column;gap:12px}
 
 /* CARDS */
-.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden}
+.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden}
 .card-head{padding:9px 14px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
 .card-title{font-size:11px;font-weight:500;color:var(--txt)}
 .card-body{padding:11px 14px}
 .pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
-.p-green{background:var(--gl);color:var(--gd)}
-.p-amber{background:var(--al);color:var(--a)}
-.p-blue{background:var(--bl);color:var(--b)}
-.p-red{background:var(--rl);color:var(--r2)}
+.p-ok{background:var(--p-light);color:var(--p-dark)}
+.p-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.p-blue{background:var(--s-info-l);color:var(--s-info)}
+.p-red{background:var(--s-err-l);color:var(--s-err)}
 .p-gray{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
 
 .datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
@@ -107,46 +107,46 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .req-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--brd);font-size:11px}
 .req-row:last-child{border-bottom:none}
 .req-ico{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ri-ok{background:var(--gl)}
-.ri-err{background:var(--rl)}
-.ri-warn{background:var(--al)}
+.ri-ok{background:var(--p-light)}
+.ri-err{background:var(--s-err-l)}
+.ri-warn{background:var(--s-warn-l)}
 
 /* BOTÓN DE INGRESO */
 .ingreso-btn{display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:var(--bg);border-top:0.5px solid var(--brd)}
-.btn-confirmar-ingreso{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-confirmar-ingreso:hover{background:var(--gd)}
+.btn-confirmar-ingreso{width:100%;padding:13px;font-size:14px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-confirmar-ingreso:hover{background:var(--p-dark)}
 .btn-confirmar-ingreso.done{background:var(--bg2);color:var(--txt3);cursor:default}
 .ingreso-sub{font-size:10px;color:var(--txt3);text-align:center}
 
 /* NOTIF ENFERMERÍA */
-.notif-panel{background:var(--gl);border:0.5px solid var(--gm);border-radius:var(--rr);padding:10px 13px;font-size:11px;color:var(--gd);display:flex;align-items:center;gap:7px}
+.notif-panel{background:var(--p-light);border:0.5px solid var(--p-mid);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--p-dark);display:flex;align-items:center;gap:7px}
 
 /* ═══════ JEFATURA ═══════ */
-.jef-shell{background:var(--bg3);border-radius:var(--rl2);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.jef-shell{background:var(--bg3);border-radius:var(--r-lg);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 .jef-topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .jef-title{font-size:13px;font-weight:500;color:var(--txt)}
 .jef-sub{font-size:10px;color:var(--txt3)}
 .jef-right{display:flex;align-items:center;gap:10px}
-.period-sel{font-size:11px;padding:5px 10px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:var(--bg);color:var(--txt2);cursor:pointer}
+.period-sel{font-size:11px;padding:5px 10px;border-radius:var(--r);border:0.5px solid var(--brd2);background:var(--bg);color:var(--txt2);cursor:pointer}
 .jef-av{width:28px;height:28px;border-radius:50%;background:var(--bg2);border:0.5px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--txt2)}
 
 .jef-body{padding:18px 20px;display:flex;flex-direction:column;gap:16px}
 
 /* KPI ROW */
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.kpi-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:14px 16px}
+.kpi-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);padding:14px 16px}
 .kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 .kpi-val{font-size:28px;font-weight:500;color:var(--txt);line-height:1;margin-bottom:4px}
 .kpi-trend{font-size:10px;font-weight:500}
-.trend-up{color:var(--rm)}
-.trend-down{color:var(--g)}
+.trend-up{color:var(--s-err-m)}
+.trend-down{color:var(--p)}
 .kpi-sub{font-size:10px;color:var(--txt3);margin-top:2px}
-.kpi-card.highlight .kpi-val{color:var(--rm)}
-.kpi-card.ok-card .kpi-val{color:var(--g)}
+.kpi-card.highlight .kpi-val{color:var(--s-err-m)}
+.kpi-card.ok-card .kpi-val{color:var(--p)}
 
 /* CHARTS */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.chart-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);padding:14px 16px}
+.chart-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);padding:14px 16px}
 .chart-title{font-size:12px;font-weight:500;color:var(--txt);margin-bottom:12px}
 
 /* BAR CHART */
@@ -181,11 +181,11 @@ svg.trend-svg{width:100%;height:80px}
 /* STANDALONE ADJUSTMENTS */
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
 .page-meta{width:100%;max-width:900px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.logo-i{width:28px;height:28px;background:var(--b);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo-i svg{width:16px;height:16px;fill:#fff}
 .pm-title{font-size:14px;font-weight:500;color:var(--txt)}
 .pm-sub{font-size:10px;color:var(--txt3)}
-.slabel{font-size:10px;background:var(--bl);color:var(--b);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--bm)}
+.slabel{font-size:10px;background:var(--s-info-l);color:var(--s-info);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--s-info-m)}
 </style>
 </head>
 <body>
@@ -254,10 +254,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="bar-chart">
           <div class="bar-row"><span class="bar-lbl">Lunes</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#378ADD"></div></div><span class="bar-num">+18 min</span></div>
           <div class="bar-row"><span class="bar-lbl">Martes</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:#378ADD"></div></div><span class="bar-num">+12 min</span></div>
-          <div class="bar-row"><span class="bar-lbl">Miércoles</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--rm)"></div></div><span class="bar-num">+26 min</span></div>
+          <div class="bar-row"><span class="bar-lbl">Miércoles</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--s-err-m)"></div></div><span class="bar-num">+26 min</span></div>
           <div class="bar-row"><span class="bar-lbl">Jueves</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:#378ADD"></div></div><span class="bar-num">+21 min</span></div>
-          <div class="bar-row"><span class="bar-lbl">Viernes</span><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--rm)"></div></div><span class="bar-num">+29 min</span></div>
-          <div class="bar-row"><span class="bar-lbl" style="color:var(--txt3)">Ref. objetivo</span><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--gm)"></div></div><span class="bar-num" style="color:var(--g)">+10 min</span></div>
+          <div class="bar-row"><span class="bar-lbl">Viernes</span><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--s-err-m)"></div></div><span class="bar-num">+29 min</span></div>
+          <div class="bar-row"><span class="bar-lbl" style="color:var(--txt3)">Ref. objetivo</span><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--p-mid)"></div></div><span class="bar-num" style="color:var(--p)">+10 min</span></div>
         </div>
       </div>
 
@@ -265,14 +265,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="chart-card">
         <div class="chart-title">Motivos de suspensión — abril (14 casos)</div>
         <div class="bar-chart" style="margin-bottom:14px">
-          <div class="bar-row"><span class="bar-lbl">Req. incompletos</span><div class="bar-track"><div class="bar-fill" style="width:71%;background:var(--rm)"></div></div><span class="bar-num">5</span></div>
-          <div class="bar-row"><span class="bar-lbl">Sin cama UTI</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--am)"></div></div><span class="bar-num">3</span></div>
-          <div class="bar-row"><span class="bar-lbl">Conflicto recursos</span><div class="bar-track"><div class="bar-fill" style="width:29%;background:var(--am)"></div></div><span class="bar-num">2</span></div>
+          <div class="bar-row"><span class="bar-lbl">Req. incompletos</span><div class="bar-track"><div class="bar-fill" style="width:71%;background:var(--s-err-m)"></div></div><span class="bar-num">5</span></div>
+          <div class="bar-row"><span class="bar-lbl">Sin cama UTI</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--s-warn-m)"></div></div><span class="bar-num">3</span></div>
+          <div class="bar-row"><span class="bar-lbl">Conflicto recursos</span><div class="bar-track"><div class="bar-fill" style="width:29%;background:var(--s-warn-m)"></div></div><span class="bar-num">2</span></div>
           <div class="bar-row"><span class="bar-lbl">Prof. no confirmó</span><div class="bar-track"><div class="bar-fill" style="width:29%;background:#378ADD"></div></div><span class="bar-num">2</span></div>
           <div class="bar-row"><span class="bar-lbl">Condición clínica</span><div class="bar-track"><div class="bar-fill" style="width:29%;background:#378ADD"></div></div><span class="bar-num">2</span></div>
         </div>
-        <div style="font-size:10px;color:var(--txt3);background:var(--rl);padding:6px 9px;border-radius:var(--rr)">
-          <strong style="color:var(--r2)">Acción sugerida:</strong> Los requisitos incompletos son el principal motivo de suspensión. El flujo digital del paciente está reduciendo este número progresivamente.
+        <div style="font-size:10px;color:var(--txt3);background:var(--s-err-l);padding:6px 9px;border-radius:var(--r)">
+          <strong style="color:var(--s-err)">Acción sugerida:</strong> Los requisitos incompletos son el principal motivo de suspensión. El flujo digital del paciente está reduciendo este número progresivamente.
         </div>
       </div>
 
@@ -285,12 +285,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="chart-card">
         <div class="chart-title">Uso real vs capacidad por quirófano — abril</div>
         <div class="bar-chart">
-          <div class="bar-row"><span class="bar-lbl">QX 1 — Central</span><div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--g)"></div></div><span class="bar-num">82%</span></div>
-          <div class="bar-row"><span class="bar-lbl">QX 2 — Central</span><div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--g)"></div></div><span class="bar-num">78%</span></div>
+          <div class="bar-row"><span class="bar-lbl">QX 1 — Central</span><div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--p)"></div></div><span class="bar-num">82%</span></div>
+          <div class="bar-row"><span class="bar-lbl">QX 2 — Central</span><div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--p)"></div></div><span class="bar-num">78%</span></div>
           <div class="bar-row"><span class="bar-lbl">QX 3 — Ambulatorio</span><div class="bar-track"><div class="bar-fill" style="width:65%;background:#378ADD"></div></div><span class="bar-num">65%</span></div>
           <div class="bar-row"><span class="bar-lbl">QX 4 — Ambulatorio</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:#378ADD"></div></div><span class="bar-num">70%</span></div>
-          <div class="bar-row"><span class="bar-lbl">QX 5 — Central</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--am)"></div></div><span class="bar-num">55%</span></div>
-          <div class="bar-row"><span class="bar-lbl">QX 6 — Ambulatorio</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--am)"></div></div><span class="bar-num">40%</span></div>
+          <div class="bar-row"><span class="bar-lbl">QX 5 — Central</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--s-warn-m)"></div></div><span class="bar-num">55%</span></div>
+          <div class="bar-row"><span class="bar-lbl">QX 6 — Ambulatorio</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--s-warn-m)"></div></div><span class="bar-num">40%</span></div>
         </div>
       </div>
 
@@ -302,33 +302,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="serv-row">
             <div><div class="serv-name">Cama acompañante</div><div class="serv-sub">Cubierto por OS</div></div>
             <span style="font-size:12px;font-weight:500">124</span>
-            <span style="font-size:12px;font-weight:500;color:var(--g)">$1.24M</span>
+            <span style="font-size:12px;font-weight:500;color:var(--p)">$1.24M</span>
             <div>
-              <div style="font-size:11px;font-weight:500;color:var(--g)">100%</div>
-              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:100%;background:var(--g)"></div></div>
+              <div style="font-size:11px;font-weight:500;color:var(--p)">100%</div>
+              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:100%;background:var(--p)"></div></div>
             </div>
           </div>
           <div class="serv-row">
             <div><div class="serv-name">Habitación VIP</div><div class="serv-sub">Diferencial</div></div>
             <span style="font-size:12px;font-weight:500">18</span>
-            <span style="font-size:12px;font-weight:500;color:var(--b)">$4.5M</span>
+            <span style="font-size:12px;font-weight:500;color:var(--s-info)">$4.5M</span>
             <div>
-              <div style="font-size:11px;font-weight:500;color:var(--b)">12%</div>
-              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:12%;background:var(--b)"></div></div>
+              <div style="font-size:11px;font-weight:500;color:var(--s-info)">12%</div>
+              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:12%;background:var(--s-info)"></div></div>
             </div>
           </div>
           <div class="serv-row">
             <div><div class="serv-name">Pago online anticipado</div><div class="serv-sub">Flujo digital paciente</div></div>
             <span style="font-size:12px;font-weight:500">41</span>
-            <span style="font-size:12px;font-weight:500;color:var(--am)">$52M</span>
+            <span style="font-size:12px;font-weight:500;color:var(--s-warn-m)">$52M</span>
             <div>
-              <div style="font-size:11px;font-weight:500;color:var(--am)">27%</div>
-              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:27%;background:var(--am)"></div></div>
+              <div style="font-size:11px;font-weight:500;color:var(--s-warn-m)">27%</div>
+              <div class="prog-bar-sm"><div class="prog-fill-sm" style="width:27%;background:var(--s-warn-m)"></div></div>
             </div>
           </div>
         </div>
-        <div style="font-size:10px;color:var(--txt3);background:var(--gl);padding:6px 9px;border-radius:var(--rr);margin-top:10px">
-          <strong style="color:var(--gd)">Oportunidad:</strong> 88% de pacientes no seleccionó habitación VIP en el flujo digital. Revisar el copy de presentación del servicio.
+        <div style="font-size:10px;color:var(--txt3);background:var(--p-light);padding:6px 9px;border-radius:var(--r);margin-top:10px">
+          <strong style="color:var(--p-dark)">Oportunidad:</strong> 88% de pacientes no seleccionó habitación VIP en el flujo digital. Revisar el copy de presentación del servicio.
         </div>
       </div>
 
@@ -338,12 +338,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <div class="chart-card">
       <div class="chart-title">Retraso promedio de inicio por cirujano — top 5 (abril)</div>
       <div class="bar-chart">
-        <div class="bar-row"><span class="bar-lbl">Dr. Suárez, J.</span><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--rm)"></div></div><span class="bar-num" style="color:var(--r2)">+38 min</span></div>
-        <div class="bar-row"><span class="bar-lbl">Dr. Castillo, R.</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--am)"></div></div><span class="bar-num">+28 min</span></div>
+        <div class="bar-row"><span class="bar-lbl">Dr. Suárez, J.</span><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--s-err-m)"></div></div><span class="bar-num" style="color:var(--s-err)">+38 min</span></div>
+        <div class="bar-row"><span class="bar-lbl">Dr. Castillo, R.</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--s-warn-m)"></div></div><span class="bar-num">+28 min</span></div>
         <div class="bar-row"><span class="bar-lbl">Dr. Méndez, C.</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:#378ADD"></div></div><span class="bar-num">+22 min</span></div>
         <div class="bar-row"><span class="bar-lbl">Dra. Rodríguez, A.</span><div class="bar-track"><div class="bar-fill" style="width:38%;background:#378ADD"></div></div><span class="bar-num">+15 min</span></div>
-        <div class="bar-row"><span class="bar-lbl">Dr. García, M.</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--gm)"></div></div><span class="bar-num" style="color:var(--g)">+10 min</span></div>
-        <div class="bar-row"><span class="bar-lbl" style="color:var(--txt3)">Objetivo</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--gl);border:1px dashed var(--gm)"></div></div><span class="bar-num" style="color:var(--g)">+10 min</span></div>
+        <div class="bar-row"><span class="bar-lbl">Dr. García, M.</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--p-mid)"></div></div><span class="bar-num" style="color:var(--p)">+10 min</span></div>
+        <div class="bar-row"><span class="bar-lbl" style="color:var(--txt3)">Objetivo</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--p-light);border:1px dashed var(--p-mid)"></div></div><span class="bar-num" style="color:var(--p)">+10 min</span></div>
       </div>
     </div>
 

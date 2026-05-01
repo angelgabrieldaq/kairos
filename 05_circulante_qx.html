@@ -9,33 +9,33 @@
   --bg:#fff;--bg2:#f5f4f0;--bg3:#f0efea;
   --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
   --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
-  --g:#0F6E56;--gl:#E1F5EE;--gm:#9FE1CB;--gd:#085041;
-  --bl:#E6F1FB;--b:#0C447C;--bm:#B5D4F4;
-  --al:#FAEEDA;--a:#633806;--am:#EF9F27;
-  --rl:#FCEBEB;--r2:#791F1F;--rm:#E24B4A;
-  --rr:8px;--rl2:12px;
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-info-l:#E6F1FB;--s-info:#0C447C;--s-info-m:#B5D4F4;
+  --s-warn-l:#FAEEDA;--s-warn:#633806;--s-warn-m:#EF9F27;
+  --s-err-l:#FCEBEB;--s-err:#791F1F;--s-err-m:#E24B4A;
+  --r:8px;--r-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
 
 .page-meta{width:100%;max-width:520px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.logo-i{width:28px;height:28px;background:var(--a);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo-i{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo-i svg{width:16px;height:16px;fill:#fff}
 .pm-title{font-size:14px;font-weight:500;color:var(--txt)}
 .pm-sub{font-size:10px;color:var(--txt3)}
-.slabel{font-size:10px;background:var(--al);color:var(--a);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--am)}
+.slabel{font-size:10px;background:var(--s-warn-l);color:var(--s-warn);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid var(--s-warn-m)}
 
-.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--rl2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.shell{width:100%;max-width:520px;background:var(--bg3);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 
 /* TOPBAR */
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
 .tb-left{display:flex;align-items:center;gap:9px}
-.tb-av{width:30px;height:30px;border-radius:50%;background:var(--al);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--a)}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--s-warn-l);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--s-warn)}
 .tb-name{font-size:12px;font-weight:500;color:var(--txt)}
 .tb-role{font-size:10px;color:var(--txt3)}
 .tb-right{display:flex;align-items:center;gap:8px}
 .clock{font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
-.qx-badge{font-size:11px;font-weight:500;background:var(--bl);color:var(--b);padding:4px 12px;border-radius:20px;border:0.5px solid var(--bm)}
+.qx-badge{font-size:11px;font-weight:500;background:var(--s-info-l);color:var(--s-info);padding:4px 12px;border-radius:20px;border:0.5px solid var(--s-info-m)}
 
 /* VIEWS */
 .view{display:none}
@@ -46,16 +46,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .scan-view{padding:20px 16px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .scan-title{font-size:16px;font-weight:500;color:var(--txt)}
 .scan-sub{font-size:11px;color:var(--txt2);line-height:1.6}
-.scan-area{width:100%;border:2px dashed var(--brd2);border-radius:var(--rl2);padding:36px 24px;cursor:pointer;background:var(--bg);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px}
-.scan-area:hover{border-color:var(--g);background:var(--gl)}
+.scan-area{width:100%;border:2px dashed var(--brd2);border-radius:var(--r-lg);padding:36px 24px;cursor:pointer;background:var(--bg);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scan-area:hover{border-color:var(--p);background:var(--p-light)}
 .scan-icon{font-size:48px;line-height:1}
 .scan-lbl{font-size:14px;font-weight:500;color:var(--txt)}
 .scan-hint{font-size:11px;color:var(--txt2)}
 .scan-alt{font-size:11px;color:var(--txt3)}
-.scan-alt button{color:var(--g);background:none;border:none;cursor:pointer;font-size:11px;text-decoration:underline}
+.scan-alt button{color:var(--p);background:none;border:none;cursor:pointer;font-size:11px;text-decoration:underline}
 
 /* LISTA QX DEL DÍA */
-.qx-list{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl2);width:100%;text-align:left;overflow:hidden}
+.qx-list{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);width:100%;text-align:left;overflow:hidden}
 .ql-head{padding:9px 13px;border-bottom:0.5px solid var(--brd);background:var(--bg2)}
 .ql-title{font-size:11px;font-weight:500;color:var(--txt)}
 .ql-item{display:flex;align-items:center;gap:10px;padding:9px 13px;border-bottom:0.5px solid var(--brd);cursor:pointer;transition:background .12s}
@@ -67,9 +67,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .ql-proc{font-size:10px;color:var(--txt2)}
 .ql-status{font-size:10px;padding:2px 7px;border-radius:8px;font-weight:500;white-space:nowrap}
 .s-pend{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
-.s-act{background:var(--bl);color:var(--b)}
-.s-done{background:var(--gl);color:var(--gd)}
-.s-warn{background:var(--al);color:var(--a)}
+.s-act{background:var(--s-info-l);color:var(--s-info)}
+.s-done{background:var(--p-light);color:var(--p-dark)}
+.s-warn{background:var(--s-warn-l);color:var(--s-warn)}
 
 /* ─── VIEW 2: PACIENTE CARGADO ─── */
 /* PAC HEADER */
@@ -80,13 +80,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .ph-sub{font-size:10px;color:var(--txt3);margin-top:2px}
 .ph-badges{display:flex;gap:5px;flex-wrap:wrap}
 .badge{font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500}
-.b-proc{background:var(--bl);color:var(--b)}
-.b-anest{background:var(--al);color:var(--a)}
-.b-latex{background:var(--rl);color:var(--r2);border:0.5px solid #F7C1C1}
+.b-proc{background:var(--s-info-l);color:var(--s-info)}
+.b-anest{background:var(--s-warn-l);color:var(--s-warn)}
+.b-latex{background:var(--s-err-l);color:var(--s-err);border:0.5px solid #F7C1C1}
 .b-dest{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
 
 /* LATEX BANNER */
-.latex-banner{background:var(--rl);border-left:4px solid var(--rm);padding:10px 14px;font-size:12px;color:var(--r2);font-weight:500;display:flex;align-items:center;gap:8px;line-height:1.5}
+.latex-banner{background:var(--s-err-l);border-left:4px solid var(--s-err-m);padding:10px 14px;font-size:12px;color:var(--s-err);font-weight:500;display:flex;align-items:center;gap:8px;line-height:1.5}
 
 /* HITOS PANEL */
 .hitos-panel{background:var(--bg);padding:14px 16px;border-bottom:0.5px solid var(--brd)}
@@ -96,79 +96,79 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .hi-left{display:flex;flex-direction:column;align-items:center;width:36px}
 .hi-btn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:all .2s;flex-shrink:0}
 .hi-btn.pending{background:var(--bg2);border:2px dashed var(--brd2);color:var(--txt3);cursor:default}
-.hi-btn.ready{background:var(--g);color:#fff;animation:pulse-g 1.5s infinite}
+.hi-btn.ready{background:var(--p);color:#fff;animation:pulse-g 1.5s infinite}
 @keyframes pulse-g{0%,100%{box-shadow:0 0 0 0 rgba(15,110,86,.4)}50%{box-shadow:0 0 0 6px rgba(15,110,86,.0)}}
-.hi-btn.done{background:var(--gl);border:2px solid var(--gm);color:var(--gd);cursor:default;animation:none}
+.hi-btn.done{background:var(--p-light);border:2px solid var(--p-mid);color:var(--p-dark);cursor:default;animation:none}
 .hi-btn.done::after{content:'✓';font-size:14px}
 .hi-line{flex:1;width:2px;background:var(--brd);margin:3px 0;min-height:16px}
-.hi-line.done{background:var(--gm)}
+.hi-line.done{background:var(--p-mid)}
 .hi-body{flex:1;padding-bottom:18px;padding-top:4px}
 .hi-label{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px}
 .hi-who{font-size:10px;color:var(--txt2);margin-bottom:3px}
 .hi-time{font-size:11px;color:var(--txt3)}
-.hi-time.recorded{color:var(--g);font-weight:500}
-.hi-time.overdue{color:var(--r2);font-weight:500}
-.hi-scan-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;background:var(--gl);color:var(--gd);padding:2px 8px;border-radius:8px;margin-top:2px;border:0.5px solid var(--gm)}
-.hi-delta{font-size:10px;color:var(--r2);font-weight:500}
+.hi-time.recorded{color:var(--p);font-weight:500}
+.hi-time.overdue{color:var(--s-err);font-weight:500}
+.hi-scan-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;background:var(--p-light);color:var(--p-dark);padding:2px 8px;border-radius:8px;margin-top:2px;border:0.5px solid var(--p-mid)}
+.hi-delta{font-size:10px;color:var(--s-err);font-weight:500}
 
 /* SCAN CONFIRM MODAL */
 .scan-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:flex-end;justify-content:center;padding:0}
 .scan-modal.open{display:flex}
-.scan-sheet{background:var(--bg);border-radius:var(--rl2) var(--rl2) 0 0;width:100%;max-width:520px;padding:20px 20px 32px;display:flex;flex-direction:column;gap:14px}
+.scan-sheet{background:var(--bg);border-radius:var(--r-lg) var(--r-lg) 0 0;width:100%;max-width:520px;padding:20px 20px 32px;display:flex;flex-direction:column;gap:14px}
 .ss-title{font-size:16px;font-weight:500;color:var(--txt);text-align:center}
 .ss-sub{font-size:12px;color:var(--txt2);text-align:center;line-height:1.6}
-.ss-hito{background:var(--gl);border-radius:var(--rr);padding:12px 16px;text-align:center}
-.ss-hito-name{font-size:14px;font-weight:500;color:var(--gd);margin-bottom:2px}
-.ss-hito-who{font-size:11px;color:var(--g)}
+.ss-hito{background:var(--p-light);border-radius:var(--r);padding:12px 16px;text-align:center}
+.ss-hito-name{font-size:14px;font-weight:500;color:var(--p-dark);margin-bottom:2px}
+.ss-hito-who{font-size:11px;color:var(--p)}
 .ss-pac{font-size:12px;color:var(--txt2);text-align:center}
 .ss-pac strong{color:var(--txt)}
-.latex-warn-sheet{background:var(--rl);border-radius:var(--rr);padding:10px 14px;font-size:11px;color:var(--r2);font-weight:500;text-align:center}
+.latex-warn-sheet{background:var(--s-err-l);border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--s-err);font-weight:500;text-align:center}
 .ss-btns{display:flex;flex-direction:column;gap:8px}
-.btn-confirm-scan{padding:14px;font-size:14px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;width:100%}
-.btn-cancel-scan{padding:10px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;width:100%}
+.btn-confirm-scan{padding:14px;font-size:14px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;width:100%}
+.btn-cancel-scan{padding:10px;font-size:12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;width:100%}
 
 /* CONFIRMED MODAL */
 .confirmed-sheet{display:none;flex-direction:column;gap:12px;align-items:center;padding:8px 0}
 .cs-icon{font-size:52px;line-height:1}
-.cs-title{font-size:16px;font-weight:500;color:var(--gd)}
-.cs-sub{font-size:12px;color:var(--g);text-align:center;line-height:1.6}
+.cs-title{font-size:16px;font-weight:500;color:var(--p-dark)}
+.cs-sub{font-size:12px;color:var(--p);text-align:center;line-height:1.6}
 .cs-time{font-size:11px;color:var(--txt3)}
-.btn-close-conf{padding:10px 24px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;margin-top:4px}
+.btn-close-conf{padding:10px 24px;font-size:12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;margin-top:4px}
 
 /* DATOS CLÍNICOS */
 .clin-section{background:var(--bg);border-top:0.5px solid var(--brd);padding:14px 16px}
 .cs-head{font-size:11px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
 .clin-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--brd);margin-bottom:12px}
 .ctab{font-size:11px;padding:7px 12px;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px}
-.ctab.active{color:var(--g);border-bottom-color:var(--g);font-weight:500}
+.ctab.active{color:var(--p);border-bottom-color:var(--p);font-weight:500}
 .clin-panel{display:none}
 .clin-panel.active{display:block}
 .clin-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:0.5px solid var(--brd)}
 .clin-row:last-child{border-bottom:none}
 .clin-k{color:var(--txt2)}
 .clin-v{font-weight:500;color:var(--txt)}
-.clin-v.alert{color:var(--r2)}
-.clin-v.warn{color:var(--a)}
-.clin-v.ok{color:var(--g)}
+.clin-v.alert{color:var(--s-err)}
+.clin-v.warn{color:var(--s-warn)}
+.clin-v.ok{color:var(--p)}
 
 .req-mini{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--brd);font-size:11px}
 .req-mini:last-child{border-bottom:none}
 .req-ico-sm{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ri-ok{background:var(--gl)}
-.ri-err{background:var(--rl)}
-.ri-warn{background:var(--al)}
+.ri-ok{background:var(--p-light)}
+.ri-err{background:var(--s-err-l)}
+.ri-warn{background:var(--s-warn-l)}
 
 /* BOTTOM BAR */
 .bottom-bar{background:var(--bg);border-top:0.5px solid var(--brd);padding:10px 16px;display:flex;gap:8px}
-.btn-new-scan{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--rr);border:none;background:var(--g);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-change-pac{padding:11px 14px;font-size:12px;border-radius:var(--rr);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
+.btn-new-scan{flex:1;padding:11px;font-size:12px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-change-pac{padding:11px 14px;font-size:12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
 
 /* PILL */
 .pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
-.p-green{background:var(--gl);color:var(--gd)}
-.p-amber{background:var(--al);color:var(--a)}
-.p-blue{background:var(--bl);color:var(--b)}
-.p-red{background:var(--rl);color:var(--r2)}
+.p-ok{background:var(--p-light);color:var(--p-dark)}
+.p-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.p-blue{background:var(--s-info-l);color:var(--s-info)}
+.p-red{background:var(--s-err-l);color:var(--s-err)}
 </style>
 </head>
 <body>
@@ -212,13 +212,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="qx-list">
         <div class="ql-head"><div class="ql-title">Cirugías asignadas a QX 2 hoy</div></div>
         <div class="ql-item" onclick="loadPacient()">
-          <div class="ql-dot" style="background:var(--g)"></div>
+          <div class="ql-dot" style="background:var(--p)"></div>
           <div class="ql-time">10:00</div>
           <div><div class="ql-name">Vega, Carlos</div><div class="ql-proc">Artroplastia MAKO · Dr. Castillo</div></div>
           <div class="ql-status s-act">En curso</div>
         </div>
         <div class="ql-item" onclick="loadPacient()">
-          <div class="ql-dot" style="background:var(--am)"></div>
+          <div class="ql-dot" style="background:var(--s-warn-m)"></div>
           <div class="ql-time">14:00</div>
           <div><div class="ql-name">Díaz, Carlos</div><div class="ql-proc">Artroplastia cadera · Dr. Castillo</div></div>
           <div class="ql-status s-warn">Req. incompletos</div>
@@ -239,7 +239,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <!-- HEADER PACIENTE -->
     <div class="pac-header">
       <div class="ph-top">
-        <div class="ph-av" style="background:var(--rl);color:var(--r2)">VC</div>
+        <div class="ph-av" style="background:var(--s-err-l);color:var(--s-err)">VC</div>
         <div style="flex:1">
           <div class="ph-name">Vega López, Carlos</div>
           <div class="ph-sub">HC 00028741 · DNI 32.451.890 · 54 años</div>
@@ -287,7 +287,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="hi-body">
           <div class="hi-label">Inicio anestesia</div>
           <div class="hi-who">Técnico de anestesia</div>
-          <div class="hi-time recorded">10:19 hs <span class="hi-delta" style="color:var(--r2)">+4 min</span></div>
+          <div class="hi-time recorded">10:19 hs <span class="hi-delta" style="color:var(--s-err)">+4 min</span></div>
           <div class="hi-scan-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Scan registrado · Téc. Fernández</div>
         </div>
       </div>
@@ -301,7 +301,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           <div class="hi-line" id="h3-line"></div>
         </div>
         <div class="hi-body">
-          <div class="hi-label" style="color:var(--g)">Inicio cirugía</div>
+          <div class="hi-label" style="color:var(--p)">Inicio cirugía</div>
           <div class="hi-who">Circulante</div>
           <div class="hi-time" id="h3-time">Programado 10:30 hs — Tap para registrar ahora</div>
         </div>
@@ -366,35 +366,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="clin-panel active" id="clin-req">
         <div class="req-mini">
           <div style="display:flex;align-items:center;gap:7px">
-            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <span class="clin-k">Consentimiento quirúrgico</span>
           </div>
           <span class="clin-v ok">Firmado</span>
         </div>
         <div class="req-mini">
           <div style="display:flex;align-items:center;gap:7px">
-            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <span class="clin-k">Consentimiento anestesia</span>
           </div>
           <span class="clin-v ok">Firmado</span>
         </div>
         <div class="req-mini">
           <div style="display:flex;align-items:center;gap:7px">
-            <div class="req-ico-sm ri-warn"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="3"><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="req-ico-sm ri-warn"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--s-warn)" stroke-width="3"><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
             <span class="clin-k">Autorización OS</span>
           </div>
           <span class="clin-v warn">Pendiente</span>
         </div>
         <div class="req-mini">
           <div style="display:flex;align-items:center;gap:7px">
-            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <span class="clin-k">Estudios prequirúrgicos</span>
           </div>
           <span class="clin-v ok">Cargados HIS</span>
         </div>
         <div class="req-mini">
           <div style="display:flex;align-items:center;gap:7px">
-            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico-sm ri-ok"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
             <span class="clin-k">Eval. preanestésica</span>
           </div>
           <span class="clin-v ok">Completa · HIS</span>

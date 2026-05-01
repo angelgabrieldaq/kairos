@@ -9,25 +9,25 @@
   --bg:#ffffff;--bg2:#f5f4f0;--bg3:#f0efea;
   --txt:#1a1a18;--txt2:#5f5e5a;--txt3:#888780;
   --brd:rgba(0,0,0,0.10);--brd2:rgba(0,0,0,0.18);
-  --green:#0F6E56;--green-l:#E1F5EE;--green-m:#9FE1CB;--green-d:#085041;
-  --blue-l:#E6F1FB;--blue:#0C447C;
-  --amber-l:#FAEEDA;--amber:#633806;--amber-m:#EF9F27;
-  --red-l:#FCEBEB;--red:#791F1F;--red-m:#E24B4A;
-  --r:8px;--rl:12px;
+  --p:#2B57D9;--p-light:#EBF2FF;--p-mid:#A3C0F8;--p-dark:#1A3FAA;
+  --s-info-l:#E6F1FB;--s-info:#0C447C;
+  --s-warn-l:#FAEEDA;--s-warn:#633806;--s-warn-m:#EF9F27;
+  --s-err-l:#FCEBEB;--s-err:#791F1F;--s-err-m:#E24B4A;
+  --r:8px;--r-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:13px;background:var(--bg3);min-height:100vh;padding:16px}
 
 /* PAGE META */
 .meta{display:flex;align-items:center;gap:9px;max-width:1200px;margin:0 auto 12px}
-.logo{width:28px;height:28px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.logo{width:28px;height:28px;background:var(--p-dark);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .logo svg{width:16px;height:16px;fill:#fff}
 .meta-title{font-size:14px;font-weight:500;color:var(--txt)}
 .meta-sub{font-size:10px;color:var(--txt3)}
-.slabel{font-size:10px;background:var(--blue-l);color:var(--blue);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid #B5D4F4}
+.slabel{font-size:10px;background:var(--s-info-l);color:var(--s-info);padding:3px 10px;border-radius:20px;margin-left:auto;font-weight:500;border:0.5px solid #B5D4F4}
 
 /* SHELL */
-.shell{max-width:1200px;margin:0 auto;background:var(--bg3);border-radius:var(--rl);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.shell{max-width:1200px;margin:0 auto;background:var(--bg3);border-radius:var(--s-err-l);border:0.5px solid var(--brd);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
 
 /* TOPBAR */
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--brd);padding:9px 16px;display:flex;align-items:center;justify-content:space-between}
@@ -36,8 +36,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .tb-role{font-size:10px;color:var(--txt3)}
 .tb-right{display:flex;align-items:center;gap:8px}
 .tb-date{font-size:11px;color:var(--txt2);background:var(--bg2);padding:3px 10px;border-radius:20px;border:0.5px solid var(--brd)}
-.his-badge{font-size:10px;background:var(--green-l);color:var(--green-d);padding:3px 9px;border-radius:20px;border:0.5px solid var(--green-m);display:flex;align-items:center;gap:4px}
-.av{width:26px;height:26px;border-radius:50%;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:var(--green-d)}
+.his-badge{font-size:10px;background:var(--p-light);color:var(--p-dark);padding:3px 9px;border-radius:20px;border:0.5px solid var(--p-mid);display:flex;align-items:center;gap:4px}
+.av{width:26px;height:26px;border-radius:50%;background:var(--p-light);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:var(--p-dark)}
 
 /* MAIN GRID: sidebar-lista | detalle | calendario */
 .body{display:grid;grid-template-columns:220px 1fr 260px;min-height:600px}
@@ -48,23 +48,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .sb-title{font-size:11px;font-weight:500;color:var(--txt);margin-bottom:6px}
 .filters{display:flex;gap:3px;flex-wrap:wrap}
 .filt{font-size:10px;padding:2px 8px;border-radius:10px;border:0.5px solid var(--brd);background:transparent;color:var(--txt2);cursor:pointer}
-.filt.on{background:var(--green);border-color:var(--green);color:#fff}
+.filt.on{background:var(--p);border-color:var(--p);color:#fff}
 .pac-list{flex:1;overflow-y:auto}
 .pac-item{padding:9px 12px;border-bottom:0.5px solid var(--brd);cursor:pointer;border-left:2.5px solid transparent;transition:background .12s}
 .pac-item:hover{background:var(--bg2)}
-.pac-item.active{background:var(--green-l);border-left-color:var(--green)}
-.pac-item.urg{border-left-color:var(--red-m)}
-.pac-item.warn{border-left-color:var(--amber-m)}
+.pac-item.active{background:var(--p-light);border-left-color:var(--p)}
+.pac-item.urg{border-left-color:var(--s-err-m)}
+.pac-item.warn{border-left-color:var(--s-warn-m)}
 .pi-top{display:flex;justify-content:space-between;margin-bottom:2px}
 .pi-name{font-size:12px;font-weight:500;color:var(--txt)}
 .pi-time{font-size:10px;font-weight:500;color:var(--txt2)}
 .pi-proc{font-size:10px;color:var(--txt2);margin-bottom:4px}
 .pi-tags{display:flex;gap:3px;flex-wrap:wrap}
 .tag{font-size:9px;padding:1px 6px;border-radius:8px}
-.t-red{background:var(--red-l);color:var(--red)}
-.t-amber{background:var(--amber-l);color:var(--amber)}
-.t-green{background:var(--green-l);color:var(--green-d)}
-.t-his{background:var(--blue-l);color:var(--blue)}
+.t-red{background:var(--s-err-l);color:var(--s-err)}
+.t-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.t-ok{background:var(--p-light);color:var(--p-dark)}
+.t-his{background:var(--s-info-l);color:var(--s-info)}
 
 /* ── DETALLE CENTRAL ── */
 .detail{display:flex;flex-direction:column;border-right:0.5px solid var(--brd)}
@@ -78,20 +78,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 .inner-tabs{display:flex;border-bottom:0.5px solid var(--brd);background:var(--bg);padding:0 16px}
 .itab{font-size:11px;padding:8px 12px;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
-.itab.active{color:var(--green);border-bottom-color:var(--green);font-weight:500}
+.itab.active{color:var(--p);border-bottom-color:var(--p);font-weight:500}
 
 .tab-body{flex:1;overflow-y:auto;padding:14px 16px;background:var(--bg3);display:flex;flex-direction:column;gap:12px}
 .tab-body.hide{display:none}
 
 /* CARDS */
-.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--rl);overflow:hidden}
+.card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--s-err-l);overflow:hidden}
 .card-head{padding:9px 14px;border-bottom:0.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
 .card-title{font-size:11px;font-weight:500;color:var(--txt)}
 .card-badge{font-size:10px;color:var(--txt3)}
 .card-body{padding:11px 14px}
 
 /* HIS SOURCE BANNER */
-.his-src{background:var(--blue-l);border-left:3px solid #378ADD;padding:7px 12px;font-size:10px;color:var(--blue);display:flex;align-items:center;gap:6px;border-bottom:0.5px solid var(--brd)}
+.his-src{background:var(--s-info-l);border-left:3px solid #378ADD;padding:7px 12px;font-size:10px;color:var(--s-info);display:flex;align-items:center;gap:6px;border-bottom:0.5px solid var(--brd)}
 
 /* DATOS GRID */
 .datos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
@@ -100,10 +100,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 /* PILLS */
 .pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
-.p-green{background:var(--green-l);color:var(--green-d)}
-.p-amber{background:var(--amber-l);color:var(--amber)}
-.p-red{background:var(--red-l);color:var(--red)}
-.p-blue{background:var(--blue-l);color:var(--blue)}
+.p-ok{background:var(--p-light);color:var(--p-dark)}
+.p-amber{background:var(--s-warn-l);color:var(--s-warn)}
+.p-red{background:var(--s-err-l);color:var(--s-err)}
+.p-blue{background:var(--s-info-l);color:var(--s-info)}
 .p-gray{background:var(--bg2);color:var(--txt2);border:0.5px solid var(--brd)}
 
 /* REQUISITOS */
@@ -111,9 +111,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .req-row:last-child{border-bottom:none}
 .req-left{display:flex;align-items:center;gap:8px}
 .req-ico{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ri-ok{background:var(--green-l)}
-.ri-warn{background:var(--amber-l)}
-.ri-err{background:var(--red-l)}
+.ri-ok{background:var(--p-light)}
+.ri-warn{background:var(--s-warn-l)}
+.ri-err{background:var(--s-err-l)}
 .req-name{font-size:11px;color:var(--txt)}
 .req-det{font-size:10px;color:var(--txt3);margin-top:1px}
 .req-right{display:flex;align-items:center;gap:6px}
@@ -145,7 +145,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .hito-lbl{font-size:12px;font-weight:500;color:var(--txt)}
 .hito-who{font-size:9px;color:var(--txt3);margin-top:2px}
 .delta-neg{color:#A32D2D;font-weight:500}
-.delta-ok{color:var(--green);font-weight:500}
+.delta-ok{color:var(--p);font-weight:500}
 .delta-pend{color:var(--txt3);font-style:italic}
 
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -169,7 +169,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .cal-nav button:hover{background:var(--bg2)}
 .view-toggle{display:flex;border:0.5px solid var(--brd2);border-radius:6px;overflow:hidden;font-size:10px;margin:0 14px 8px}
 .vt-opt{flex:1;padding:4px 8px;text-align:center;cursor:pointer;color:var(--txt2);background:transparent;transition:all .12s}
-.vt-opt.on{background:var(--green);color:#fff}
+.vt-opt.on{background:var(--p);color:#fff}
 
 /* MONTH VIEW */
 .month-view{padding:0 12px 8px}
@@ -178,21 +178,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .day-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;transition:background .12s;position:relative}
 .day-cell:hover{background:var(--bg2)}
-.day-cell.today{background:var(--green);color:#fff}
+.day-cell.today{background:var(--p);color:#fff}
 .day-cell.today .day-num{color:#fff;font-weight:500}
-.day-cell.selected{background:var(--green-l);border:0.5px solid var(--green-m)}
+.day-cell.selected{background:var(--p-light);border:0.5px solid var(--p-mid)}
 .day-cell.other-month .day-num{color:var(--txt3)}
 .day-num{font-size:11px;color:var(--txt)}
-.day-dot{width:5px;height:5px;border-radius:50%;background:var(--amber-m);margin-top:2px}
-.day-dot.urgent{background:var(--red-m)}
-.day-dot.ok{background:var(--green)}
+.day-dot{width:5px;height:5px;border-radius:50%;background:var(--s-warn-m);margin-top:2px}
+.day-dot.urgent{background:var(--s-err-m)}
+.day-dot.ok{background:var(--p)}
 
 /* WEEK VIEW */
 .week-view{display:none;flex-direction:column;flex:1;overflow-y:auto}
 .week-head{display:grid;grid-template-columns:40px repeat(5,1fr);border-bottom:0.5px solid var(--brd);background:var(--bg2)}
 .wh-empty{padding:6px 0}
 .wh-day{padding:6px 4px;text-align:center;font-size:10px;color:var(--txt2)}
-.wh-day.today{color:var(--green);font-weight:500}
+.wh-day.today{color:var(--p);font-weight:500}
 .wh-date{font-size:14px;font-weight:500;color:var(--txt);display:block}
 .week-body{display:grid;grid-template-columns:40px repeat(5,1fr);flex:1}
 .time-col{border-right:0.5px solid var(--brd)}
@@ -200,10 +200,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .qx-col{border-right:0.5px solid var(--brd);position:relative}
 .qx-col:last-child{border-right:none}
 .qx-slot{height:44px;border-bottom:0.5px solid var(--brd);cursor:pointer}
-.qx-slot:hover{background:var(--green-l)}
-.qx-block{position:absolute;left:2px;right:2px;background:var(--green-l);border:0.5px solid var(--green-m);border-radius:5px;padding:3px 5px;font-size:9px;color:var(--green-d);overflow:hidden;cursor:pointer;z-index:1}
-.qx-block.warn-block{background:var(--amber-l);border-color:var(--amber-m);color:var(--amber)}
-.qx-block.err-block{background:var(--red-l);border-color:#F7C1C1;color:var(--red)}
+.qx-slot:hover{background:var(--p-light)}
+.qx-block{position:absolute;left:2px;right:2px;background:var(--p-light);border:0.5px solid var(--p-mid);border-radius:5px;padding:3px 5px;font-size:9px;color:var(--p-dark);overflow:hidden;cursor:pointer;z-index:1}
+.qx-block.warn-block{background:var(--s-warn-l);border-color:var(--s-warn-m);color:var(--s-warn)}
+.qx-block.err-block{background:var(--s-err-l);border-color:#F7C1C1;color:var(--s-err)}
 .qx-block-name{font-weight:500;margin-bottom:1px}
 .qx-block-proc{font-size:8px;opacity:.8}
 
@@ -212,7 +212,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .sdl-title{font-size:10px;font-weight:500;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
 .sdl-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--brd);cursor:pointer}
 .sdl-item:last-child{border-bottom:none}
-.sdl-item:hover .sdl-name{color:var(--green)}
+.sdl-item:hover .sdl-name{color:var(--p)}
 .sdl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sdl-time{font-size:11px;font-weight:500;color:var(--txt2);min-width:42px}
 .sdl-name{font-size:11px;font-weight:500;color:var(--txt)}
@@ -222,7 +222,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 /* MODAL NOTIF */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);align-items:center;justify-content:center;z-index:200}
 .modal-ov.open{display:flex}
-.modal{background:var(--bg);border-radius:var(--rl);border:0.5px solid var(--brd);width:360px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.15)}
+.modal{background:var(--bg);border-radius:var(--s-err-l);border:0.5px solid var(--brd);width:360px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.15)}
 .m-head{padding:12px 16px;border-bottom:0.5px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
 .m-title{font-size:13px;font-weight:500;color:var(--txt)}
 .m-close{font-size:20px;color:var(--txt3);background:none;border:none;cursor:pointer;line-height:1}
@@ -234,14 +234,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .m-chk label{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt);cursor:pointer}
 .m-foot{padding:10px 16px;border-top:0.5px solid var(--brd);display:flex;gap:8px;justify-content:flex-end}
 .btn-cancel{font-size:11px;padding:6px 14px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer}
-.btn-send{font-size:11px;padding:6px 16px;border-radius:var(--r);border:none;background:var(--green);color:#fff;cursor:pointer;font-weight:500}
+.btn-send{font-size:11px;padding:6px 16px;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;font-weight:500}
 .sent-box{text-align:center;padding:28px 20px;display:none}
 .sent-icon{font-size:30px;margin-bottom:8px}
-.sent-title{font-size:14px;font-weight:500;color:var(--green-d);margin-bottom:4px}
-.sent-sub{font-size:11px;color:var(--green)}
+.sent-title{font-size:14px;font-weight:500;color:var(--p-dark);margin-bottom:4px}
+.sent-sub{font-size:11px;color:var(--p)}
 
 /* BUTTONS */
-.btn-primary{font-size:10px;padding:5px 12px;border-radius:var(--r);border:none;background:var(--green);color:#fff;cursor:pointer;font-weight:500}
+.btn-primary{font-size:10px;padding:5px 12px;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer;font-weight:500}
 .btn-ghost{font-size:10px;padding:5px 12px;border-radius:var(--r);border:0.5px solid var(--brd2);background:transparent;color:var(--txt2);cursor:pointer;display:flex;align-items:center;gap:5px}
 .btn-ghost:hover{background:var(--bg2)}
 </style>
@@ -304,12 +304,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <div class="pac-item" onclick="selPac(this)">
       <div class="pi-top"><span class="pi-name">García, María</span><span class="pi-time">08:00</span></div>
       <div class="pi-proc">Colecistectomía · QX 1</div>
-      <div class="pi-tags"><span class="tag t-green">Completa</span><span class="tag t-his">HIS ✓</span></div>
+      <div class="pi-tags"><span class="tag t-ok">Completa</span><span class="tag t-his">HIS ✓</span></div>
     </div>
     <div class="pac-item" onclick="selPac(this)">
       <div class="pi-top"><span class="pi-name">Ferreyra, Carlos</span><span class="pi-time">11:00</span></div>
       <div class="pi-proc">Apendicectomía · QX 4</div>
-      <div class="pi-tags"><span class="tag t-green">Completa</span></div>
+      <div class="pi-tags"><span class="tag t-ok">Completa</span></div>
     </div>
     <div class="pac-item" style="opacity:.45">
       <div class="pi-top"><span class="pi-name">+ 9 más</span></div>
@@ -324,7 +324,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <!-- HEADER PACIENTE -->
   <div class="dh">
     <div class="dh-left">
-      <div class="dh-av" style="background:var(--red-l);color:var(--red)">RJ</div>
+      <div class="dh-av" style="background:var(--s-err-l);color:var(--s-err)">RJ</div>
       <div>
         <div class="dh-name">Ramírez, Jorge Alberto</div>
         <div class="dh-sub">HC 00031284 · DNI 25.781.320 · OSDE 310 · QX 1 · 12:00 hs · <span style="color:#A32D2D;font-weight:500">En 1 h 13 min</span></div>
@@ -388,17 +388,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         </div>
         <div class="req-row">
           <div class="req-left">
-            <div class="req-ico ri-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#085041" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico ri-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1A3FAA" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div><div class="req-name">Evaluación preanestésica</div><div class="req-det">Cargado en HIS · Actualizado 15/04/2026</div></div>
           </div>
-          <div class="req-right"><span class="pill p-green">En HIS</span><button class="btn-sm">Ver</button></div>
+          <div class="req-right"><span class="pill p-ok">En HIS</span><button class="btn-sm">Ver</button></div>
         </div>
         <div class="req-row">
           <div class="req-left">
-            <div class="req-ico ri-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#085041" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="req-ico ri-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1A3FAA" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
             <div><div class="req-name">Estudios complementarios</div><div class="req-det">Laboratorio + ECG · 14/04/2026 · Cargados por paciente</div></div>
           </div>
-          <div class="req-right"><span class="pill p-green">Cargado</span><button class="btn-sm">Ver</button></div>
+          <div class="req-right"><span class="pill p-ok">Cargado</span><button class="btn-sm">Ver</button></div>
         </div>
         <div class="req-row">
           <div class="req-left">
@@ -415,7 +415,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="card-head"><div class="card-title">Historial de contacto con el paciente</div><button class="btn-sm">+ Registrar</button></div>
       <div class="card-body">
         <div class="contact-item">
-          <div class="ci-top"><span style="color:var(--txt2)">17/04 · 10:30 — Llamado 72hs</span><span class="pill p-green">Contactado</span></div>
+          <div class="ci-top"><span style="color:var(--txt2)">17/04 · 10:30 — Llamado 72hs</span><span class="pill p-ok">Contactado</span></div>
           <div class="ci-note">Confirmó hora e indicaciones de ayuno. Informó que su médico tramita la autorización de OSDE.</div>
         </div>
         <div class="contact-item">
@@ -444,7 +444,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div style="border-top:0.5px solid var(--brd);padding-top:12px">
           <div class="dato-lbl" style="margin-bottom:6px">Procedimientos del acto (HIS)</div>
           <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:block;flex-shrink:0"></span><span style="font-weight:500">Colostomía</span><span style="color:var(--txt2)">— Servicio: Cirugía General</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px"><span style="width:6px;height:6px;border-radius:50%;background:var(--p);display:block;flex-shrink:0"></span><span style="font-weight:500">Colostomía</span><span style="color:var(--txt2)">— Servicio: Cirugía General</span></div>
           </div>
         </div>
       </div>
@@ -454,13 +454,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="card-body">
         <div style="display:flex;flex-direction:column;gap:7px;font-size:11px">
           <div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">Arco en C</span><span class="pill p-red">Conflicto 14:00 hs</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">Mesa de operaciones estándar</span><span class="pill p-green">Disponible</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">Torre de video</span><span class="pill p-green">Disponible</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">Mesa de operaciones estándar</span><span class="pill p-ok">Disponible</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--txt2)">Torre de video</span><span class="pill p-ok">Disponible</span></div>
         </div>
       </div>
     </div>
-    <div class="card" style="border-left:3px solid var(--amber-m)">
-      <div class="card-body" style="font-size:11px;color:var(--amber);line-height:1.7">
+    <div class="card" style="border-left:3px solid var(--s-warn-m)">
+      <div class="card-body" style="font-size:11px;color:var(--s-warn);line-height:1.7">
         <strong>Nota:</strong> Para modificar la reserva de quirófano (cambiar horario, QX asignado, agregar procedimientos o recursos), realizá el cambio directamente en el HIS — XHIS · Módulo Quirófano · Agenda. Esta pantalla refleja los datos actualizados automáticamente.
       </div>
     </div>
@@ -472,7 +472,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       <div class="his-src"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Equipo registrado en HIS — confirmación y notificaciones gestionadas acá</div>
       <div class="card-body">
         <div class="eq-row">
-          <div class="eq-av" style="background:var(--blue-l);color:var(--blue)">MC</div>
+          <div class="eq-av" style="background:var(--s-info-l);color:var(--s-info)">MC</div>
           <div>
             <div class="eq-name">Dr. Méndez, Carlos</div>
             <div class="eq-role">Cirujano principal · Externo</div>
@@ -483,7 +483,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
               <div style="font-size:10px;color:var(--txt3);margin-bottom:3px">Canal: Mail + WhatsApp</div>
               <div style="font-size:10px;color:var(--txt3)">Recordatorio: 18/04 · 09:00</div>
             </div>
-            <span class="pill p-green">Confirmado</span>
+            <span class="pill p-ok">Confirmado</span>
             <button class="btn-notif" onclick="openModal()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.99 1.18 2 2 0 013 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Notif.</button>
           </div>
         </div>
@@ -504,13 +504,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
           </div>
         </div>
         <div class="eq-row">
-          <div class="eq-av" style="background:var(--amber-l);color:var(--amber)">LV</div>
+          <div class="eq-av" style="background:var(--s-warn-l);color:var(--s-warn)">LV</div>
           <div>
             <div class="eq-name">Lic. Vidal, Laura</div>
             <div class="eq-role">Instrumentadora · Kairos</div>
             <div class="eq-spec">Instrumentación quirúrgica</div>
           </div>
-          <div class="eq-right"><span class="pill p-green">Confirmada</span><button class="btn-notif" onclick="openModal()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.99 1.18 2 2 0 013 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Notif.</button></div>
+          <div class="eq-right"><span class="pill p-ok">Confirmada</span><button class="btn-notif" onclick="openModal()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.99 1.18 2 2 0 013 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Notif.</button></div>
         </div>
         <div class="eq-row">
           <div class="eq-av" style="background:#EAF3DE;color:#3B6D11">FG</div>
@@ -519,7 +519,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
             <div class="eq-role">Técnico anestesia · Kairos</div>
             <div class="eq-spec">Anestesiología técnica</div>
           </div>
-          <div class="eq-right"><span class="pill p-green">Confirmado</span><button class="btn-notif" onclick="openModal()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.99 1.18 2 2 0 013 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Notif.</button></div>
+          <div class="eq-right"><span class="pill p-ok">Confirmado</span><button class="btn-notif" onclick="openModal()"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.99 1.18 2 2 0 013 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Notif.</button></div>
         </div>
       </div>
     </div>
@@ -543,11 +543,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         </div>
         <div class="mat-row">
           <div><div class="mat-name">Instrumental laparoscópico</div><div class="mat-sub">Set completo · Est. central</div></div>
-          <span style="color:var(--txt2)">Sanatorio</span><span class="pill p-green">Disponible</span><span style="color:var(--txt2)">Sanatorio</span>
+          <span style="color:var(--txt2)">Sanatorio</span><span class="pill p-ok">Disponible</span><span style="color:var(--txt2)">Sanatorio</span>
         </div>
         <div class="mat-row">
           <div><div class="mat-name">Suturas — Prolene 3/0</div><div class="mat-sub">Stock farmacia QX</div></div>
-          <span style="color:var(--txt2)">Farmacia QX</span><span class="pill p-green">Disponible</span><span style="color:var(--txt2)">Sanatorio</span>
+          <span style="color:var(--txt2)">Farmacia QX</span><span class="pill p-ok">Disponible</span><span style="color:var(--txt2)">Sanatorio</span>
         </div>
         <div class="mat-row">
           <div><div class="mat-name">Bolsas de colostomía</div><div class="mat-sub">Coloplast · Solicitar autorización</div></div>
@@ -555,8 +555,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         </div>
       </div>
     </div>
-    <div class="card" style="border-left:3px solid var(--amber-m)">
-      <div class="card-body" style="font-size:11px;color:var(--amber);line-height:1.7">
+    <div class="card" style="border-left:3px solid var(--s-warn-m)">
+      <div class="card-body" style="font-size:11px;color:var(--s-warn);line-height:1.7">
         <strong>Alerta:</strong> Conflicto de Arco en C — solicitado simultáneamente para QX 1 (12:00) y QX 3 (14:00). Resolver antes de las 11:30 hs. Coordiná con el coordinador operativo de quirófano.
       </div>
     </div>
@@ -571,7 +571,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="hito-row">
           <div><div class="hito-lbl">Ingreso a QX</div><div class="hito-who">Scan pulsera · circulante</div></div>
           <span style="font-size:11px;color:var(--txt2)">12:00 hs</span>
-          <span style="font-size:11px;font-weight:500;color:var(--green)">12:04 hs</span>
+          <span style="font-size:11px;font-weight:500;color:var(--p)">12:04 hs</span>
           <span class="delta-ok">+4 min</span>
         </div>
         <div class="hito-row">
@@ -606,7 +606,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <div class="kpi-grid">
           <div class="kpi-card"><div class="kpi-lbl">Retraso inicio</div><div class="kpi-val" style="color:#A32D2D">+16 min</div><div class="kpi-sub">Promedio: +8 min</div></div>
           <div class="kpi-card"><div class="kpi-lbl">Requisitos completos</div><div class="kpi-val" style="color:#BA7517">3 / 5</div><div class="kpi-sub">2 faltantes al ingreso</div></div>
-          <div class="kpi-card"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="color:var(--blue)">En curso</div><div class="kpi-sub">Inicio pendiente de scan</div></div>
+          <div class="kpi-card"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="color:var(--s-info)">En curso</div><div class="kpi-sub">Inicio pendiente de scan</div></div>
         </div>
       </div>
     </div>
@@ -776,7 +776,7 @@ function renderDayList(){
   if(!surgs.length){ items.innerHTML=`<div style="font-size:11px;color:var(--txt3);padding:10px 0;text-align:center">Sin cirugías programadas</div>`; return; }
   items.innerHTML = surgs.map(s=>`
     <div class="sdl-item">
-      <div class="sdl-dot" style="background:${s.urgent?'var(--red-m)':s.warn?'var(--amber-m)':'var(--green)'}"></div>
+      <div class="sdl-dot" style="background:${s.urgent?'var(--s-err-m)':s.warn?'var(--s-warn-m)':'var(--p)'}"></div>
       <div><div class="sdl-name">${s.n}</div><div class="sdl-proc">${s.p}</div></div>
       <div style="text-align:right"><div class="sdl-time">${s.t}</div><div class="sdl-qx">${s.qx}</div></div>
     </div>`).join('');

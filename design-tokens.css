@@ -1,0 +1,110 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  KAIROS · ZENOXIA — Design Tokens v1.0
+ *  Fuente de verdad para todos los módulos del sistema.
+ *  Incluir este bloque en el <style> de cada pantalla nueva.
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *  USO:
+ *  Copiar el bloque :root completo al inicio del <style> de cada HTML.
+ *  Nunca hardcodear colores fuera de este bloque.
+ *  Para módulos nuevos: enviar este archivo como contexto a Claude.
+ *
+ * ───────────────────────────────────────────────────────────────
+ *  MAPA DE VARIABLES
+ * ───────────────────────────────────────────────────────────────
+ *
+ *  PRIMARIO (azul royal — acciones, estados activos, branding)
+ *  --p-light   Fondo de badges, cards activas, highlights
+ *  --p-mid     Bordes de badges, separadores sobre fondo --p-light
+ *  --p         Color primario — botones, íconos, links activos
+ *  --p-dark    Topbar, logo, nav activo, texto sobre --p-light
+ *
+ *  NEUTROS (fondos y texto)
+ *  --bg        Blanco puro — cards, modales, topbars internos
+ *  --bg2       Gris muy claro — inputs, filas alternas, fondos de sección
+ *  --bg3       Gris página — fondo del body
+ *  --txt       Texto principal
+ *  --txt2      Texto secundario
+ *  --txt3      Texto terciario, placeholders, labels
+ *  --brd       Borde sutil (10% negro)
+ *  --brd2      Borde medio (18% negro) — inputs, separadores de énfasis
+ *
+ *  SEMÁNTICOS (estados)
+ *  --s-ok      Verde éxito — estados confirmados, ítems validados
+ *  --s-ok-l    Verde éxito claro — fondo de badges OK
+ *  --s-ok-m    Verde éxito medio — borde de badges OK
+ *  --s-warn    Ámbar advertencia — pendientes, alertas leves
+ *  --s-warn-l  Ámbar claro — fondo de badges WARN
+ *  --s-warn-m  Ámbar medio — borde de badges WARN
+ *  --s-err     Rojo error — bloqueantes, alergias, críticos
+ *  --s-err-l   Rojo claro — fondo de badges ERR
+ *  --s-err-m   Rojo medio — borde de badges ERR
+ *  --s-info    Azul secundario — información, estados neutros informativos
+ *  --s-info-l  Azul info claro
+ *  --s-info-m  Azul info medio
+ *
+ *  RADIO Y ESPACIADO
+ *  --r         Border radius estándar (8px)
+ *  --r-lg      Border radius largo (12px) — cards, modales, shells
+ *
+ * ───────────────────────────────────────────────────────────────
+ *  REGLAS DE USO
+ * ───────────────────────────────────────────────────────────────
+ *
+ *  ✓ Estados OK/validado    → --s-ok, --s-ok-l, --s-ok-m
+ *  ✓ Pendiente/advertencia  → --s-warn, --s-warn-l, --s-warn-m
+ *  ✓ Error/bloqueante       → --s-err, --s-err-l, --s-err-m
+ *  ✓ Branding/acciones      → --p, --p-dark, --p-light, --p-mid
+ *  ✓ Info neutral           → --s-info, --s-info-l, --s-info-m
+ *
+ *  ✗ No usar --p para estados de éxito (usar --s-ok)
+ *  ✗ No hardcodear hex fuera de este bloque
+ *  ✗ No usar --s-err para advertencias leves (usar --s-warn)
+ *
+ * ───────────────────────────────────────────────────────────────
+ */
+
+:root {
+
+  /* ── PRIMARIO — Azul royal ─────────────────────────────────── */
+  --p-light: #EBF2FF;   /* fills, fondos de badge, card activa    */
+  --p-mid:   #A3C0F8;   /* bordes de badge, separadores           */
+  --p:       #2B57D9;   /* botones, íconos primarios, links       */
+  --p-dark:  #1A3FAA;   /* topbar, logo, nav activo, texto activo */
+
+  /* ── NEUTROS ───────────────────────────────────────────────── */
+  --bg:   #ffffff;               /* cards, modales, topbars internos   */
+  --bg2:  #f5f4f0;               /* inputs, fondos de sección, filas   */
+  --bg3:  #f0efea;               /* fondo del body                     */
+  --txt:  #1a1a18;               /* texto principal                    */
+  --txt2: #5f5e5a;               /* texto secundario                   */
+  --txt3: #888780;               /* labels, placeholders, tertiary     */
+  --brd:  rgba(0, 0, 0, 0.10);  /* borde sutil                        */
+  --brd2: rgba(0, 0, 0, 0.18);  /* borde medio                        */
+
+  /* ── SEMÁNTICOS — Éxito ────────────────────────────────────── */
+  --s-ok:   #0F6E56;   /* verde — confirmado, validado, OK         */
+  --s-ok-l: #E1F5EE;   /* fondo badge OK                           */
+  --s-ok-m: #9FE1CB;   /* borde badge OK                           */
+
+  /* ── SEMÁNTICOS — Advertencia ──────────────────────────────── */
+  --s-warn:   #633806;   /* ámbar oscuro — texto sobre fondo claro  */
+  --s-warn-l: #FAEEDA;   /* fondo badge WARN                        */
+  --s-warn-m: #EF9F27;   /* borde / ícono badge WARN                */
+
+  /* ── SEMÁNTICOS — Error ────────────────────────────────────── */
+  --s-err:   #791F1F;   /* rojo oscuro — texto sobre fondo claro   */
+  --s-err-l: #FCEBEB;   /* fondo badge ERR                         */
+  --s-err-m: #E24B4A;   /* borde / ícono badge ERR                 */
+
+  /* ── SEMÁNTICOS — Info neutral ─────────────────────────────── */
+  --s-info:   #0C447C;   /* azul oscuro — información secundaria   */
+  --s-info-l: #E6F1FB;   /* fondo badge INFO                       */
+  --s-info-m: #B5D4F4;   /* borde badge INFO                       */
+
+  /* ── RADIO ─────────────────────────────────────────────────── */
+  --r:    8px;    /* estándar — inputs, badges, nav items          */
+  --r-lg: 12px;   /* largo — cards, modales, shells                */
+
+}
