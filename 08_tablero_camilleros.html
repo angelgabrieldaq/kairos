@@ -279,11 +279,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 /* SOL CARD */
 .sol-card{background:var(--bg);border:0.5px solid var(--brd);border-radius:var(--r-lg);overflow:hidden;transition:box-shadow .15s}
 .sol-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.09)}
-.sol-card.urgente{border-left:3px solid var(--s-err-m)}
-.sol-card.normal{border-left:3px solid var(--s-warn-m)}
-.sol-card.asignada{border-left:3px solid var(--p)}
+.sol-card.urgente{border-left:3px solid var(--tr-urg-m)}
+.sol-card.normal{border-left:3px solid var(--tr-pend-m)}
+.sol-card.asignada{border-left:3px solid var(--tr-curso)}
 .sol-card.completada{border-left:3px solid var(--s-ok);opacity:.75}
-.sol-card.rechazada{border-left:3px solid var(--s-err)}
+.sol-card.rechazada{border-left:3px solid var(--tr-urg)}
 
 .sc-body{padding:11px 13px}
 .sc-row1{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px}
@@ -303,12 +303,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .sc-solicita{font-size:9px;color:var(--txt3);margin-top:5px}
 
 .sc-status{font-size:9px;padding:2px 8px;border-radius:8px;font-weight:500;white-space:nowrap}
-.st-p{background:var(--s-warn-l);color:var(--s-warn)}
-.st-a{background:var(--p-light);color:var(--p-dark)}
-.st-c{background:var(--s-ok-l);color:var(--s-ok)}
-.st-r{background:var(--s-err-l);color:var(--s-err)}
+.st-p{background:var(--tr-pend-l);color:var(--tr-pend)}
+.st-a{background:var(--tr-curso-l);color:var(--tr-curso)}
+.st-c{background:var(--tr-done-l);color:var(--tr-done)}
+.st-r{background:var(--tr-urg-l);color:var(--tr-urg)}
 
-.delta-row{display:flex;align-items:center;gap:6px;padding:6px 13px;background:var(--s-err-l);border-top:0.5px solid var(--s-err-m);font-size:10px;color:var(--s-err);font-weight:500}
+.delta-row{display:flex;align-items:center;gap:6px;padding:6px 13px;background:var(--tr-urg-l);border-top:0.5px solid var(--tr-urg-m);font-size:10px;color:var(--tr-urg);font-weight:500}
 
 .sc-foot{padding:8px 13px;border-top:0.5px solid var(--brd);background:var(--bg2);display:flex;gap:6px;align-items:center}
 .btn-asig{flex:1;padding:7px;font-size:11px;font-weight:500;border-radius:var(--r);border:none;background:var(--p);color:#fff;cursor:pointer}
@@ -331,7 +331,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .cr-name{font-size:12px;font-weight:500;color:var(--txt);flex:1}
 .cr-badge{font-size:9px;padding:2px 7px;border-radius:8px;font-weight:500}
 .cb-l{background:var(--p-light);color:var(--p-dark)}
-.cb-t{background:var(--s-warn-l);color:var(--s-warn)}
+.cb-t{background:var(--tr-asig-l);color:var(--tr-asig)}
 
 .cr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
 .cr-stat{background:var(--bg2);border-radius:5px;padding:5px 4px;text-align:center}

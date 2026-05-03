@@ -323,8 +323,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .btn-solicitar:hover{background:var(--p-dark)}
 .btn-solicitar.solicitado{background:var(--s-ok);cursor:default}
 .btn-solicitar.pendiente{background:var(--s-warn-m);cursor:default}
-.sol-status{background:var(--p-light);border:0.5px solid var(--p-mid);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--p-dark)}
-.sol-dot{width:8px;height:8px;border-radius:50%;background:var(--p);animation:blink 1.5s infinite;flex-shrink:0}
+.sol-status{background:var(--tr-asig-l);border:0.5px solid var(--tr-asig-m);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--tr-asig)}
+.sol-dot{width:8px;height:8px;border-radius:50%;background:var(--tr-asig);animation:blink 1.5s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* CHECKLIST PREQUIRÚRGICO */
@@ -582,21 +582,21 @@ function renderDetalle() {
     </div>`;
   } else if (cam.estado === 'en-traslado') {
     camHTML = `<div class="cam-section">
-      <div class="sol-status" style="background:var(--s-ok-l);border-color:var(--s-ok-m)">
+      <div class="sol-status" style="background:var(--tr-done-l);border-color:var(--tr-done-m)">
         <div class="sol-dot" style="background:var(--s-ok)"></div>
         <div>
           <div style="font-weight:500;color:var(--s-ok)">Camillero asignado — en traslado</div>
-          <div style="font-size:10px;color:var(--s-ok);margin-top:1px">${cam.nombre} · Retiro ${cam.retiro} hs</div>
+          <div style="font-size:10px;color:var(--tr-done);margin-top:1px">${cam.nombre} · Retiro ${cam.retiro} hs</div>
         </div>
       </div>
     </div>`;
   } else if (cam.estado === 'completado') {
     camHTML = `<div class="cam-section">
-      <div class="sol-status" style="background:var(--s-ok-l);border-color:var(--s-ok-m)">
+      <div class="sol-status" style="background:var(--tr-done-l);border-color:var(--tr-done-m)">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--s-ok);flex-shrink:0"></div>
         <div>
-          <div style="font-weight:500;color:var(--s-ok)">Traslado completado</div>
-          <div style="font-size:10px;color:var(--s-ok);margin-top:1px">${cam.nombre} · ${cam.retiro} → ${cam.entrega} hs</div>
+          <div style="font-weight:500;color:var(--tr-done)">Traslado completado</div>
+          <div style="font-size:10px;color:var(--tr-done);margin-top:1px">${cam.nombre} · ${cam.retiro} → ${cam.entrega} hs</div>
         </div>
       </div>
     </div>`;
